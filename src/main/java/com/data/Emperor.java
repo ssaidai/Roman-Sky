@@ -1,7 +1,5 @@
 package com.data;
 
-import java.time.LocalDate;
-
 public class Emperor extends Person{
     private ChargeTime charge;
     private String deathCause;
