@@ -7,6 +7,8 @@ public class Person {
     private String name;
     private LocalDate bornDate;
 
+    private String href;    // used as ID to distinguish homonym persons
+
     private Set<Person> parents, children, siblings;
 
     public Person(String name, LocalDate bornDate){
@@ -31,6 +33,9 @@ public class Person {
         return name;
     }
 
+    public Set<Person> getChildren(){
+        return this.children;
+    }
     public LocalDate getBornDate() {
         return bornDate;
     }

@@ -1,6 +1,8 @@
 package com.scraper;
 
+import com.data.Emperor;
 import com.data.Person;
+import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -12,22 +14,59 @@ import java.util.List;
 public class Scraper {
     private ArrayList<Person> emperors;
     private final String url = "https://it.wikipedia.org/wiki/Imperatori_romani";
-    private final String nameXPath = "//*[@id=\"mw-content-text\"]/div[1]/table[2]/tbody/tr/td[2]";
+    private final String xPath = "tbody/tr/td[2]/b/a";
+
+    private Emperor dynastyProgenitor;
+    private List<WebElement> tables;
     private final WebDriver driver = new HtmlUnitDriver();
 
     public Scraper(){
-
-    }
-
-    public void fetchEmperors(){
         driver.get(url);
 
-        List<WebElement> names = driver.findElements(By.xpath(nameXPath));
+        tables = driver.findElements(By.xpath("//table[@class=\"wikitable\"][@style=\"text-align:center\"]"));
 
-        for(WebElement name : names){
-            System.out.println(name.getText());
+        for(WebElement table : tables)
+            printNames(table);
+    }
+
+    //  Test method to print main names
+    public void printNames(@NotNull WebElement table){
+        List<WebElement> names = table.findElements(By.xpath(xPath));
+        int c = 1;
+        for(WebElement name: names){
+            System.out.print("|-- " + name.getAttribute("href") + "\n");
+            for(int i = 0; i < c; i++){
+                System.out.print("\t");
+            }
+            c++;
         }
+        System.out.println("\n---------------------------------------");
+    }
 
-        driver.close();
+    //  PER KIVIN:  SERVE UN METODO PER INIZIALIZZARE IL PRIMO IMPERATORE
+
+    private void initializeProgenitor(Dynasty period){
+        //  PRENDERE PRIMO IMPERATORE DALLA TABELLA DELLA DINASTIA RICEVUTA IN INPUT
+
+        //  ANDARE ALL'HREF DI ESSO E CREARE UN'ISTANZA DELLA CLASSE EMPEROR CON I DATI
+
+        //  ASSEGNARE A this.dynastyProgenitor LA CLASSE APPENA CREATA
+    }
+    private void buildTree(String href, int recursiveLevel){
+        if(recursiveLevel > 2){
+            driver.get(href);
+
+            for(Person child : this.dynastyProgenitor.getChildren()){
+                // per ogni figlio ripetere il metodo in modo ricorsivo (fino a level == 2)
+
+
+            }
+
+        }
+    }
+
+    public void fetchEmperors(@NotNull Dynasty period){
+        List<WebElement> names = tables.get(period.getValue()).findElements(By.xpath(xPath));
+        //System.out.println(names);
     }
 }
