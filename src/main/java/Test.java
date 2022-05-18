@@ -5,6 +5,7 @@ public class Test {
     public static void main(String[] args) {
         Scraper scraper = new Scraper();
 
-        scraper.fetchEmperors(Dynasty.IMPERATORI_ADOTTIVI);
+        //scraper.fetchEmperors(Dynasty.IMPERATORI_ADOTTIVI);
+        System.out.println(scraper);
     }
 }

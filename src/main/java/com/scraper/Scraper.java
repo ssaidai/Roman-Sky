@@ -14,16 +14,17 @@ import java.util.List;
 public class Scraper {
     private ArrayList<Person> emperors;
     private final String url = "https://it.wikipedia.org/wiki/Imperatori_romani";
-    private final String xPath = "tbody/tr/td[2]/b/a";
+    private final String namexPath = "tbody/tr/td[2]/b/a";
+    private final String xPath = "//table[@class=\"wikitable\"][@style=\"text-align:center\"]";
 
     private Emperor dynastyProgenitor;
-    private List<WebElement> tables;
+    private final List<WebElement> tables;
     private final WebDriver driver = new HtmlUnitDriver();
 
     public Scraper(){
         driver.get(url);
 
-        tables = driver.findElements(By.xpath("//table[@class=\"wikitable\"][@style=\"text-align:center\"]"));
+        tables = driver.findElements(By.xpath(xPath));
 
         for(WebElement table : tables)
             printNames(table);
@@ -31,7 +32,7 @@ public class Scraper {
 
     //  Test method to print main names
     public void printNames(@NotNull WebElement table){
-        List<WebElement> names = table.findElements(By.xpath(xPath));
+        List<WebElement> names = table.findElements(By.xpath(namexPath));
         int c = 1;
         for(WebElement name: names){
             System.out.print("|-- " + name.getAttribute("href") + "\n");
@@ -43,9 +44,8 @@ public class Scraper {
         System.out.println("\n---------------------------------------");
     }
 
-    //  PER KIVIN:  SERVE UN METODO PER INIZIALIZZARE IL PRIMO IMPERATORE
 
-    private void initializeProgenitor(Dynasty period){
+    private void initializeProgenitor(Dynasty period){  // Method to initialize the Dynasty's first Emperor
         //  PRENDERE PRIMO IMPERATORE DALLA TABELLA DELLA DINASTIA RICEVUTA IN INPUT
 
         //  ANDARE ALL'HREF DI ESSO E CREARE UN'ISTANZA DELLA CLASSE EMPEROR CON I DATI
