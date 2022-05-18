@@ -11,7 +11,7 @@ public class Window {
     private JLabel logoPrincipale =new JLabel();
     private JPanel p2 =new JPanel();
     private JPanel p3 =new JPanel();
-    private String[] dynasties = {"DINASTIAsdfasdfasdfsadf 1", "DINASTIAsdafasdf 2", "DINASTIA 3"};
+    private String[] dynasties = {"DINASTIAsdfasdfasdfsadf 1", "DINASTIAsdafasdf 2", "DINASTIghA 3"};
     JComboBox<String> mTendina = new JComboBox<>(dynasties);
     JButton button = new JButton("CREA ALBERO");
     public Window(){
