@@ -9,9 +9,8 @@ public class ChargeTime {
     //  TODO:   IMPLEMENT CLASS CONSTRUCTOR
 
 
-    public String getTotalCharge(){
-        Period totalCharge = Period.between(start, end);
-        return totalCharge.getYears() + "years";
+    public int getTotalCharge(){
+        return Period.between(start , end).getYears();
     }
 
     public LocalDate getStart() {
