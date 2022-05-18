@@ -10,7 +10,7 @@ public class ChargeTime {
 
 
     public int getTotalCharge(){
-        return Period.between(start, end).getYears();
+        return Period.between(start , end).getYears();
     }
 
     public LocalDate getStart() {
