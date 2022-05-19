@@ -1,19 +1,23 @@
 package com.data;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.Set;
 
 public class Person {
-    private String name;
-    private LocalDate bornDate;
+    private final String name;
+    private final LocalDate bornDate;
 
-    private String href;    // used as ID to distinguish homonym persons
+    private final String href;    // used as ID to distinguish homonym persons
 
-    private Set<Person> parents, children, siblings;
+    private Set<Person> parents, married;
 
-    public Person(String name, LocalDate bornDate){
+    private HashMap<Person, Boolean> children;
+
+    public Person(String name, LocalDate bornDate, String href){
         this.name = name;
         this.bornDate = bornDate;
+        this.href = href;
     }
 
     //  CHANGE THIS TO BOOLEAN
@@ -21,20 +25,25 @@ public class Person {
         this.parents.add(parent);
     }
 
-    public void addChild(Person parent){
-        this.parents.add(parent);
+    public void addChild(Person child, boolean adopted){
+
+        this.children.put(child, adopted);
     }
 
-    public void addSibling(Person parent){
-        this.parents.add(parent);
+    public void addMarried(Person married){
+        this.married.add(married);
     }
 
     public String getName() {
         return name;
     }
 
-    public Set<Person> getChildren(){
+    public HashMap<Person, Boolean> getChildren(){
         return this.children;
+    }
+
+    public Set<Person> getMarried(){
+        return this.married;
     }
     public LocalDate getBornDate() {
         return bornDate;

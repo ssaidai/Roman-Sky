@@ -56,7 +56,7 @@ public class Scraper {
         if(recursiveLevel > 2){
             driver.get(href);
 
-            for(Person child : this.dynastyProgenitor.getChildren()){
+            for(Person child : this.dynastyProgenitor.getChildren().keySet()){
                 // per ogni figlio ripetere il metodo in modo ricorsivo (fino a level == 2)
 
 
