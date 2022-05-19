@@ -8,26 +8,35 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.scraper.Dynasty.DINASTIA_GIULIO_CLAUDIA;
 
 public class Scraper {
     private ArrayList<Person> emperors;
     private final String url = "https://it.wikipedia.org/wiki/Imperatori_romani";
-    private final String namexPath = "tbody/tr/td[2]/b/a";
     private final String xPath = "//table[@class=\"wikitable\"][@style=\"text-align:center\"]";
+    private final String namexPath = "tbody/tr/td[2]/b/a";
+    private final String deathCausexPath = "tbody/tr/td[6]/small";
+    private final String infoxPath = "tbody/tr/td[7]";
+    private final String startChargePath = "tbody/tr/td[4]";
+    private final String endChargePath = "tbody/tr/td[5]";
 
     private Emperor dynastyProgenitor;
+
     private final List<WebElement> tables;
     private final WebDriver driver = new HtmlUnitDriver();
 
+    // Scraper constructor
     public Scraper(){
         driver.get(url);
 
         tables = driver.findElements(By.xpath(xPath));
 
-        for(WebElement table : tables)
-            printNames(table);
+        //for(WebElement table : tables)
+        //    printNames(table);
     }
 
     //  Test method to print main names
@@ -45,28 +54,48 @@ public class Scraper {
     }
 
 
-    private void initializeProgenitor(Dynasty period){  // Method to initialize the Dynasty's first Emperor
-        //  PRENDERE PRIMO IMPERATORE DALLA TABELLA DELLA DINASTIA RICEVUTA IN INPUT
 
-        //  ANDARE ALL'HREF DI ESSO E CREARE UN'ISTANZA DELLA CLASSE EMPEROR CON I DATI
+    //---------------------------------------------Getters----------------------------------------------------------
 
-        //  ASSEGNARE A this.dynastyProgenitor LA CLASSE APPENA CREATA
+    public String getPersonName(){
+        return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/p[1]/b[1]")).getText();
     }
-    private void buildTree(String href, int recursiveLevel){
-        if(recursiveLevel > 2){
-            driver.get(href);
 
-            for(Person child : this.dynastyProgenitor.getChildren()){
-                // per ogni figlio ripetere il metodo in modo ricorsivo (fino a level == 2)
+    public String getDeathCause(Dynasty period){
+        return tables.get(period.getValue()).findElement(By.xpath(deathCausexPath)).getText();
+    }
 
+    public String getAdditionalInfo(Dynasty period){
+        return tables.get(period.getValue()).findElement(By.xpath(infoxPath)).getText();
+    }
 
+    public String getCharge(Dynasty period){
+        int periodValue = period.getValue();
+
+        ;
+        if(periodValue >= 13){              //13 is the "Riforma tetrarchica"'s periodValue
+            if(getPersonName().equals("Diocleziano")){
+                return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/table[1]/tbody/tr[5]/td")).getText();
             }
-
+            return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/table[1]/tbody/tr[4]/td/ul/li")).getText();
         }
+        return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/table[1]/tbody/tr[5]/td")).getText();
     }
 
-    public void fetchEmperors(@NotNull Dynasty period){
-        List<WebElement> names = tables.get(period.getValue()).findElements(By.xpath(xPath));
-        //System.out.println(names);
+    //---------------------------------------------Persons----------------------------------------------------------
+
+
+
+
+
+    public static void main(String[] args) {
+        Scraper scraper = new Scraper();
+
+        System.out.println("Death Cause: " + scraper.getDeathCause(DINASTIA_GIULIO_CLAUDIA));
+        System.out.println("Additional Info: " + scraper.getAdditionalInfo(DINASTIA_GIULIO_CLAUDIA));
+
+        scraper.tables.get(2).findElement(By.xpath("tbody/tr/td[2]/b/a")).click();
+        System.out.println("Person Name: " + scraper.getPersonName());
+        System.out.println("Charge: " + scraper.getCharge(DINASTIA_GIULIO_CLAUDIA));
     }
-}
+    }
