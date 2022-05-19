@@ -6,6 +6,7 @@ public class Emperor extends Person{
     private ChargeTime charge;
     private String deathCause;
     private String additionalInfo;
+    private String Title;
 
     //  TODO:   IMPLEMENT CLASS CONSTRUCTOR
     public Emperor(String name, LocalDate bornDate){

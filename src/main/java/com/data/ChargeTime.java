@@ -1,23 +1,14 @@
 package com.data;
 
-import java.time.LocalDate;
+
 import java.time.Period;
 
 public class ChargeTime {
-    private LocalDate start, end;
+    private String charge;
 
     //  TODO:   IMPLEMENT CLASS CONSTRUCTOR
 
 
-    public int getTotalCharge(){
-        return Period.between(start , end).getYears();
-    }
+    public String getChargeTime(){return charge;}
 
-    public LocalDate getStart() {
-        return start;
-    }
-
-    public LocalDate getEnd() {
-        return end;
-    }
 }
