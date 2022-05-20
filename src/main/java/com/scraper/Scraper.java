@@ -19,6 +19,7 @@ public class Scraper {
     private final String url = "https://it.wikipedia.org/wiki/Imperatori_romani";
     private final String xPath = "//table[@class=\"wikitable\"][@style=\"text-align:center\"]";
     private final String namexPath = "tbody/tr/td[2]/b/a";
+    private final String categoryxPath = "tbody/tr";
     private final String deathCausexPath = "tbody/tr/td[6]/small";
     private final String infoxPath = "tbody/tr/td[7]";
     private final String startChargePath = "tbody/tr/td[4]";
@@ -51,9 +52,10 @@ public class Scraper {
                 else{
                     String pName = Utils.getPersonName(synopticTable);
                     LocalDate bornDate = null;
-                    entityList.add(new Emperor( bla bla bla));
-
+                    entityList.add(new Emperor(pName, bornDate, name.getAttribute("href")));
                     // if its emperor check for sons in the synoptic table
+
+                    }
                     WebElement sonList = bla bla bla;
                     for(WebElement son : sonList){
                         //  click and get info
@@ -76,15 +78,4 @@ public class Scraper {
         System.out.println("\n---------------------------------------");
     }
 
-    //  TODO:   IL MAIN METTILO NELLA CLASSE TEST CLOWN (OCCHIO CHE TABLES E' PRIVATO QUINDI CONVERTI TUTTO IN UNA FUNZIONE PUBBLICA E CHIAMALA NEL MAIN DI Test.java)
-    /*public static void main(String[] args) {
-        Scraper scraper = new Scraper();
-
-        System.out.println("Death Cause: " + scraper.getDeathCause(DINASTIA_GIULIO_CLAUDIA));
-        System.out.println("Additional Info: " + scraper.getAdditionalInfo(DINASTIA_GIULIO_CLAUDIA));
-
-        scraper.tables.get(2).findElement(By.xpath("tbody/tr/td[2]/b/a")).click();
-        System.out.println("Person Name: " + scraper.getPersonName());
-        System.out.println("Charge: " + scraper.getCharge(DINASTIA_GIULIO_CLAUDIA));
-    }*/
 }
