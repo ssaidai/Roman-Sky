@@ -24,7 +24,7 @@ public class Scraper {
     private final String startChargePath = "tbody/tr/td[4]";
     private final String endChargePath = "tbody/tr/td[5]";
 
-    private Emperor dynastyProgenitor;
+    private List<Person> entityList;
 
     private final List<WebElement> tables;
     private final WebDriver driver = new HtmlUnitDriver();
@@ -35,11 +35,34 @@ public class Scraper {
 
         tables = driver.findElements(By.xpath(xPath));
 
-        //for(WebElement table : tables)
-        //    printNames(table);
+        for(WebElement table : tables)
+            for(WebElement name : table.findElements(By.xpath(namexPath))){
+                name.click();
+                WebElement synopticTable =
+                        driver.findElement(
+                                By.xpath("//table[@class=\"sinottico\"]")
+                        );      //  Check if this is empty
+                                //  If so it means there is not a synoptic table and we need to create an instance of Person instead of Emperor
+                if(synopticTable.getText().equals("")){
+                    String pName = Utils.getPersonName(driver);
+                    LocalDate bornDate = null;     //  Da valutare effettiva utilità della data di nascita
+                    entityList.add(new Person(pName, bornDate, name.getAttribute("href")));
+                }
+                else{
+                    String pName = Utils.getPersonName(synopticTable);
+                    LocalDate bornDate = null;
+                    entityList.add(new Emperor( bla bla bla));
+
+                    // if its emperor check for sons in the synoptic table
+                    WebElement sonList = bla bla bla;
+                    for(WebElement son : sonList){
+                        //  click and get info
+                    }
+                }
+            }
     }
 
-    //  Test method to print main names
+    //  Test method to print table names
     public void printNames(@NotNull WebElement table){
         List<WebElement> names = table.findElements(By.xpath(namexPath));
         int c = 1;
@@ -53,42 +76,8 @@ public class Scraper {
         System.out.println("\n---------------------------------------");
     }
 
-
-
-    //---------------------------------------------Getters----------------------------------------------------------
-
-    public String getPersonName(){
-        return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/p[1]/b[1]")).getText();
-    }
-
-    public String getDeathCause(Dynasty period){
-        return tables.get(period.getValue()).findElement(By.xpath(deathCausexPath)).getText();
-    }
-
-    public String getAdditionalInfo(Dynasty period){
-        return tables.get(period.getValue()).findElement(By.xpath(infoxPath)).getText();
-    }
-
-    public String getCharge(Dynasty period){
-        int periodValue = period.getValue();
-
-        ;
-        if(periodValue >= 13){              //13 is the "Riforma tetrarchica"'s periodValue
-            if(getPersonName().equals("Diocleziano")){
-                return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/table[1]/tbody/tr[5]/td")).getText();
-            }
-            return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/table[1]/tbody/tr[4]/td/ul/li")).getText();
-        }
-        return driver.findElement(By.xpath("/html/body/div[3]/div[3]/div[5]/div[1]/table[1]/tbody/tr[5]/td")).getText();
-    }
-
-    //---------------------------------------------Persons----------------------------------------------------------
-
-
-
-
-
-    public static void main(String[] args) {
+    //  TODO:   IL MAIN METTILO NELLA CLASSE TEST CLOWN (OCCHIO CHE TABLES E' PRIVATO QUINDI CONVERTI TUTTO IN UNA FUNZIONE PUBBLICA E CHIAMALA NEL MAIN DI Test.java)
+    /*public static void main(String[] args) {
         Scraper scraper = new Scraper();
 
         System.out.println("Death Cause: " + scraper.getDeathCause(DINASTIA_GIULIO_CLAUDIA));
@@ -97,5 +86,5 @@ public class Scraper {
         scraper.tables.get(2).findElement(By.xpath("tbody/tr/td[2]/b/a")).click();
         System.out.println("Person Name: " + scraper.getPersonName());
         System.out.println("Charge: " + scraper.getCharge(DINASTIA_GIULIO_CLAUDIA));
-    }
-    }
+    }*/
+}
