@@ -6,4 +6,5 @@ public class Test {
         Scraper scraper = new Scraper();
 
     }
+
 }
