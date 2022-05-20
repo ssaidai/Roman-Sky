@@ -8,7 +8,7 @@ public class Person {
     private final String name;
     private final LocalDate bornDate;
 
-    private final String href;    // used as ID to distinguish homonym persons
+    private String href = null;    // used as ID to distinguish homonym persons
 
     private Set<Person> parents, married;
 
@@ -17,7 +17,7 @@ public class Person {
     public Person(String name, LocalDate bornDate, String href){
         this.name = name;
         this.bornDate = bornDate;
-        this.href = href;
+        this.href = this.href;
     }
 
     //  CHANGE THIS TO BOOLEAN

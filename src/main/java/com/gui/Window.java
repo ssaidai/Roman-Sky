@@ -17,6 +17,7 @@ public class Window extends JFrame{
     private JPanel pCentro2 = new JPanel();
     private JPanel pCentro2NORD = new JPanel();
     private JPanel pCentro2CENTRO = new JPanel();
+    private JPanel pCentro2SUD = new JPanel();
     private JTextField testoRoma = new JTextField("Questa è Roma!");
     private JLabel testoTendina = new JLabel("SCEGLI LA DINASTIA: ");
     private JLabel labSx = new JLabel();
@@ -24,6 +25,7 @@ public class Window extends JFrame{
     private JLabel testoProvvisiorio = new JLabel();
     private JLabel testoProvvisiorio2 = new JLabel();
     private JLabel labLogo = new JLabel();
+    private JLabel labSPQR = new JLabel();
     private JLabel spazioBianco = new JLabel();
 
 
@@ -70,8 +72,9 @@ public class Window extends JFrame{
         testoRoma.setEditable(false);
         testoTendina.setForeground(new Color(0x000000));
         testoTendina.setFont(new Font("Sans Serif", Font.PLAIN, 16));
-        labSx.setIcon(new ImageIcon("src/resources/images/Augusto3sx.png"));
-        labDx.setIcon(new ImageIcon("src/resources/images/Augusto3dx.png"));
+        labSx.setIcon(new ImageIcon("src/resources/images/Giuliosx.png"));
+        labDx.setIcon(new ImageIcon("src/resources/images/Augustodx.png"));
+        labSPQR.setIcon(new ImageIcon("src/resources/logos/logo_spqr.png"));
         mTendina.setBounds(2,2,10,10);
 
 
@@ -85,11 +88,13 @@ public class Window extends JFrame{
         // GESTIONE PANEL
 
         pCentro.setLayout(new BorderLayout());
+        //pCentro2.setBackground(new Color(0xFFFFFF));
+        //pCentro2NORD.setBackground(new Color(0xFFFFFF));
         pCentro2.setLayout(new BorderLayout());
         pCentro2.add(spazioBianco, BorderLayout.SOUTH);
         pCentro2CENTRO.setLayout(new GridLayout(3,1, 0,30));
-        pCentro2.setBackground(new Color(0xEFEBEB));
-        pCentro2CENTRO.setBackground(new Color(0xEFEBEB));
+        //pCentro2.setBackground(new Color(0xEFEBEB));
+        //pCentro2CENTRO.setBackground(new Color(0xFFFFFF));
         pCentro2.add(pCentro2CENTRO, BorderLayout.CENTER);
         pCentro2.add(pCentro2NORD, BorderLayout.NORTH);
         pCentro.add(pCentro2,BorderLayout.CENTER);
@@ -98,18 +103,20 @@ public class Window extends JFrame{
         pEst.setLayout(new BorderLayout());
         pNord.add(testoProvvisiorio);
         pNord.setBackground(new Color(0x282727));
-        pCentro.setBackground(new Color(0xEFEBEB));       //Da levare o cambiare colore in base ai nostri gusti
+        //.setBackground(new Color(0xEFEBEB));       //Da levare o cambiare colore in base ai nostri gusti
         pCentro2CENTRO.add(testoTendina);
-        pEst.setBackground(new Color(0xEFEBEB));
-        pOvest.setBackground(new Color(0xEFEBEB));
+        //pEst.setBackground(new Color(0xEFEBEB));
+        //pOvest.setBackground(new Color(0xEFEBEB));
         pCentro2CENTRO.add(mTendina);
         pCentro2CENTRO.add(button);
-        pCentro2NORD.setBackground(new Color(0xEFEBEB));
+        //pCentro2NORD.setBackground(new Color(0xEFEBEB));
         pCentro2NORD.add(labLogo);
         pOvest.add(labSx, BorderLayout.SOUTH);
         pEst.add(labDx, BorderLayout.SOUTH);
         pSud.setLayout(new GridBagLayout());
         pSud.add(testoProvvisiorio2);
+        //pEst.setBackground(new Color(0xFFFFFF));
+        //pOvest.setBackground(new Color(0xFFFFFF));
         //pSud.setBackground(new Color(0x282727));
 
 

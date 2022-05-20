@@ -9,8 +9,8 @@ public class Emperor extends Person{
     private String Title;
 
     //  TODO:   IMPLEMENT CLASS CONSTRUCTOR
-    public Emperor(String name, LocalDate bornDate){
-        super(name, bornDate);    //  We need to pass the parameters to super constructor first
+    public Emperor(String name, LocalDate bornDate, String href){
+        super(name, bornDate, href);    //  We need to pass the parameters to super constructor first
                                   //  example usage should be: super("Noemi", "23-02-2004")
         //  Constructor implementation here
 
