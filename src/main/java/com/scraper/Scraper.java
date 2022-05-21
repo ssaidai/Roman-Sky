@@ -28,17 +28,17 @@ public class Scraper {
     private final List<WebElement> tables;
     private final WebDriver driver = new HtmlUnitDriver();
 
+
     // Scraper constructor
     public Scraper(){
         driver.get(url);
-
         tables = driver.findElements(By.xpath(xPath));
 
         for(WebElement table : tables)
             for(WebElement name : table.findElements(By.xpath(namexPath))){
                 String href = name.getAttribute("href");
                 driver.get(href);
-                Person temp = Utils.getInfo(driver, href);
+                Person temp = Utils.getInfo(driver, href, href);
                 entityList.add(temp);
                 entityList.addAll(temp.getChildren().keySet());
             }
@@ -46,6 +46,7 @@ public class Scraper {
         DynastyTree graph = new DynastyTree(entityList);
         System.out.println(graph);
     }
+
 
     //  Test method to print table names
     public void printNames(@NotNull WebElement table){
