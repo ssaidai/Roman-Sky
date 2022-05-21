@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 
+//  TODO: RINOMINATE LE VARIABILI IN INGLESE, ETTA HA DETTO CHE IL CODICE DEVE ESSERE IN INGLESE .-.
 
 public class Window extends JFrame{
 

@@ -6,7 +6,6 @@ import java.util.Set;
 
 public class Person {
     private final String name;
-    private final LocalDate bornDate;
 
     private String href = null;    // used as ID to distinguish homonym persons
 
@@ -14,13 +13,11 @@ public class Person {
 
     private HashMap<Person, Boolean> children;
 
-    public Person(String name, LocalDate bornDate, String href){
+    public Person(String name, String href){
         this.name = name;
-        this.bornDate = bornDate;
-        this.href = this.href;
+        this.href = href;
     }
 
-    //  CHANGE THIS TO BOOLEAN
     public void addParent(Person parent){
         this.parents.add(parent);
     }
@@ -44,8 +41,5 @@ public class Person {
 
     public Set<Person> getMarried(){
         return this.married;
-    }
-    public LocalDate getBornDate() {
-        return bornDate;
     }
 }

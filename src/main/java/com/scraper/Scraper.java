@@ -1,18 +1,16 @@
 package com.scraper;
 
-import com.data.Emperor;
+import com.data.Vip;
 import com.data.Person;
+import com.graph.DynastyTree;
 import org.jetbrains.annotations.NotNull;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.scraper.Dynasty.DINASTIA_GIULIO_CLAUDIA;
 
 public class Scraper {
     private ArrayList<Person> emperors;
@@ -38,30 +36,15 @@ public class Scraper {
 
         for(WebElement table : tables)
             for(WebElement name : table.findElements(By.xpath(namexPath))){
-                name.click();
-                WebElement synopticTable =
-                        driver.findElement(
-                                By.xpath("//table[@class=\"sinottico\"]")
-                        );      //  Check if this is empty
-                                //  If so it means there is not a synoptic table and we need to create an instance of Person instead of Emperor
-                if(synopticTable.getText().equals("")){
-                    String pName = Utils.getPersonName(driver);
-                    LocalDate bornDate = null;     //  Da valutare effettiva utilità della data di nascita
-                    entityList.add(new Person(pName, bornDate, name.getAttribute("href")));
-                }
-                else{
-                    String pName = Utils.getPersonName(synopticTable);
-                    LocalDate bornDate = null;
-                    entityList.add(new Emperor(pName, bornDate, name.getAttribute("href")));
-                    // if its emperor check for sons in the synoptic table
-
-                    }
-                    WebElement sonList = bla bla bla;
-                    for(WebElement son : sonList){
-                        //  click and get info
-                    }
-                }
+                String href = name.getAttribute("href");
+                driver.get(href);
+                Person temp = Utils.getInfo(driver, href);
+                entityList.add(temp);
+                entityList.addAll(temp.getChildren().keySet());
             }
+
+        DynastyTree graph = new DynastyTree(entityList);
+        System.out.println(graph);
     }
 
     //  Test method to print table names
