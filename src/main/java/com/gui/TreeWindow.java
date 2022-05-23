@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 public class TreeWindow extends JFrame implements ActionListener {
 
@@ -14,7 +16,7 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenu menuFile = new JMenu("File");
     private JMenu menuEdit= new JMenu("Edit");
     private JMenu menuHelp = new JMenu("Help");
-    private JMenuItem saveItem = new JMenuItem("Save");
+    private JMenuItem saveItem = new JMenuItem("Save", KeyEvent.VK_S);
     private JMenuItem infoItem = new JMenuItem("Info");
     private JMenuItem drawItem = new JMenuItem("Draw");
     private JMenuItem exitItem = new JMenuItem("Exit");
@@ -51,14 +53,23 @@ public class TreeWindow extends JFrame implements ActionListener {
         menuHelp.add(infoItem);
         //TODO: INSERIRE ICONE (24x24) PER MENU (sito da dove ho scaricato l'icona https://icons8.it/icons)
         saveItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaSalva.png"));
+        infoItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaInfo.png"));
+        exitItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaExit.png"));
+        drawItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaDraw.png"));
+        changeNamesColorItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
 
         //TODO: CAMBIARE FONT DEL MENU SE NON PIACE QUELLO DI DEFAULT
-
+        menuBar.setFont(new Font("Georgia", Font.PLAIN, 10));  //vedere se funziona
 
         // Gestione container
         container = this.getContentPane();
     }
     //TODO: KEYBOARD SHORTCUTS PER MENU ATTRAVERSO IL METODO setMnemonic
+
+    public void mnemonics(){
+        saveItem.setMnemonic(KeyEvent.VK_S);
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {

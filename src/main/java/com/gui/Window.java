@@ -68,7 +68,7 @@ public class Window extends JFrame implements ActionListener{
         dropdown_Text.setBounds(0,100,400,50);
         dropdown_Text.setForeground(new Color(0x000000));
         dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 25f));
-        labSx.setIcon(new ImageIcon("src/resources/images/Augusto3sx.png"));
+        labSx.setIcon(new ImageIcon("src/resources/images/GC2.png"));
         labDx.setIcon(new ImageIcon("src/resources/images/Augusto3dx.png"));
         labSPQR.setIcon(new ImageIcon("src/resources/logos/logo_spqr.png"));
         dropdown_menù.setBackground(new Color(0xFAF7F7));
