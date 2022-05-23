@@ -1,5 +1,7 @@
 package com.gui;
 
+
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -44,16 +46,10 @@ public class Window extends JFrame implements ActionListener{
 
     private void setupListener(){
         button.addActionListener(this);
+        dropdown_menù.addActionListener(this);
     }
 
     public void setup() {
-
-
-
-
-
-        //TODO: BISOGNA MODIFICARE IL PANEL CENTRALE PER RENDERLO PIU' MINIMAL E CARINO DA VEDERE.
-        //TODO: BISOGNA INIZIARE AD IMPLEMENTARE ACTIONLISTENER :))
 
 
 
@@ -130,6 +126,9 @@ public class Window extends JFrame implements ActionListener{
         setLocationRelativeTo(null);          //Si apre la finestra al centro dello schermo
         setVisible(true);
     }
+
+
+
     public static void main(String[] args) {
         new Window().setup();
     }
@@ -141,7 +140,9 @@ public class Window extends JFrame implements ActionListener{
         String bottone = e.getActionCommand();
         if(bottone.equals("CREA ALBERO"))
         {
-            System.out.println("FORZA ROMA E ABEL");
+
+            TreeWindow tree = new TreeWindow(dropdown_menù.getSelectedItem().toString());
+            //System.out.println(dropdown_menù.getSelectedItem().toString());
 
         }
     }
