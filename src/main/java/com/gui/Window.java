@@ -2,6 +2,9 @@ package com.gui;
 
 
 
+import com.formdev.flatlaf.FlatDarculaLaf;
+import com.formdev.flatlaf.FlatIntelliJLaf;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -65,7 +68,7 @@ public class Window extends JFrame implements ActionListener{
         mainLogo.setVisible(true);
         text_Rome.setBorder(BorderFactory.createEmptyBorder());
         text_Rome.setEditable(false);
-        dropdown_Text.setBounds(0,100,400,50);
+        dropdown_Text.setBounds(85,100,400,50);
         dropdown_Text.setForeground(new Color(0x000000));
         dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 25f));
         labSx.setIcon(new ImageIcon("src/resources/images/GC2.png"));
@@ -74,8 +77,8 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menù.setBackground(new Color(0xFAF7F7));
         dropdown_menù.setFocusable(false);
         dropdown_menù.setBorder(BorderFactory.createRaisedBevelBorder());
-        dropdown_menù.setFont(new Font("Sans Serif", Font.PLAIN, 17));
-        dropdown_menù.setBounds(0,150,600,30);
+        dropdown_menù.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin Italic.ttf", 15f));
+        dropdown_menù.setBounds(85,150,515,30);
 
 
 
@@ -86,7 +89,7 @@ public class Window extends JFrame implements ActionListener{
         button.setBackground(new Color(0x676060));
         button.setForeground(Color.white);
         button.setFont(MyFont.creaFont("src/resources/fonts/Coco-Gothic-Regular-trial.ttf", 15f));
-        button.setBounds(0,300,160,30);
+        button.setBounds(85,300,160,30);
 
 
         // GESTIONE PANEL
@@ -130,6 +133,11 @@ public class Window extends JFrame implements ActionListener{
 
 
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         new Window().setup();
     }
 

@@ -59,7 +59,7 @@ public class TreeWindow extends JFrame implements ActionListener {
         changeNamesColorItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
 
         //TODO: CAMBIARE FONT DEL MENU SE NON PIACE QUELLO DI DEFAULT
-        menuBar.setFont(new Font("Georgia", Font.PLAIN, 10));  //vedere se funziona
+        menuFile.setFont(new Font("Georgia", Font.PLAIN, 10));  //vedere se funziona --- FUNZIONA :D
 
         // Gestione container
         container = this.getContentPane();
@@ -68,13 +68,16 @@ public class TreeWindow extends JFrame implements ActionListener {
 
     public void mnemonics(){
         saveItem.setMnemonic(KeyEvent.VK_S);
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)); //a me non funziona ctrl + s
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == exitItem){
             System.exit(0);
+        }
+        if(e.getSource() == saveItem){
+            System.out.println("--- HAI SALVATO IL FILE ---");
         }
     }
 }
