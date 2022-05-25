@@ -1,4 +1,4 @@
-package com.gui;
+package com.gui.TreeWindow;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,18 +11,18 @@ public class TreeWindow extends JFrame implements ActionListener {
 
     private String dinasty;
 
-    private Container container;
     private JMenuBar menuBar = new JMenuBar();
     private JMenu menuFile = new JMenu("File");
     private JMenu menuEdit= new JMenu("Edit");
     private JMenu menuHelp = new JMenu("Help");
-    private JMenuItem saveItem = new JMenuItem("Save", KeyEvent.VK_S);
+    private JMenuItem saveItem = new JMenuItem("Save");
     private JMenuItem infoItem = new JMenuItem("Info");
     private JMenuItem drawItem = new JMenuItem("Draw");
     private JMenuItem exitItem = new JMenuItem("Exit");
     private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
     public TreeWindow(String din){
-        super("Imperatori Romani");
+        super(din);
+        setLayout(new BorderLayout());
         setSize(1400, 800);
         setResizable(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -51,6 +51,7 @@ public class TreeWindow extends JFrame implements ActionListener {
         menuEdit.add(drawItem);
         menuEdit.add(changeNamesColorItem);
         menuHelp.add(infoItem);
+
         //TODO: INSERIRE ICONE (24x24) PER MENU (sito da dove ho scaricato l'icona https://icons8.it/icons)
         saveItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaSalva.png"));
         infoItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaInfo.png"));
@@ -59,16 +60,15 @@ public class TreeWindow extends JFrame implements ActionListener {
         changeNamesColorItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
 
         //TODO: CAMBIARE FONT DEL MENU SE NON PIACE QUELLO DI DEFAULT
-        menuFile.setFont(new Font("Georgia", Font.PLAIN, 10));  //vedere se funziona --- FUNZIONA :D
+        menuFile.setFont(new Font("Bell MT", Font.PLAIN, 15));  //vedere se funziona --- FUNZIONA :D --- daje
+        menuEdit.setFont(new Font("Bell MT", Font.PLAIN, 15));
+        menuHelp.setFont(new Font("Bell MT", Font.PLAIN, 15));
 
-        // Gestione container
-        container = this.getContentPane();
     }
     //TODO: KEYBOARD SHORTCUTS PER MENU ATTRAVERSO IL METODO setMnemonic
 
     public void mnemonics(){
-        saveItem.setMnemonic(KeyEvent.VK_S);
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK)); //a me non funziona ctrl + s
+        //non sono ancora riuscito a impostarlo
     }
 
     @Override

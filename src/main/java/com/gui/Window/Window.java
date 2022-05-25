@@ -1,23 +1,21 @@
-package com.gui;
+package com.gui.Window;
 
 
 
-import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import com.gui.MyFont;
+import com.gui.TreeWindow.TreeWindow;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
-//  TODO: RINOMINATE LE VARIABILI IN INGLESE, ETTA HA DETTO CHE IL CODICE DEVE ESSERE IN INGLESE .-.
-
 public class Window extends JFrame implements ActionListener{
 
-    private Container cont;
     private JLabel mainLogo =new JLabel();
-    private JPanel panelNord = new JPanel(new FlowLayout());
+    private JPanel panelNord = new JPanel();
     private JPanel panelCenter =new JPanel();       //Forse Card Layout
     private JPanel panelSud =new JPanel();
     private JPanel panelWest = new JPanel();
@@ -25,8 +23,6 @@ public class Window extends JFrame implements ActionListener{
     private JPanel panelCenter2 = new JPanel();
     private JPanel pCenter2NORD = new JPanel();
     private JPanel pCenter2CENTER = new JPanel();
-    private JPanel pCenter2SUD = new JPanel();
-    private JTextField text_Rome = new JTextField("Questa è Roma!");
     private JLabel dropdown_Text = new JLabel("SCEGLI LA DINASTIA ");
     private JLabel labSx = new JLabel();
     private JLabel labDx = new JLabel();
@@ -34,8 +30,7 @@ public class Window extends JFrame implements ActionListener{
     private JLabel background2 = new JLabel();
     private JLabel labLogo = new JLabel();
     private JLabel labSPQR = new JLabel();
-    private JLabel emptySpace = new JLabel();
-    private String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA_3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
+    private String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
     JComboBox<String> dropdown_menù = new JComboBox<>(dynasties);
     JButton button = new JButton("CREA ALBERO");
 
@@ -55,22 +50,18 @@ public class Window extends JFrame implements ActionListener{
     public void setup() {
 
 
-
         // GESTIONE LABEL
         background1.setPreferredSize(new Dimension(1400, 30));
         background1.setIcon(new ImageIcon("src/resources/images/sfondo2Nord.jpg"));
         background2.setPreferredSize(new Dimension(1400, 30));
         background2.setIcon(new ImageIcon("src/resources/images/sfondo2Sud.jpg"));
-        emptySpace.setPreferredSize(new Dimension(10, 400));
         labLogo.setIcon(new ImageIcon("src/resources/logos/logoPROVA.png"));
         labLogo.setBorder(BorderFactory.createEtchedBorder());
         mainLogo.setHorizontalAlignment(JLabel.CENTER);
         mainLogo.setVisible(true);
-        text_Rome.setBorder(BorderFactory.createEmptyBorder());
-        text_Rome.setEditable(false);
         dropdown_Text.setBounds(85,100,400,50);
         dropdown_Text.setForeground(new Color(0x000000));
-        dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 25f));
+        dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/opificio_light.ttf", 25f));
         labSx.setIcon(new ImageIcon("src/resources/images/GC2.png"));
         labDx.setIcon(new ImageIcon("src/resources/images/Augusto3dx.png"));
         labSPQR.setIcon(new ImageIcon("src/resources/logos/logo_spqr.png"));
@@ -86,7 +77,7 @@ public class Window extends JFrame implements ActionListener{
         button.setFocusable(false);
         button.setFont(new Font("Comic Sans", Font.BOLD, 15));
         button.setBorder(BorderFactory.createEtchedBorder());
-        button.setBackground(new Color(0x676060));
+        button.setBackground(new Color(0x4D3939));
         button.setForeground(Color.white);
         button.setFont(MyFont.creaFont("src/resources/fonts/Coco-Gothic-Regular-trial.ttf", 15f));
         button.setBounds(85,300,160,30);
@@ -95,7 +86,6 @@ public class Window extends JFrame implements ActionListener{
         // GESTIONE PANEL
         panelCenter.setLayout(new BorderLayout());
         panelCenter2.setLayout(new BorderLayout());
-        //pCentro2.add(emptySpace, BorderLayout.SOUTH);
         pCenter2CENTER.setLayout(null);
         panelCenter2.add(pCenter2CENTER, BorderLayout.CENTER);
         panelCenter2.add(pCenter2NORD, BorderLayout.NORTH);
@@ -115,14 +105,12 @@ public class Window extends JFrame implements ActionListener{
         panelSud.add(background2);
 
 
-        // GESTIONE DEL FRAME E DEL CONTAINER
-        cont = this.getContentPane();
-        cont.setLayout(new BorderLayout());
-        cont.add(panelNord, BorderLayout.NORTH);
-        cont.add(panelSud, BorderLayout.SOUTH);
-        cont.add(panelCenter, BorderLayout.CENTER);
-        cont.add(panelWest, BorderLayout.WEST);
-        cont.add(panelEast, BorderLayout.EAST);
+        // GESTIONE DEL FRAME
+        add(panelNord, BorderLayout.NORTH);
+        add(panelSud, BorderLayout.SOUTH);
+        add(panelCenter, BorderLayout.CENTER);
+        add(panelWest, BorderLayout.WEST);
+        add(panelEast, BorderLayout.EAST);
         setSize(1400, 800);
         setResizable(false);  // forse TRUE, per adesso FALSE
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
