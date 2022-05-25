@@ -20,7 +20,6 @@ public class Person {
         this.href = href;
     }
 
-
     public void addParent(Person parent){
         this.parents.add(parent);
     }
@@ -53,6 +52,11 @@ public class Person {
 
     public HashMap<Person, Boolean> getChildren(){
         return this.children;
+    }
+
+    @Override
+    public String toString(){
+        return this.name;
     }
 
 }

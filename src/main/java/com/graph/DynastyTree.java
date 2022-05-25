@@ -1,9 +1,9 @@
 package com.graph;
 
 import com.data.Person;
-import com.mxgraph.layout.mxCircleLayout;
-import com.mxgraph.layout.mxEdgeLabelLayout;
-import com.mxgraph.layout.mxIGraphLayout;
+import com.mxgraph.layout.*;
+import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
+import com.mxgraph.layout.orthogonal.mxOrthogonalLayout;
 import com.mxgraph.swing.mxGraphComponent;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -45,7 +45,7 @@ public class DynastyTree {
         @Override
         public String toString()
         {
-            return "(" + getSource() + " : " + getTarget() + " : " + label + ")";
+            return label;
         }
     }
 
@@ -55,6 +55,7 @@ public class DynastyTree {
     private static final String ADOPTED = "adopted";
 
     public DynastyTree(Set<Person> entityList){
+        //  TODO:   order entities by bornDate before adding it to the graph (set adds them in random order)
         Graphs.addAllVertices(this.graph, entityList);
 
         for(Person person : graph.vertexSet()){
@@ -69,12 +70,14 @@ public class DynastyTree {
             }
         }
 
+        //  TODO:   https://jgraph.github.io/mxgraph/docs/manual_javavis.html   ---   mxGraph documentation
+        //  FIXME:  change edge color by relation type and place wives at same level of the husband
+
         JFrame frame = new JFrame("Grafo de noemi");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JGraphXAdapter<Person, RelationshipEdge> graphAdapter =
-                new JGraphXAdapter<Person, RelationshipEdge>(graph);
+        JGraphXAdapter<Person, RelationshipEdge> graphAdapter = new JGraphXAdapter<>(graph);
 
-        mxIGraphLayout layout = new mxEdgeLabelLayout(graphAdapter);
+        mxIGraphLayout layout = new mxHierarchicalLayout(graphAdapter);
         layout.execute(graphAdapter.getDefaultParent());
 
         frame.add(new mxGraphComponent(graphAdapter));

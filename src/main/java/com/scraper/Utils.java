@@ -17,6 +17,10 @@ import java.util.regex.Pattern;
 public class Utils {
 
     public static Vip getInfo(WebDriver driver, String href, Set<Person> entitylist){
+        Person p = containsHref(entitylist, href);
+        if(p != null){
+            return (Vip) p;
+        }
         System.out.println(href);
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
@@ -24,9 +28,9 @@ public class Utils {
             String title = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_divisione\"]/th")).getText();
             String bornDate = null;
             try{
-                 bornDate = getHeaderContent("Nascita", synopticTable).getText();     // TODO:    CHECK FOR NULLPOINTEREXCEPTION
+                 bornDate = getHeaderContent("Nascita", synopticTable).getText();
             }
-            catch (NullPointerException nullPointerException){}
+            catch (NullPointerException ignored){}
             Vip entity = new Vip(name, title, bornDate, href);
             addRelatives(driver, synopticTable, entity, entitylist);
             entitylist.add(entity);
@@ -49,9 +53,8 @@ public class Utils {
         }
         return null;    // TODO:    CHANGE THIS RETURN TO SOMETHING ELSE SO WE DON'T HAVE TO HANDLE NULL POINTERS
     }
-
-    private static boolean containsHref(final List<Person> list, final String href){
-        return list.stream().anyMatch(o -> o.getHref().equals(href));
+    private static Person containsHref(final Set<Person> list, final String href){
+        return list.stream().filter(o -> o.getHref().equals(href)).findFirst().orElse(null);
     }
 
     private static boolean listContainsTitle(final List<String> list, final String str){

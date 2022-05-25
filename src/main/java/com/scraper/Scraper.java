@@ -38,7 +38,6 @@ public class Scraper {
                 Utils.getInfo(driver, href, entityList);
                 driver.navigate().back();
             }
-            break;
         }
 
         DynastyTree graph = new DynastyTree(entityList);
