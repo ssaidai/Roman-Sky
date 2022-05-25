@@ -1,15 +1,18 @@
 package com.data;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 public class Person {
     private final String name;
     private String href = null;    // used as ID to distinguish homonym persons
 
-    private Set<Person> parents, married;
-    private HashMap<Person, Boolean> children;
+    private Set<Person> parents = new HashSet<>();
+    private Set<Person>married = new HashSet<>();
+    private HashMap<Person, Boolean> children = new HashMap<>();
 
 
     public Person(String name, String href){
@@ -40,12 +43,12 @@ public class Person {
         return href;
     }
 
-    public Set<Person> getParents() {
-        return parents;
+    public ArrayList<Person> getParents() {
+        return new ArrayList<>(parents);
     }
 
-    public Set<Person> getMarried(){
-        return this.married;
+    public ArrayList<Person> getMarried(){
+        return new ArrayList<>(married);
     }
 
     public HashMap<Person, Boolean> getChildren(){

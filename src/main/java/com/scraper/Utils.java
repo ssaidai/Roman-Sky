@@ -1,6 +1,5 @@
 package com.scraper;
 
-import com.data.Emperor;
 import com.data.Person;
 import com.data.Vip;
 import org.openqa.selenium.By;
@@ -9,74 +8,90 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Utils {
 
-    public static Vip getInfo(WebDriver driver, String href, String emperorHRef) {
-        try {
+    public static Vip getInfo(WebDriver driver, String href, Set<Person> entitylist){
+        System.out.println(href);
+        try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
             String name = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_testata\"]/th")).getText();
             String title = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_divisione\"]/th")).getText();
-            String bornDate = getHeaderContent("Nascita", synopticTable).getText();     // TODO:    CHECK FOR NULLPOINTEREXCEPTION
-
+            String bornDate = null;
+            try{
+                 bornDate = getHeaderContent("Nascita", synopticTable).getText();     // TODO:    CHECK FOR NULLPOINTEREXCEPTION
+            }
+            catch (NullPointerException nullPointerException){}
             Vip entity = new Vip(name, title, bornDate, href);
-            if  (href.equals(emperorHRef)) {                           //TODO: CHECK IF IT'S RIGHT
-                entity = new Emperor(name, title, bornDate, href);
-            }
-
-
-
-
-            if (getHeaderContent("Figli", synopticTable) != null) {
-                for (Person son : getChildren(driver, synopticTable, emperorHRef)) {
-                    entity.addChild(son, false);
-                }
-            }
+            addRelatives(driver, synopticTable, entity, entitylist);
+            entitylist.add(entity);
             return entity;
-        }
-        catch (NoSuchElementException e) {
-            return new Vip(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(), null, null, href);
+        }catch (NoSuchElementException e){
+            Vip temp = new Vip(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(),null, null, href);
+            entitylist.add(temp);
+            return temp;
         }
     }
 
-
-    private static WebElement getHeaderContent(String header, WebElement table) {
+    private static WebElement getHeaderContent(String header, WebElement table){
         List<WebElement> rows = table.findElements(By.xpath("tbody/tr"));
-        for (WebElement row : rows) {
-            try {
-                if (row.findElement(By.tagName("th")).getText().equals(header)) {
+        for(WebElement row : rows){
+            try{
+                if(row.findElement(By.tagName("th")).getText().equals(header)){
                     return row.findElement(By.tagName("td"));
                 }
-            } catch (NoSuchElementException e) {
+            }catch (NoSuchElementException e){}
+        }
+        return null;    // TODO:    CHANGE THIS RETURN TO SOMETHING ELSE SO WE DON'T HAVE TO HANDLE NULL POINTERS
+    }
+
+    private static boolean containsHref(final List<Person> list, final String href){
+        return list.stream().anyMatch(o -> o.getHref().equals(href));
+    }
+
+    private static boolean listContainsTitle(final List<String> list, final String str){
+        return list.stream().anyMatch(e -> e.contains(str));
+    }
+
+    private static void addRelatives(WebDriver driver, WebElement table, Person entity, Set<Person> entitylist){
+        WebElement relativeHeader = getHeaderContent("Coniuge", table);
+        if(relativeHeader != null)
+            for(WebElement relative : relativeHeader.findElements(By.tagName("a"))){
+                String href = relative.getAttribute("href");
+                if(!href.matches(".*\\d.*")){
+                    driver.get(href);
+                    Person person = getInfo(driver, href, entitylist);
+                    entity.addMarried(person);
+                    driver.navigate().back();
+                }
+            }
+        relativeHeader = getHeaderContent("Figli", table);
+
+        List<String> matchList = new ArrayList<String>();
+        Pattern regex = Pattern.compile("\\((.*?)\\)");
+
+        if(relativeHeader != null){
+            Matcher regexMatcher = regex.matcher(relativeHeader.getText());
+
+            while (regexMatcher.find()) {
+                matchList.add(regexMatcher.group(1));
+            }
+
+            for(WebElement relative : relativeHeader.findElements(By.tagName("a"))){
+                String href = relative.getAttribute("href");
+                if(!href.matches(".*\\d.*") && !listContainsTitle(matchList, relative.getText())){
+                    driver.get(href);
+                    Person person = getInfo(driver, href, entitylist);
+                    entity.addChild(person, false);
+                    driver.navigate().back();
+                }
             }
         }
-        return null;
     }
-
-
-    private static List<Person> getChildren(WebDriver driver, WebElement table, String emperorHRef) {
-        WebElement childrenHeader = getHeaderContent("Figli", table);
-        List<Person> result = new ArrayList<>();
-
-        for (WebElement son : childrenHeader.findElements(By.tagName("a"))) {
-            String href = son.getAttribute("href");
-            driver.get(href);
-            Person pSon = getInfo(driver, href, emperorHRef);        //  FIXME: need to check if all href is referred to their sons,
-            result.add(pSon);                           //  FIXME: some of it is referred to the son's mother
-            driver.navigate().back();
-        }
-        return result;
-    }
-
-    private static String getCharge(WebDriver driver, WebElement table){
-        try{
-            return getHeaderContent("Regno", table).getText();
-        }
-        catch(Exception e){
-            return getHeaderContent("In carica", table).getText();
-        }
-    }
-
 
 }

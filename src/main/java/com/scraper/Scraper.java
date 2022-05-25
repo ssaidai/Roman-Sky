@@ -4,26 +4,23 @@ import com.data.Vip;
 import com.data.Person;
 import com.graph.DynastyTree;
 import org.jetbrains.annotations.NotNull;
+import org.jgrapht.Graph;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Scraper {
-    private ArrayList<Person> emperors;
     private final String url = "https://it.wikipedia.org/wiki/Imperatori_romani";
     private final String xPath = "//table[@class=\"wikitable\"][@style=\"text-align:center\"]";
     private final String namexPath = "tbody/tr/td[2]/b/a";
-    private final String categoryxPath = "tbody/tr";
-    private final String deathCausexPath = "tbody/tr/td[6]/small";
-    private final String infoxPath = "tbody/tr/td[7]";
-    private final String startChargePath = "tbody/tr/td[4]";
-    private final String endChargePath = "tbody/tr/td[5]";
 
-    private List<Person> entityList;
+    private Set<Person> entityList = new HashSet<>();
 
     private final List<WebElement> tables;
     private final WebDriver driver = new HtmlUnitDriver();
@@ -34,14 +31,15 @@ public class Scraper {
         driver.get(url);
         tables = driver.findElements(By.xpath(xPath));
 
-        for(WebElement table : tables)
+        for(WebElement table : tables){
             for(WebElement name : table.findElements(By.xpath(namexPath))){
                 String href = name.getAttribute("href");
                 driver.get(href);
-                Person temp = Utils.getInfo(driver, href, href);
-                entityList.add(temp);
-                entityList.addAll(temp.getChildren().keySet());
+                Utils.getInfo(driver, href, entityList);
+                driver.navigate().back();
             }
+            break;
+        }
 
         DynastyTree graph = new DynastyTree(entityList);
         System.out.println(graph);

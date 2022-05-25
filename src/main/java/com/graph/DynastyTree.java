@@ -1,13 +1,21 @@
 package com.graph;
 
 import com.data.Person;
+import com.mxgraph.layout.mxCircleLayout;
+import com.mxgraph.layout.mxEdgeLabelLayout;
+import com.mxgraph.layout.mxIGraphLayout;
+import com.mxgraph.swing.mxGraphComponent;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
+import org.jgrapht.ListenableGraph;
+import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.Multigraph;
 
+import javax.swing.*;
 import java.util.List;
+import java.util.Set;
 
 public class DynastyTree {
     private class RelationshipEdge extends DefaultEdge{
@@ -46,7 +54,7 @@ public class DynastyTree {
     private static final String KIN = "kin";
     private static final String ADOPTED = "adopted";
 
-    public DynastyTree(List<Person> entityList){
+    public DynastyTree(Set<Person> entityList){
         Graphs.addAllVertices(this.graph, entityList);
 
         for(Person person : graph.vertexSet()){
@@ -61,7 +69,19 @@ public class DynastyTree {
             }
         }
 
-        System.out.println(graph);
+        JFrame frame = new JFrame("Grafo de noemi");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        JGraphXAdapter<Person, RelationshipEdge> graphAdapter =
+                new JGraphXAdapter<Person, RelationshipEdge>(graph);
+
+        mxIGraphLayout layout = new mxEdgeLabelLayout(graphAdapter);
+        layout.execute(graphAdapter.getDefaultParent());
+
+        frame.add(new mxGraphComponent(graphAdapter));
+
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
     }
 
 }
