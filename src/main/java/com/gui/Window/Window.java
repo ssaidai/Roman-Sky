@@ -5,6 +5,7 @@ package com.gui.Window;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.gui.MyFont;
 import com.gui.TreeWindow.TreeWindow;
+import com.scraper.Scraper;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -14,25 +15,27 @@ import java.awt.event.ActionListener;
 
 public class Window extends JFrame implements ActionListener{
 
-    private JLabel mainLogo =new JLabel();
-    private JPanel panelNord = new JPanel();
-    private JPanel panelCenter =new JPanel();       //Forse Card Layout
-    private JPanel panelSud =new JPanel();
-    private JPanel panelWest = new JPanel();
-    private JPanel panelEast = new JPanel();
-    private JPanel panelCenter2 = new JPanel();
-    private JPanel pCenter2NORD = new JPanel();
-    private JPanel pCenter2CENTER = new JPanel();
-    private JLabel dropdown_Text = new JLabel("SCEGLI LA DINASTIA ");
-    private JLabel labSx = new JLabel();
-    private JLabel labDx = new JLabel();
-    private JLabel background1 = new JLabel();
-    private JLabel background2 = new JLabel();
-    private JLabel labLogo = new JLabel();
-    private JLabel labSPQR = new JLabel();
-    private String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
-    JComboBox<String> dropdown_menù = new JComboBox<>(dynasties);
-    JButton button = new JButton("CREA ALBERO");
+    private final JLabel mainLogo =new JLabel();
+    private final JPanel panelNord = new JPanel();
+    private final JPanel panelCenter =new JPanel();       //Forse Card Layout
+    private final JPanel panelSud =new JPanel();
+    private final JPanel panelWest = new JPanel();
+    private final JPanel panelEast = new JPanel();
+    private final JPanel panelCenter2 = new JPanel();
+    private final JPanel pCenter2NORD = new JPanel();
+    private final JPanel pCenter2CENTER = new JPanel();
+    private final JLabel dropdown_Text = new JLabel("SCEGLI LA DINASTIA ");
+    private final JLabel labSx = new JLabel();
+    private final JLabel labDx = new JLabel();
+    private final JLabel background1 = new JLabel();
+    private final JLabel background2 = new JLabel();
+    private final JLabel labLogo = new JLabel();
+    private final JLabel labSPQR = new JLabel();
+    private final String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
+    private final JComboBox<String> dropdown_menu = new JComboBox<>(dynasties);
+    private final JButton button = new JButton("CREA ALBERO");
+
+    private Scraper scraper;
 
 
 
@@ -44,12 +47,10 @@ public class Window extends JFrame implements ActionListener{
 
     private void setupListener(){
         button.addActionListener(this);
-        dropdown_menù.addActionListener(this);
+        dropdown_menu.addActionListener(this);
     }
 
     public void setup() {
-
-
         // GESTIONE LABEL
         background1.setPreferredSize(new Dimension(1400, 30));
         background1.setIcon(new ImageIcon("src/resources/images/sfondo2Nord.jpg"));
@@ -65,11 +66,11 @@ public class Window extends JFrame implements ActionListener{
         labSx.setIcon(new ImageIcon("src/resources/images/GC2.png"));
         labDx.setIcon(new ImageIcon("src/resources/images/Augusto3dx.png"));
         labSPQR.setIcon(new ImageIcon("src/resources/logos/logo_spqr.png"));
-        dropdown_menù.setBackground(new Color(0xFAF7F7));
-        dropdown_menù.setFocusable(false);
-        dropdown_menù.setBorder(BorderFactory.createRaisedBevelBorder());
-        dropdown_menù.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin Italic.ttf", 15f));
-        dropdown_menù.setBounds(85,150,515,30);
+        dropdown_menu.setBackground(new Color(0xFAF7F7));
+        dropdown_menu.setFocusable(false);
+        dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
+        dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin Italic.ttf", 15f));
+        dropdown_menu.setBounds(85,150,515,30);
 
 
 
@@ -96,7 +97,7 @@ public class Window extends JFrame implements ActionListener{
         panelNord.add(background1);
         panelNord.setBackground(new Color(0x282727));
         pCenter2CENTER.add(dropdown_Text);
-        pCenter2CENTER.add(dropdown_menù);
+        pCenter2CENTER.add(dropdown_menu);
         pCenter2CENTER.add(button);
         pCenter2NORD.add(labLogo);
         panelWest.add(labSx, BorderLayout.SOUTH);
@@ -118,15 +119,18 @@ public class Window extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-
-
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(new FlatIntelliJLaf());
         } catch (Exception e) {
             e.printStackTrace();
         }
-        new Window().setup();
+        Scraper scraper = new Scraper();      //  TODO: SETUPPARE UN THREAD APPARTE PER LO SCRAPER  COSI NON SI FREEZZA LA GUI MENTRE CARICA
+        Window window = new Window();           //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
+                                                //  TODO: ANCHE NELL'ALTRA CLASSE (VEDI SOTTO)
+
+        window.scraper = scraper;
+        window.setup();
     }
 
 
@@ -136,8 +140,7 @@ public class Window extends JFrame implements ActionListener{
         String bottone = e.getActionCommand();
         if(bottone.equals("CREA ALBERO"))
         {
-
-            TreeWindow tree = new TreeWindow(dropdown_menù.getSelectedItem().toString());
+            TreeWindow tree = new TreeWindow(dropdown_menu.getSelectedItem().toString(), dropdown_menu.getSelectedIndex(), scraper);
             //System.out.println(dropdown_menù.getSelectedItem().toString());
 
         }

@@ -1,5 +1,10 @@
 package com.gui.TreeWindow;
 
+import com.graph.DynastyTree;
+import com.mxgraph.swing.mxGraphComponent;
+import com.scraper.Scraper;
+import org.jgrapht.ext.JGraphXAdapter;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,15 +25,20 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem drawItem = new JMenuItem("Draw");
     private JMenuItem exitItem = new JMenuItem("Exit");
     private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
-    public TreeWindow(String din){
-        super(din);
+
+    private JGraphXAdapter jGraphXAdapter;
+    public TreeWindow(String dinasty, int dIndex, Scraper scraper){
+        super(dinasty);
         setLayout(new BorderLayout());
         setSize(1400, 800);
         setResizable(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
         setVisible(true);
-        dinasty = din;
+        DynastyTree tree = scraper.getDinastyTree(dIndex);
+        jGraphXAdapter = tree.getGraphAdapter();
+        this.dinasty = dinasty;
+        this.add(new mxGraphComponent(jGraphXAdapter));
         setup();
         setupListener();
     }
@@ -69,6 +79,7 @@ public class TreeWindow extends JFrame implements ActionListener {
 
     public void mnemonics(){
         //non sono ancora riuscito a impostarlo
+            //forza roma allora
     }
 
     @Override

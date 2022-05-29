@@ -72,19 +72,15 @@ public class DynastyTree {
 
         //  TODO:   https://jgraph.github.io/mxgraph/docs/manual_javavis.html   ---   mxGraph documentation
         //  FIXME:  change edge color by relation type and place wives at same level of the husband
+    }
 
-        JFrame frame = new JFrame("Grafo de noemi");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public JGraphXAdapter<Person, RelationshipEdge> getGraphAdapter(){
         JGraphXAdapter<Person, RelationshipEdge> graphAdapter = new JGraphXAdapter<>(graph);
 
         mxIGraphLayout layout = new mxHierarchicalLayout(graphAdapter);
         layout.execute(graphAdapter.getDefaultParent());
 
-        frame.add(new mxGraphComponent(graphAdapter));
-
-        frame.pack();
-        frame.setLocationByPlatform(true);
-        frame.setVisible(true);
+        return graphAdapter;
     }
 
 }
