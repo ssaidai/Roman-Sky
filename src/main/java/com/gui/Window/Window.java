@@ -34,6 +34,7 @@ public class Window extends JFrame implements ActionListener{
     private final String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
     private final JComboBox<String> dropdown_menu = new JComboBox<>(dynasties);
     private final JButton button = new JButton("CREA ALBERO");
+    private final JLabel loadingGif = new JLabel();
 
     private Scraper scraper;
 
@@ -56,13 +57,12 @@ public class Window extends JFrame implements ActionListener{
         background1.setIcon(new ImageIcon("src/resources/images/sfondo2Nord.jpg"));
         background2.setPreferredSize(new Dimension(1400, 30));
         background2.setIcon(new ImageIcon("src/resources/images/sfondo2Sud.jpg"));
-        labLogo.setIcon(new ImageIcon("src/resources/logos/logoPROVA.png"));
-        labLogo.setBorder(BorderFactory.createEtchedBorder());
+        labLogo.setIcon(new ImageIcon("src/resources/logos/logo_small.png"));
         mainLogo.setHorizontalAlignment(JLabel.CENTER);
         mainLogo.setVisible(true);
-        dropdown_Text.setBounds(85,100,400,50);
+        dropdown_Text.setBounds(230,100,400,50);
         dropdown_Text.setForeground(new Color(0x000000));
-        dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/opificio_light.ttf", 25f));
+        dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 25f));
         labSx.setIcon(new ImageIcon("src/resources/images/GC2.png"));
         labDx.setIcon(new ImageIcon("src/resources/images/Augusto3dx.png"));
         labSPQR.setIcon(new ImageIcon("src/resources/logos/logo_spqr.png"));
@@ -71,6 +71,8 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
         dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin Italic.ttf", 15f));
         dropdown_menu.setBounds(85,150,515,30);
+        loadingGif.setIcon(new ImageIcon("src/resources/videos or gif/loadingGif2.gif"));
+        loadingGif.setBounds(325,340,40,40);
 
 
 
@@ -81,7 +83,8 @@ public class Window extends JFrame implements ActionListener{
         button.setBackground(new Color(0x4D3939));
         button.setForeground(Color.white);
         button.setFont(MyFont.creaFont("src/resources/fonts/Coco-Gothic-Regular-trial.ttf", 15f));
-        button.setBounds(85,300,160,30);
+        button.setBounds(260,300,160,30);
+        button.setEnabled(false);
 
 
         // GESTIONE PANEL
@@ -99,6 +102,7 @@ public class Window extends JFrame implements ActionListener{
         pCenter2CENTER.add(dropdown_Text);
         pCenter2CENTER.add(dropdown_menu);
         pCenter2CENTER.add(button);
+        pCenter2CENTER.add(loadingGif);
         pCenter2NORD.add(labLogo);
         panelWest.add(labSx, BorderLayout.SOUTH);
         panelEast.add(labDx, BorderLayout.SOUTH);
@@ -118,6 +122,12 @@ public class Window extends JFrame implements ActionListener{
         setLocationRelativeTo(null);          //Si apre la finestra al centro dello schermo
         setVisible(true);
     }
+    public void openBttn(){
+        button.setEnabled(true);
+    }
+    public void setInvisibleGif(){
+        loadingGif.setVisible(false);
+    }
 
     public static void main(String[] args) {
         try {
@@ -125,12 +135,16 @@ public class Window extends JFrame implements ActionListener{
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Scraper scraper = new Scraper();      //  TODO: SETUPPARE UN THREAD APPARTE PER LO SCRAPER  COSI NON SI FREEZZA LA GUI MENTRE CARICA
-        Window window = new Window();           //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
+        Window window = new Window();
+        window.setup();
+        Scraper scraper = new Scraper();        //  TODO: SETUPPARE UN THREAD APPARTE PER LO SCRAPER  COSI NON SI FREEZZA LA GUI MENTRE CARICA
+        System.out.println(" FINITO ");                                        //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
                                                 //  TODO: ANCHE NELL'ALTRA CLASSE (VEDI SOTTO)
 
         window.scraper = scraper;
-        window.setup();
+        window.openBttn();
+        window.setInvisibleGif();
+
     }
 
 
