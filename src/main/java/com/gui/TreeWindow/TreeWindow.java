@@ -5,12 +5,15 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.scraper.Scraper;
 import org.jgrapht.ext.JGraphXAdapter;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
 public class TreeWindow extends JFrame implements ActionListener {
 
@@ -26,6 +29,8 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem exitItem = new JMenuItem("Exit");
     private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
 
+
+
     private JGraphXAdapter jGraphXAdapter;
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
@@ -39,6 +44,8 @@ public class TreeWindow extends JFrame implements ActionListener {
         jGraphXAdapter = tree.getGraphAdapter();
         this.dinasty = dinasty;
         this.add(new mxGraphComponent(jGraphXAdapter));
+
+
         setup();
         setupListener();
     }
@@ -88,7 +95,19 @@ public class TreeWindow extends JFrame implements ActionListener {
             System.exit(0);
         }
         if(e.getSource() == saveItem){
-            System.out.println("--- HAI SALVATO IL FILE ---");
+            try
+            {
+                BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+                Graphics2D graphics2D = image.createGraphics();
+                paint(graphics2D);
+                // TODO: BISOGNA MODIFICARE IL PATH.
+                // TODO: CREARE FINESTRA CHE CHIEDA COME SALVARE IL NOME DEL FILE E GESTIRE LE ...
+                ImageIO.write(image,"jpeg", new File("C:/Users/victo/Downloads/prova.jpeg"));
+            }
+            catch(Exception exception)
+            {
+                //code
+            }
         }
     }
 }

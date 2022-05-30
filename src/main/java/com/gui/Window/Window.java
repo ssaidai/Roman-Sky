@@ -71,8 +71,8 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
         dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin Italic.ttf", 15f));
         dropdown_menu.setBounds(85,150,515,30);
-        loadingGif.setIcon(new ImageIcon("src/resources/videos or gif/loadingGif2.gif"));
-        loadingGif.setBounds(325,340,40,40);
+        loadingGif.setIcon(new ImageIcon("src/resources/videos or gif/loadingGif3.gif"));
+        loadingGif.setBounds(323,340,60,60);
 
 
 
