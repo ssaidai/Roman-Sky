@@ -137,8 +137,8 @@ public class Window extends JFrame implements ActionListener{
         }
         Window window = new Window();
         window.setup();
-        Scraper scraper = new Scraper();        //  TODO: SETUPPARE UN THREAD APPARTE PER LO SCRAPER  COSI NON SI FREEZZA LA GUI MENTRE CARICA
-        System.out.println(" FINITO ");                                        //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
+        Scraper scraper = new Scraper();        //  TODO: CHE PALLE CI METTE UN BORDELLO FORSE SERVE UNA PERCENTUALE ALTRIMENTI UNO SE AMMAZZA PRIMA CHE FINISCE
+        System.out.println(" FINITO ");         //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
                                                 //  TODO: ANCHE NELL'ALTRA CLASSE (VEDI SOTTO)
 
         window.scraper = scraper;
@@ -154,9 +154,7 @@ public class Window extends JFrame implements ActionListener{
         String bottone = e.getActionCommand();
         if(bottone.equals("CREA ALBERO"))
         {
-            TreeWindow tree = new TreeWindow(dropdown_menu.getSelectedItem().toString(), dropdown_menu.getSelectedIndex(), scraper);
-            //System.out.println(dropdown_menù.getSelectedItem().toString());
-
+            new TreeWindow(dropdown_menu.getSelectedItem().toString(), dropdown_menu.getSelectedIndex(), scraper);
         }
     }
 }

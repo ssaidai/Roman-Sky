@@ -4,6 +4,7 @@ import com.data.Person;
 import com.mxgraph.layout.*;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.layout.orthogonal.mxOrthogonalLayout;
+import com.mxgraph.model.mxICell;
 import com.mxgraph.swing.mxGraphComponent;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -14,29 +15,18 @@ import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.graph.Multigraph;
 
 import javax.swing.*;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class DynastyTree {
     private class RelationshipEdge extends DefaultEdge{
-        private String label;
+        private final String label;
 
-        /**
-         * Constructs a relationship edge
-         *
-         * @param label the label of the new edge.
-         *
-         */
         public RelationshipEdge(String label)
         {
             this.label = label;
         }
 
-        /**
-         * Gets the label associated with this edge.
-         *
-         * @return edge label
-         */
         public String getLabel()
         {
             return label;
@@ -47,9 +37,17 @@ public class DynastyTree {
         {
             return label;
         }
+
+        public Person getSource(){
+            return (Person) super.getSource();
+        }
+
+        public Person getTarget(){
+            return (Person) super.getTarget();
+        }
     }
 
-    private Graph<Person, RelationshipEdge> graph = new Multigraph<>(RelationshipEdge.class);
+    private final Graph<Person, RelationshipEdge> graph = new Multigraph<>(RelationshipEdge.class);
     private static final String MARRIED = "married";
     private static final String KIN = "kin";
     private static final String ADOPTED = "adopted";
@@ -59,11 +57,13 @@ public class DynastyTree {
         Graphs.addAllVertices(this.graph, entityList);
 
         for(Person person : graph.vertexSet()){
-            for(Person relative : person.getMarried()){
+            List<Person> relatives = entityList.stream().filter(p -> person.getMarriedHrefs().contains(p.getHref())).collect(Collectors.toList());
+            for(Person relative : relatives){
                 graph.addEdge(person, relative, new RelationshipEdge(MARRIED));
             }
-            for(Person child : person.getChildren().keySet()){
-                if(person.getChildren().get(child))
+            List<Person> children = entityList.stream().filter(p -> person.getChildren().containsKey(p.getHref())).collect(Collectors.toList());
+            for(Person child : children){
+                if(person.getChildren().get(child.getHref()))
                     graph.addEdge(person, child, new RelationshipEdge(ADOPTED));
                 else
                     graph.addEdge(person, child, new RelationshipEdge(KIN));
@@ -80,6 +80,19 @@ public class DynastyTree {
         mxIGraphLayout layout = new mxHierarchicalLayout(graphAdapter);
         layout.execute(graphAdapter.getDefaultParent());
 
+
+        HashMap<RelationshipEdge, mxICell> edgemxICellHashMap = graphAdapter.getEdgeToCellMap();
+        ArrayList<Object> cellsList = new ArrayList<>();
+
+        for(RelationshipEdge edge : edgemxICellHashMap.keySet()){
+            if(edge.getLabel().equals("married")){
+                cellsList.add(edgemxICellHashMap.get(edge));
+            }
+        }
+        Object[] cells = new Object[cellsList.size()];
+        cellsList.toArray(cells);
+
+        graphAdapter.setCellStyle("strokeColor=#78130C", cells);
         return graphAdapter;
     }
 

@@ -2,8 +2,8 @@ package com.data;
 
 public class Vip extends Person{
 
-    private String title;
-    private String bornDate;    //  to be formatted to fit it in LocalDate
+    private final String title;
+    private final String bornDate;    //  to be formatted to fit it in LocalDate
 
 
     public Vip(String name, String title, String bornDate, String href){

@@ -29,9 +29,6 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem exitItem = new JMenuItem("Exit");
     private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
 
-
-
-    private JGraphXAdapter jGraphXAdapter;
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
         setLayout(new BorderLayout());
@@ -41,7 +38,7 @@ public class TreeWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
         setVisible(true);
         DynastyTree tree = scraper.getDinastyTree(dIndex);
-        jGraphXAdapter = tree.getGraphAdapter();
+        JGraphXAdapter jGraphXAdapter = tree.getGraphAdapter();
         this.dinasty = dinasty;
         this.add(new mxGraphComponent(jGraphXAdapter));
 
@@ -102,7 +99,9 @@ public class TreeWindow extends JFrame implements ActionListener {
                 paint(graphics2D);
                 // TODO: BISOGNA MODIFICARE IL PATH.
                 // TODO: CREARE FINESTRA CHE CHIEDA COME SALVARE IL NOME DEL FILE E GESTIRE LE ...
-                ImageIO.write(image,"jpeg", new File("C:/Users/victo/Downloads/prova.jpeg"));
+                ImageIO.write(image,"jpeg", new File("C:/Users/spide/Downloads/prova.jpeg"));
+
+                // FIXME: LO SCREEN LO DEVI FARE AL CONTENUTO DEL PANEL, NON ALLA FINESTRA, SENNO VIENE TRONCATO
             }
             catch(Exception exception)
             {

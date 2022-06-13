@@ -1,56 +1,43 @@
 package com.data;
 
+import com.shapesecurity.salvation2.Values.Hash;
+
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class Person {
     private final String name;
-    private String href = null;    // used as ID to distinguish homonym persons
+    private final String href;    // used as ID to distinguish homonym persons
 
-    private Set<Person> parents = new HashSet<>();
-    private Set<Person>married = new HashSet<>();
-    private HashMap<Person, Boolean> children = new HashMap<>();
+    private Set<String> parentsHref;
+    private Set<String> marriedHref;
+    private HashMap<String, Boolean> children = new HashMap<>();
+
+    private final boolean vip;
 
 
-    public Person(String name, String href){
+    public Person(String name, String href, Set<String> parents, Set<String> married, HashMap<String, Boolean> children, boolean vip){
         this.name = name;
         this.href = href;
+        this.parentsHref = parents;
+        this.marriedHref = married;
+        this.children = children;
+        this.vip = vip;
     }
 
-    public void addParent(Person parent){
-        this.parents.add(parent);
+    public Set<String> getMarriedHrefs() {
+        return marriedHref;
     }
 
-    public void addMarried(Person married){
-        this.married.add(married);
-    }
-
-    public void addChild(Person child, boolean adopted){
-
-        this.children.put(child, adopted);
-    }
-
-
-    public String getName() {
-        return name;
+    public Set<String> getParentsHrefs() {
+        return parentsHref;
     }
 
     public String getHref() {
         return href;
     }
 
-    public ArrayList<Person> getParents() {
-        return new ArrayList<>(parents);
-    }
-
-    public ArrayList<Person> getMarried(){
-        return new ArrayList<>(married);
-    }
-
-    public HashMap<Person, Boolean> getChildren(){
+    public HashMap<String, Boolean> getChildren(){
         return this.children;
     }
 
