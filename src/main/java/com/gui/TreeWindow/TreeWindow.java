@@ -13,7 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
+
 
 
 /**
@@ -127,6 +127,9 @@ public class TreeWindow extends JFrame implements ActionListener {
             paint(graphics2D);
             new SaveWindow(image);
 
+        }
+        if(e.getSource() == infoItem){
+            new InfoWindow();
         }
     }
 }

@@ -6,6 +6,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 
+/**
+ * SaveWindow Class.
+ */
 public class SaveWindow extends JFrame {
     private JPanel pan = new JPanel();
     private JButton saveBttn = new JButton("Salva");
@@ -13,14 +16,21 @@ public class SaveWindow extends JFrame {
     private JFileChooser jF = new JFileChooser(new File("c://"));
     private BufferedImage image;
 
+    /**
+     * Class constructor.
+     * @param bf
+     */
     public SaveWindow(BufferedImage bf){
         this.image = bf;
         setup();
 
     }
 
+    /**
+     * setup method
+     */
     public void setup(){
-        jF.setDialogTitle("Save as ...");
+        jF.setDialogTitle("Save as...");
         jF.showSaveDialog(null);
         jF.setFileFilter(new FileType(".jpeg", "jpeg file"));
 
