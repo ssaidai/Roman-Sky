@@ -23,6 +23,15 @@ public class Person {
         this.marriedHref = married;
         this.children = children;
         this.vip = vip;
+        if(this.parentsHref == null){
+            this.parentsHref = new HashSet<>();
+        }
+        if(this.marriedHref == null){
+            this.marriedHref = new HashSet<>();
+        }
+        if(this.children == null){
+            this.children = new HashMap<>();
+        }
     }
 
     public Set<String> getMarriedHrefs() {

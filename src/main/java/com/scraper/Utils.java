@@ -1,7 +1,7 @@
 package com.scraper;
 
 import com.data.Person;
-import com.shapesecurity.salvation2.Values.Hash;
+import com.google.common.collect.Iterables;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -13,11 +13,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public static Person getInfo(WebDriver driver, String href, Set<Person> entityList){
-        Person person = getFrom(entityList, href);
-        if(person != null){
-            return person;
-        }
+    public static void getInfo(WebDriver driver, String href, Set<Person> entityList){
         System.out.println(href);
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
@@ -28,16 +24,20 @@ public class Utils {
                  bornDate = getHeaderContent("Nascita", synopticTable).getText();
             }
             catch (NullPointerException ignored){}*/
-            Set<String> parents = getRelatives(synopticTable, "Genitori");
+            Set<String> parents = getRelatives(synopticTable, "Padre");
             Set<String> married = getRelatives(synopticTable, "Coniuge");
             HashMap<String, Boolean> children = getChildren(synopticTable);
-            person = new Person(name, href, parents, married, children, true);
+            Person person = new Person(name, href, parents, married, children, true);
             entityList.add(person);
-            return person;
+            for(String link: Iterables.concat(parents, married, children.keySet())){
+                driver.get(link);
+                if(getFrom(entityList, link) == null)
+                    getInfo(driver, link, entityList);
+                driver.navigate().back();
+            }
         }catch (NoSuchElementException e){
-            person = new Person(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(), href, null, null, null, false);
+            Person person = new Person(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(), href, null, null, null, false);
             entityList.add(person);
-            return person;
         }
     }
 
@@ -56,27 +56,51 @@ public class Utils {
         return list.stream().filter(o -> o.getHref().equals(href)).findFirst().orElse(null);
     }
 
+    // FIXME: CAMBIARE NOME A QUESTA ROBA, TROPPO SPECIFICO AL MOMENTO
     private static boolean isInBrackets(final List<String> list, final String str){
         return list.stream().anyMatch(e -> e.contains(str));
     }
 
-    // TODO: DA FINIRE
     private static HashMap<String, Boolean> getChildren(WebElement table){
-        HashMap<String, Boolean> result = new HashMap<>();
+        HashMap<String, Boolean> results = new HashMap<>();
         WebElement childrenHeader = getHeaderContent("Figli", table);
-        if(childrenHeader != null){
+        if(childrenHeader == null) return results;
 
+        String[] strings = childrenHeader.getText().split(":");
+        if(strings.length == 2){
+            for(WebElement relative : childrenHeader.findElements(By.tagName("a"))){
+                String href = relative.getAttribute("href");
+                if(!href.matches(".*\\d.*") && strings[0].contains(relative.getText())){
+                    results.put(href, false);
+                }
+                else if(!href.matches(".*\\d.*") && strings[1].contains(relative.getText())){
+                    results.put(href, true);
+                }
+            }
         }
-
-        return result;
+        else{
+            List<String> wordList = Arrays.asList(childrenHeader.getText().split(" "));
+            for(WebElement relative : childrenHeader.findElements(By.tagName("a"))){
+                String href = relative.getAttribute("href");
+                int index = wordList.indexOf(relative.getText());
+                if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)"))
+                    results.put(href, true);
+                else if(!href.matches(".*\\d.*"))
+                    results.put(href, false);
+            }
+        }
+        return results;
     }
 
-    // TODO: DA AGGIUNGERE 2 IF (SE TYPE == CONIUGE PRENDERE ANCHE I CONSTORTI), (SE TYPE == GENITORI, PRENDERE PADRE E MADRE ED EVENTUALI GENITORI ADOTTIVI)
     private static Set<String> getRelatives(WebElement table, String type){
         WebElement relativeHeader = getHeaderContent(type, table);
-        if (relativeHeader == null) return null;
 
         Set<String> results = new HashSet<>();
+
+        if (relativeHeader == null && type.equals("Coniuge")){
+            return getRelatives(table, "Consorti");
+        }
+        else if(relativeHeader == null) return results;
 
         List<String> hrefsInBrackets = new ArrayList<>();
         Pattern regex = Pattern.compile("\\((.*?)\\)");
@@ -91,6 +115,10 @@ public class Utils {
             if(!href.matches(".*\\d.*") && !isInBrackets(hrefsInBrackets, relative.getText())){
                 results.add(href);
             }
+        }
+        if(type.equals("Padre")){
+            Set<String> temp = getRelatives(table, "Madre");
+            if (temp != null) results.addAll(temp);
         }
         return results;
     }

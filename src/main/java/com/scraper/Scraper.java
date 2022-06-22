@@ -30,8 +30,7 @@ public class Scraper {
                 Utils.getInfo(driver, href, dinasties.get(tableIndex));
                 driver.navigate().back();
             }
-            break;
-            //tableIndex++;
+            tableIndex++;
         }
     }
 

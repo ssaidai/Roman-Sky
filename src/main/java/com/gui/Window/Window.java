@@ -4,11 +4,10 @@ package com.gui.Window;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.gui.MyFont;
-import com.gui.TreeWindow.TreeWindow;
+import com.gui.Window.TreeWindow.TreeWindow;
 import com.scraper.Scraper;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
