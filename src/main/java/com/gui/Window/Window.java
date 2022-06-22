@@ -4,7 +4,7 @@ package com.gui.Window;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.gui.MyFont;
-import com.gui.Window.TreeWindow.TreeWindow;
+import com.gui.TreeWindow.TreeWindow;
 import com.scraper.Scraper;
 
 import javax.swing.*;
@@ -39,6 +39,7 @@ public class Window extends JFrame implements ActionListener{
 
 
 
+
     public Window(){
         super("Imperatori Romani");
         setLayout(new BorderLayout());
@@ -68,7 +69,7 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menu.setBackground(new Color(0xFAF7F7));
         dropdown_menu.setFocusable(false);
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
-        dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin Italic.ttf", 15f));
+        dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 16f));
         dropdown_menu.setBounds(85,150,515,30);
         loadingGif.setIcon(new ImageIcon("src/resources/videos or gif/loadingGif3.gif"));
         loadingGif.setBounds(323,340,60,60);
@@ -81,7 +82,7 @@ public class Window extends JFrame implements ActionListener{
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(new Color(0x4D3939));
         button.setForeground(Color.white);
-        button.setFont(MyFont.creaFont("src/resources/fonts/Coco-Gothic-Regular-trial.ttf", 15f));
+        button.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
         button.setBounds(260,300,160,30);
         button.setEnabled(false);
 

@@ -1,4 +1,4 @@
-package com.gui.Window.TreeWindow;
+package com.gui.TreeWindow;
 
 import com.graph.DynastyTree;
 import com.mxgraph.swing.mxGraphComponent;
@@ -10,6 +10,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 
 
