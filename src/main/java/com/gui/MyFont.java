@@ -9,7 +9,12 @@ import java.io.IOException;
 // BASTA CHE SIA .TTF
 public class MyFont {
 
-
+    /**
+     * Crea font personalizzati.
+     * @param path
+     * @param size
+     * @return
+     */
     public static Font creaFont(String path, float size) {
         Font customFont = null;
         try {

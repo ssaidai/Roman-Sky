@@ -11,8 +11,12 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 
+
+
+/**
+ *  tree GUI
+ */
 public class TreeWindow extends JFrame implements ActionListener {
 
     private String dinasty;
@@ -27,6 +31,16 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem exitItem = new JMenuItem("Exit");
     private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
 
+
+
+    private JGraphXAdapter jGraphXAdapter;
+
+    /**
+     * Class constructor
+     * @param dinasty
+     * @param dIndex
+     * @param scraper
+     */
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
         setLayout(new BorderLayout());
@@ -36,14 +50,19 @@ public class TreeWindow extends JFrame implements ActionListener {
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
         setVisible(true);
         DynastyTree tree = scraper.getDinastyTree(dIndex);
-        JGraphXAdapter jGraphXAdapter = tree.getGraphAdapter();
+        jGraphXAdapter = tree.getGraphAdapter();
         this.dinasty = dinasty;
         this.add(new mxGraphComponent(jGraphXAdapter));
 
 
         setup();
         setupListener();
+        mnemonics();
     }
+
+    /**
+     * setup the addActionListener method.
+     */
     private void setupListener(){
         saveItem.addActionListener(this);
         drawItem.addActionListener(this);
@@ -51,6 +70,11 @@ public class TreeWindow extends JFrame implements ActionListener {
         infoItem.addActionListener(this);
         exitItem.addActionListener(this);
     }
+
+    /**
+     * GUI setup.
+     *
+     */
     public void setup(){
 
         // Gestione menù
@@ -71,40 +95,39 @@ public class TreeWindow extends JFrame implements ActionListener {
         drawItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaDraw.png"));
         changeNamesColorItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
 
-        //TODO: CAMBIARE FONT DEL MENU SE NON PIACE QUELLO DI DEFAULT
-        menuFile.setFont(new Font("Bell MT", Font.PLAIN, 15));  //vedere se funziona --- FUNZIONA :D --- daje
-        menuEdit.setFont(new Font("Bell MT", Font.PLAIN, 15));
-        menuHelp.setFont(new Font("Bell MT", Font.PLAIN, 15));
+
 
     }
     //TODO: KEYBOARD SHORTCUTS PER MENU ATTRAVERSO IL METODO setMnemonic
 
+    /**
+     * mnemonic method
+     */
     public void mnemonics(){
-        //non sono ancora riuscito a impostarlo
-            //forza roma allora
+        saveItem.setMnemonic(KeyEvent.VK_S);
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
+        infoItem.setMnemonic(KeyEvent.VK_I);
+        infoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK));
+        exitItem.setMnemonic(KeyEvent.VK_E);
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
+        drawItem.setMnemonic(KeyEvent.VK_D);
+        drawItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == exitItem){
-            System.exit(0);
+            setVisible(false);
         }
         if(e.getSource() == saveItem){
-            try
-            {
-                BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-                Graphics2D graphics2D = image.createGraphics();
-                paint(graphics2D);
-                // TODO: BISOGNA MODIFICARE IL PATH.
-                // TODO: CREARE FINESTRA CHE CHIEDA COME SALVARE IL NOME DEL FILE E GESTIRE LE ...
-                ImageIO.write(image,"jpeg", new File("C:/Users/spide/Downloads/prova.jpeg"));
+            BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
+            Graphics2D graphics2D = image.createGraphics();
+            paint(graphics2D);
+            new SaveWindow(image);
 
-                // FIXME: LO SCREEN LO DEVI FARE AL CONTENUTO DEL PANEL, NON ALLA FINESTRA, SENNO VIENE TRONCATO
-            }
-            catch(Exception exception)
-            {
-                //code
-            }
+        }
+        if(e.getSource() == infoItem){
+            new InfoWindow();
         }
     }
 }
