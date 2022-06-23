@@ -117,7 +117,11 @@ public class Window extends JFrame implements ActionListener{
         add(panelWest, BorderLayout.WEST);
         add(panelEast, BorderLayout.EAST);
         setSize(1400, 800);
-        setResizable(false);  // forse TRUE, per adesso FALSE
+
+        // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //TODO: prende in automatico le dimensioni
+        // setSize(screenSize.width,screenSize.height);                        //TODO:dello schermo
+
+        setResizable(false);  // forse TRUE, per adesso FALSE       //TODO: secondo me metti TRUE come un programma normale, molto più comodo e hai 3 pulsanti in alto a destra che due (si quello è il punto)
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);          //Si apre la finestra al centro dello schermo
         setVisible(true);

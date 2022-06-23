@@ -57,6 +57,7 @@ public class TreeWindow extends JFrame implements ActionListener {
         this.add(new mxGraphComponent(jGraphXAdapter));
 
 
+
         setup();
         setupListener();
         mnemonics();
@@ -101,19 +102,15 @@ public class TreeWindow extends JFrame implements ActionListener {
 
     }
     //TODO: KEYBOARD SHORTCUTS PER MENU ATTRAVERSO IL METODO setMnemonic
-
     /**
      * mnemonic method
      */
     public void mnemonics(){
-        saveItem.setMnemonic(KeyEvent.VK_S);
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
-        infoItem.setMnemonic(KeyEvent.VK_I);
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));      //FIXME: Se viene chiusa la finestra di save, viene riaperta per una seconda volta
         infoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK));
-        exitItem.setMnemonic(KeyEvent.VK_E);
-        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
-        drawItem.setMnemonic(KeyEvent.VK_D);
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));      // Non è necessarrio mettere sia setAccelerator che setMnemonic
         drawItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
+        changeNamesColorItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
     }
 
     @Override
@@ -132,4 +129,5 @@ public class TreeWindow extends JFrame implements ActionListener {
             new InfoWindow();
         }
     }
+
 }

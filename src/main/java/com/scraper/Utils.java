@@ -18,8 +18,8 @@ public class Utils {
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
             String name = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_testata\"]/th")).getText();
-            String title = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_divisione\"]/th")).getText();
-/*          String bornDate = null;
+/*            String title = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_divisione\"]/th")).getText();
+            String bornDate = null;
             try{
                  bornDate = getHeaderContent("Nascita", synopticTable).getText();
             }
@@ -83,10 +83,12 @@ public class Utils {
             for(WebElement relative : childrenHeader.findElements(By.tagName("a"))){
                 String href = relative.getAttribute("href");
                 int index = wordList.indexOf(relative.getText());
-                if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)"))
+                if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)")) {
                     results.put(href, true);
-                else if(!href.matches(".*\\d.*"))
+                }
+                else if(!href.matches(".*\\d.*")) {
                     results.put(href, false);
+                }
             }
         }
         return results;
