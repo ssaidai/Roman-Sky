@@ -83,12 +83,10 @@ public class Utils {
             for(WebElement relative : childrenHeader.findElements(By.tagName("a"))){
                 String href = relative.getAttribute("href");
                 int index = wordList.indexOf(relative.getText());
-                if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)")) {
+                if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)"))
                     results.put(href, true);
-                }
-                else if(!href.matches(".*\\d.*")) {
+                else if(!href.matches(".*\\d.*"))
                     results.put(href, false);
-                }
             }
         }
         return results;
@@ -120,7 +118,7 @@ public class Utils {
         }
         if(type.equals("Padre")){
             Set<String> temp = getRelatives(table, "Madre");
-            if (temp != null) results.addAll(temp);
+            results.addAll(temp);
         }
         return results;
     }

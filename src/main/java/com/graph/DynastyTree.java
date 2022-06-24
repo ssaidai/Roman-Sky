@@ -35,7 +35,7 @@ public class DynastyTree {
         @Override
         public String toString()
         {
-            return label;
+            return null;
         }
 
         public Person getSource(){
@@ -51,6 +51,10 @@ public class DynastyTree {
     private static final String MARRIED = "married";
     private static final String KIN = "kin";
     private static final String ADOPTED = "adopted";
+
+    private final JGraphXAdapter<Person, RelationshipEdge> graphAdapter;
+
+    private Object[] marriedCells, adoptedCells, kinCells;
 
     public DynastyTree(Set<Person> entityList){
         //  TODO:   order entities by bornDate before adding it to the graph (set adds them in random order)
@@ -71,29 +75,61 @@ public class DynastyTree {
         }
 
         //  TODO:   https://jgraph.github.io/mxgraph/docs/manual_javavis.html   ---   mxGraph documentation
-        //  FIXME:  change edge color by relation type and place wives at same level of the husband
-    }
+        //  FIXME:  place wives at same level of the husbands
 
-    public JGraphXAdapter<Person, RelationshipEdge> getGraphAdapter(){
-        JGraphXAdapter<Person, RelationshipEdge> graphAdapter = new JGraphXAdapter<>(graph);
+        this.graphAdapter = new JGraphXAdapter<>(graph);
 
-        mxIGraphLayout layout = new mxHierarchicalLayout(graphAdapter);
-        layout.execute(graphAdapter.getDefaultParent());
+        new mxParallelEdgeLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
+        new mxHierarchicalLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
 
 
         HashMap<RelationshipEdge, mxICell> edgemxICellHashMap = graphAdapter.getEdgeToCellMap();
-        ArrayList<Object> cellsList = new ArrayList<>();
+        ArrayList<Object> marriedList = new ArrayList<>();
+        ArrayList<Object> adoptedList = new ArrayList<>();
+        ArrayList<Object> kinList = new ArrayList<>();
 
         for(RelationshipEdge edge : edgemxICellHashMap.keySet()){
-            if(edge.getLabel().equals("married")){
-                cellsList.add(edgemxICellHashMap.get(edge));
-            }
+            if(edge.getLabel().equals("married"))
+                marriedList.add(edgemxICellHashMap.get(edge));
+            if(edge.getLabel().equals("adopted"))
+                adoptedList.add(edgemxICellHashMap.get(edge));
+            else
+                kinList.add(edgemxICellHashMap.get(edge));
         }
-        Object[] cells = new Object[cellsList.size()];
-        cellsList.toArray(cells);
 
-        graphAdapter.setCellStyle("strokeColor=#78130C", cells);
-        return graphAdapter;
+        this.marriedCells = new Object[marriedList.size()];
+        marriedList.toArray(this.marriedCells);
+
+        setCellsStyle("married", "78130C");
+        //graphAdapter.setCellStyle("strokeColor=#78130C", marriedCells);
+
+        this.adoptedCells = new Object[adoptedList.size()];
+        adoptedList.toArray(this.adoptedCells);
+
+        setCellsStyle("adopted", "422AAD");
+        graphAdapter.setCellStyle("dashed=true", adoptedCells);
+
+        this.kinCells = new Object[kinList.size()];
+        kinList.toArray(this.kinCells);
+    }
+
+    public JGraphXAdapter<Person, RelationshipEdge> getGraphAdapter(){
+        return this.graphAdapter;
+    }
+
+    public void setCellsStyle(String cellType, String colorInHex){
+        String color = "strokeColor=#" + colorInHex;
+        switch (cellType){
+            case "married":
+                this.graphAdapter.setCellStyle(color, marriedCells);
+                break;
+            case "kin":
+                this.graphAdapter.setCellStyle(color, kinCells);
+                break;
+            case "adopted":
+                this.graphAdapter.setCellStyle(color, adoptedCells);
+                break;
+        }
     }
 
 }
