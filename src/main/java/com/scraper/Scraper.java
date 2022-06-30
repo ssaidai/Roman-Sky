@@ -15,6 +15,7 @@ import java.util.Set;
 public class Scraper {
     private final List<WebElement> tables;
     private ArrayList<Set<Person>> dinasties = new ArrayList<>();
+    private Set<Person> entityList = new HashSet<>();
     private final WebDriver driver = new HtmlUnitDriver();
 
     public Scraper(){
@@ -27,10 +28,11 @@ public class Scraper {
             for(WebElement name : table.findElements(By.xpath("tbody/tr/td[2]/b/a"))){
                 String href = name.getAttribute("href");
                 driver.get(href);
-                Utils.getInfo(driver, href, dinasties.get(tableIndex));
+                Utils.getInfo(driver, href, dinasties.get(tableIndex), entityList);
                 driver.navigate().back();
             }
-            tableIndex++;
+            break;
+            //tableIndex++;
         }
     }
 

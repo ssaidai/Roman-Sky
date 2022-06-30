@@ -79,10 +79,14 @@ public class DynastyTree {
 
         this.graphAdapter = new JGraphXAdapter<>(graph);
 
-        new mxParallelEdgeLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
-        new mxHierarchicalLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
-
-
+        mxHierarchicalLayout layout = new mxHierarchicalLayout(graphAdapter);
+        layout.setDisableEdgeStyle(false);
+        layout.setParallelEdgeSpacing(30);
+        System.out.println("ParallelEdge Spacing:" + layout.getParallelEdgeSpacing());
+        System.out.println("InterHierarchy Spacing:" + layout.getInterHierarchySpacing());
+        layout.execute(graphAdapter.getDefaultParent());
+        mxParallelEdgeLayout layout1 = new mxParallelEdgeLayout(graphAdapter);
+        layout1.execute(graphAdapter.getDefaultParent());
         HashMap<RelationshipEdge, mxICell> edgemxICellHashMap = graphAdapter.getEdgeToCellMap();
         ArrayList<Object> marriedList = new ArrayList<>();
         ArrayList<Object> adoptedList = new ArrayList<>();

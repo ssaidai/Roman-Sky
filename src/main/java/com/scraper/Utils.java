@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public static void getInfo(WebDriver driver, String href, Set<Person> entityList){
+    public static void getInfo(WebDriver driver, String href, Set<Person> dinasty, Set<Person> entityList){
         System.out.println(href);
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
@@ -25,27 +25,47 @@ public class Utils {
             }
             catch (NullPointerException ignored){}*/
             Set<String> parents = getRelatives(synopticTable, "Padre");
-            Set<String> married = getRelatives(synopticTable, "Coniuge");
+            Set<String> married = getRelatives(synopticTable, "Coniug");
             HashMap<String, Boolean> children = getChildren(synopticTable);
             Person person = new Person(name, href, parents, married, children, true);
+            dinasty.add(person);
             entityList.add(person);
             for(String link: Iterables.concat(parents, married, children.keySet())){
                 driver.get(link);
-                if(getFrom(entityList, link) == null)
-                    getInfo(driver, link, entityList);
+                if(isDisambiguityPage(driver)){
+                    driver.navigate().back();
+                    break;
+                }
+                if(getFrom(entityList, driver.getCurrentUrl()) == null)
+                    getInfo(driver, driver.getCurrentUrl(), dinasty, entityList);
                 driver.navigate().back();
             }
         }catch (NoSuchElementException e){
             Person person = new Person(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(), href, null, null, null, false);
+            dinasty.add(person);
             entityList.add(person);
         }
+    }
+
+    private static boolean isDisambiguityPage(WebDriver driver){
+        try{
+            driver.findElement(By.xpath("//table[@class=\"avviso-disambigua\"]"));
+            return true;
+        }
+        catch (NoSuchElementException e){
+            return false;
+        }
+    }
+
+    private static boolean pageExists(WebElement element){
+        return !element.getAttribute("title").contains("la pagina non esiste");
     }
 
     private static WebElement getHeaderContent(String header, WebElement table){
         List<WebElement> rows = table.findElements(By.xpath("tbody/tr"));
         for(WebElement row : rows){
             try{
-                if(row.findElement(By.tagName("th")).getText().equals(header)){
+                if(row.findElement(By.tagName("th")).getText().startsWith(header)){
                     return row.findElement(By.tagName("td"));
                 }
             }catch (NoSuchElementException ignored){}
@@ -69,24 +89,28 @@ public class Utils {
         String[] strings = childrenHeader.getText().split(":");
         if(strings.length == 2){
             for(WebElement relative : childrenHeader.findElements(By.tagName("a"))){
-                String href = relative.getAttribute("href");
-                if(!href.matches(".*\\d.*") && strings[0].contains(relative.getText())){
-                    results.put(href, false);
-                }
-                else if(!href.matches(".*\\d.*") && strings[1].contains(relative.getText())){
-                    results.put(href, true);
+                if(pageExists(relative)){
+                    String href = relative.getAttribute("href");
+                    if(!href.matches(".*\\d.*") && strings[0].contains(relative.getText())){
+                        results.put(href, false);
+                    }
+                    else if(!href.matches(".*\\d.*") && strings[1].contains(relative.getText())){
+                        results.put(href, true);
+                    }
                 }
             }
         }
         else{
             List<String> wordList = Arrays.asList(childrenHeader.getText().split(" "));
             for(WebElement relative : childrenHeader.findElements(By.tagName("a"))){
-                String href = relative.getAttribute("href");
-                int index = wordList.indexOf(relative.getText());
-                if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)"))
-                    results.put(href, true);
-                else if(!href.matches(".*\\d.*"))
-                    results.put(href, false);
+                if(pageExists(relative)){
+                    String href = relative.getAttribute("href");
+                    int index = wordList.indexOf(relative.getText());
+                    if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)"))
+                        results.put(href, true);
+                    else if(!href.matches(".*\\d.*"))
+                        results.put(href, false);
+                }
             }
         }
         return results;
@@ -97,8 +121,8 @@ public class Utils {
 
         Set<String> results = new HashSet<>();
 
-        if (relativeHeader == null && type.equals("Coniuge")){
-            return getRelatives(table, "Consorti");
+        if (relativeHeader == null && type.equals("Coniug")){
+            return getRelatives(table, "Consort");
         }
         else if(relativeHeader == null) return results;
 
@@ -111,9 +135,11 @@ public class Utils {
         }
 
         for(WebElement relative : relativeHeader.findElements(By.tagName("a"))){
-            String href = relative.getAttribute("href");
-            if(!href.matches(".*\\d.*") && !isInBrackets(hrefsInBrackets, relative.getText())){
-                results.add(href);
+            if(pageExists(relative)){
+                String href = relative.getAttribute("href");
+                if(!href.matches(".*\\d.*") && !isInBrackets(hrefsInBrackets, relative.getText())){
+                    results.add(href);
+                }
             }
         }
         if(type.equals("Padre")){
