@@ -144,9 +144,6 @@ public class Window extends JFrame implements ActionListener{
     public void openBttn(){
         button.setEnabled(true);
     }
-    public void setInvisibleGif(){
-        progressBar.setVisible(false);
-    }
 
     public static void main(String[] args) {
         try {
@@ -162,7 +159,6 @@ public class Window extends JFrame implements ActionListener{
 
         window.scraper = scraper;
         window.openBttn();
-        window.setInvisibleGif();
 
     }
 
