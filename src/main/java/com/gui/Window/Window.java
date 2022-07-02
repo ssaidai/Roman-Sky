@@ -33,9 +33,11 @@ public class Window extends JFrame implements ActionListener{
     private final String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
     private final JComboBox<String> dropdown_menu = new JComboBox<>(dynasties);
     private final JButton button = new JButton("CREA ALBERO");
-    private final JLabel loadingGif = new JLabel();
+    private final JLabel loadingBar = new JLabel();
 
     private Scraper scraper;
+
+    private JProgressBar progressBar;
 
 
 
@@ -44,6 +46,9 @@ public class Window extends JFrame implements ActionListener{
         super("Imperatori Romani");
         setLayout(new BorderLayout());
         setupListener();
+
+        progressBar = new JProgressBar(0, 100);
+        progressBar.setValue(50);
     }
 
     private void setupListener(){
@@ -70,10 +75,7 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menu.setFocusable(false);
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
         dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 16f));
-        dropdown_menu.setBounds(85,150,515,30);
-        loadingGif.setIcon(new ImageIcon("src/resources/videos or gif/loadingGif3.gif"));
-        loadingGif.setBounds(323,340,60,60);
-
+        dropdown_menu.setBounds(85,150,516,30);
 
 
         // GESTIONE BUTTON
@@ -83,8 +85,22 @@ public class Window extends JFrame implements ActionListener{
         button.setBackground(new Color(0x4D3939));
         button.setForeground(Color.white);
         button.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
-        button.setBounds(260,300,160,30);
+        button.setBounds(260,280,160,30);
         button.setEnabled(false);
+
+
+        // GESTIONE PROGRESS BAR
+        progressBar.setFocusable(false);
+        progressBar.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
+        progressBar.setBorder(BorderFactory.createEtchedBorder());
+        progressBar.setBackground(Color.white);
+        progressBar.setForeground(new Color(0x4D3939));
+        progressBar.setBounds(96,330,494,30);
+        progressBar.setString("Wikipedia è fatto con i piedini");
+        progressBar.setBorderPainted(true);
+        progressBar.setStringPainted(true);
+
+
 
 
         // GESTIONE PANEL
@@ -102,12 +118,13 @@ public class Window extends JFrame implements ActionListener{
         pCenter2CENTER.add(dropdown_Text);
         pCenter2CENTER.add(dropdown_menu);
         pCenter2CENTER.add(button);
-        pCenter2CENTER.add(loadingGif);
+        pCenter2CENTER.add(progressBar);
         pCenter2NORD.add(labLogo);
         panelWest.add(labSx, BorderLayout.SOUTH);
         panelEast.add(labDx, BorderLayout.SOUTH);
         panelSud.setLayout(new GridBagLayout());
         panelSud.add(background2);
+
 
 
         // GESTIONE DEL FRAME
@@ -116,12 +133,10 @@ public class Window extends JFrame implements ActionListener{
         add(panelCenter, BorderLayout.CENTER);
         add(panelWest, BorderLayout.WEST);
         add(panelEast, BorderLayout.EAST);
-        setSize(1400, 800);
-
-        // Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //TODO: prende in automatico le dimensioni
-        // setSize(screenSize.width,screenSize.height);                        //TODO:dello schermo
-
-        setResizable(false);  // forse TRUE, per adesso FALSE       //TODO: secondo me metti TRUE come un programma normale, molto più comodo e hai 3 pulsanti in alto a destra che due (si quello è il punto)
+        //setSize(1400, 800);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(screenSize.width,screenSize.height);
+        setResizable(false);  // forse TRUE, per adesso FALSE
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);          //Si apre la finestra al centro dello schermo
         setVisible(true);
@@ -130,7 +145,7 @@ public class Window extends JFrame implements ActionListener{
         button.setEnabled(true);
     }
     public void setInvisibleGif(){
-        loadingGif.setVisible(false);
+        progressBar.setVisible(false);
     }
 
     public static void main(String[] args) {

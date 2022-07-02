@@ -46,7 +46,8 @@ public class TreeWindow extends JFrame implements ActionListener {
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
         setLayout(new BorderLayout());
-        setSize(1400, 800);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        setSize(screenSize.width,screenSize.height);
         setResizable(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
