@@ -36,8 +36,8 @@ public class Window extends JFrame implements ActionListener{
     private final JLabel loadingBar = new JLabel();
 
     private Scraper scraper;
-
     private JProgressBar progressBar;
+    private Dimension screenSize;
 
 
 
@@ -46,6 +46,9 @@ public class Window extends JFrame implements ActionListener{
         super("Imperatori Romani");
         setLayout(new BorderLayout());
         setupListener();
+
+        screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        System.out.println(screenSize);
 
         progressBar = new JProgressBar(0, 100);
         progressBar.setValue(50);
@@ -65,7 +68,7 @@ public class Window extends JFrame implements ActionListener{
         labLogo.setIcon(new ImageIcon("src/resources/logos/logo_small.png"));
         mainLogo.setHorizontalAlignment(JLabel.CENTER);
         mainLogo.setVisible(true);
-        dropdown_Text.setBounds(230,100,400,50);
+        dropdown_Text.setBounds(188,100,400,50);
         dropdown_Text.setForeground(new Color(0x000000));
         dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 25f));
         labSx.setIcon(new ImageIcon("src/resources/images/GC2.png"));
@@ -75,7 +78,7 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menu.setFocusable(false);
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
         dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 16f));
-        dropdown_menu.setBounds(85,150,516,30);
+        dropdown_menu.setBounds(44,150,516,30);
 
 
         // GESTIONE BUTTON
@@ -85,7 +88,7 @@ public class Window extends JFrame implements ActionListener{
         button.setBackground(new Color(0x4D3939));
         button.setForeground(Color.white);
         button.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
-        button.setBounds(260,280,160,30);
+        button.setBounds(219,280,160,30);
         button.setEnabled(false);
 
 
@@ -95,7 +98,7 @@ public class Window extends JFrame implements ActionListener{
         progressBar.setBorder(BorderFactory.createEtchedBorder());
         progressBar.setBackground(Color.white);
         progressBar.setForeground(new Color(0x4D3939));
-        progressBar.setBounds(96,330,494,30);
+        progressBar.setBounds(55,330,494,30);
         progressBar.setString("Wikipedia è fatto con i piedini");
         progressBar.setBorderPainted(true);
         progressBar.setStringPainted(true);
@@ -133,9 +136,8 @@ public class Window extends JFrame implements ActionListener{
         add(panelCenter, BorderLayout.CENTER);
         add(panelWest, BorderLayout.WEST);
         add(panelEast, BorderLayout.EAST);
-        //setSize(1400, 800);
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(screenSize.width,screenSize.height);
+        setSize(1300, 750);
+        //setSize(screenSize.width, screenSize.height);
         setResizable(false);  // forse TRUE, per adesso FALSE
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);          //Si apre la finestra al centro dello schermo
