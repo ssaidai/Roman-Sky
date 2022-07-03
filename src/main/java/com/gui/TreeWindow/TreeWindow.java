@@ -8,10 +8,7 @@ import org.jgrapht.ext.JGraphXAdapter;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 
 
@@ -33,7 +30,7 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem exitItem = new JMenuItem("Exit");
     private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
 
-
+    private JPanel pan = new JPanel();
 
     private JGraphXAdapter jGraphXAdapter;
 
@@ -46,7 +43,8 @@ public class TreeWindow extends JFrame implements ActionListener {
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
         setLayout(new BorderLayout());
-        setSize(1400, 800);
+        setSize(1300,700);
+        setMaximumSize(new Dimension(1400, 800));
         setResizable(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
@@ -54,7 +52,10 @@ public class TreeWindow extends JFrame implements ActionListener {
         DynastyTree tree = scraper.getDinastyTree(dIndex);
         jGraphXAdapter = tree.getGraphAdapter();
         this.dinasty = dinasty;
-        this.add(new mxGraphComponent(jGraphXAdapter));
+        pan.add(new mxGraphComponent(jGraphXAdapter));
+        JScrollPane pan2 = new JScrollPane(pan);
+        add(pan2);
+
 
 
 
@@ -119,10 +120,21 @@ public class TreeWindow extends JFrame implements ActionListener {
             setVisible(false);
         }
         if(e.getSource() == saveItem){
-            BufferedImage image = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
-            Graphics2D graphics2D = image.createGraphics();
-            paint(graphics2D);
-            new SaveWindow(image);
+            try {
+                Point p1 = getLocationOnScreen();
+                Point p = new Point((int)p1.getX() + 10, (int)p1.getY() + 25);
+
+                Dimension dim = new Dimension(getWidth() - 20, getHeight() - 40);
+                Rectangle rect = new Rectangle(p, dim);
+
+                Robot robot = new Robot();
+                BufferedImage background = robot.createScreenCapture(rect);
+                new SaveWindow(background);
+
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
 
         }
         if(e.getSource() == infoItem){
