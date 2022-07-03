@@ -28,7 +28,7 @@ public class Scraper {
             for(WebElement name : table.findElements(By.xpath("tbody/tr/td[2]/b/a"))){
                 String href = name.getAttribute("href");
                 driver.get(href);
-                Utils.getInfo(driver, href, dinasties.get(tableIndex), entityList);
+                Utils.getInfo(driver, dinasties.get(tableIndex), entityList);
                 driver.navigate().back();
             }
             break;

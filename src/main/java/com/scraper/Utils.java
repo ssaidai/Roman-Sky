@@ -13,8 +13,18 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
-    public static void getInfo(WebDriver driver, String href, Set<Person> dinasty, Set<Person> entityList){
-        System.out.println(href);
+    public static void getInfo(WebDriver driver, Set<Person> dinasty, Set<Person> entityList){
+        System.out.println(driver.getCurrentUrl());
+        Person person = getFrom(entityList, driver.getCurrentUrl());
+        if(person != null){
+            dinasty.add(person);
+            for (String relative : Iterables.concat(person.getMarriedHrefs(), person.getParentsHrefs(), person.getChildren().keySet())) {
+                driver.get(relative);
+                getInfo(driver, dinasty, entityList);
+                driver.navigate().back();
+            }
+            return;
+        }
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
             String name = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_testata\"]/th")).getText();
@@ -27,7 +37,7 @@ public class Utils {
             Set<String> parents = getRelatives(synopticTable, "Padre");
             Set<String> married = getRelatives(synopticTable, "Coniug");
             HashMap<String, Boolean> children = getChildren(synopticTable);
-            Person person = new Person(name, href, parents, married, children, true);
+            person = new Person(name, driver.getCurrentUrl(), parents, married, children, true);
             dinasty.add(person);
             entityList.add(person);
             for(String link: Iterables.concat(parents, married, children.keySet())){
@@ -36,12 +46,11 @@ public class Utils {
                     driver.navigate().back();
                     break;
                 }
-                if(getFrom(entityList, driver.getCurrentUrl()) == null)
-                    getInfo(driver, driver.getCurrentUrl(), dinasty, entityList);
+                getInfo(driver, dinasty, entityList);
                 driver.navigate().back();
             }
         }catch (NoSuchElementException e){
-            Person person = new Person(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(), href, null, null, null, false);
+            person = new Person(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(), driver.getCurrentUrl(), null, null, null, false);
             dinasty.add(person);
             entityList.add(person);
         }
