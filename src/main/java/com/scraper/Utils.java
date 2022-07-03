@@ -13,21 +13,33 @@ import java.util.regex.Pattern;
 
 public class Utils {
 
+    private static final Pattern articleIDPattern = Pattern.compile("\"wgArticleId\":(.*?),");
+    private static final Pattern inBracketsPattern = Pattern.compile("\\((.*?)\\)");
+
     public static void getInfo(WebDriver driver, Set<Person> dinasty, Set<Person> entityList){
-        System.out.println(driver.getCurrentUrl());
-        Person person = getFrom(entityList, driver.getCurrentUrl());
+        String scriptText = driver.findElement(By.xpath("/html/head/script[1]")).getAttribute("innerHTML");
+        Matcher regexMatcher = articleIDPattern.matcher(scriptText);
+        regexMatcher.find();
+        long articleID = Long.parseLong(regexMatcher.group(1));
+        Person person = getFrom(entityList, articleID);
+
         if(person != null){
-            dinasty.add(person);
-            for (String relative : Iterables.concat(person.getMarriedHrefs(), person.getParentsHrefs(), person.getChildren().keySet())) {
-                driver.get(relative);
-                getInfo(driver, dinasty, entityList);
-                driver.navigate().back();
+            if(!dinasty.contains(person)){
+                dinasty.add(person);
+                for(String link: Iterables.concat(person.getParentsHrefs(), person.getMarriedHrefs(), person.getChildren().keySet())){
+                    driver.get(link);
+                    getInfo(driver, dinasty, entityList);
+                    driver.navigate().back();
+                }
             }
-            return;
+            else
+                return;
         }
+
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
             String name = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_testata\"]/th")).getText();
+
 /*            String title = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_divisione\"]/th")).getText();
             String bornDate = null;
             try{
@@ -37,9 +49,10 @@ public class Utils {
             Set<String> parents = getRelatives(synopticTable, "Padre");
             Set<String> married = getRelatives(synopticTable, "Coniug");
             HashMap<String, Boolean> children = getChildren(synopticTable);
-            person = new Person(name, driver.getCurrentUrl(), parents, married, children, true);
+            person = new Person(name, driver.getCurrentUrl(), articleID, parents, married, children, true);
             dinasty.add(person);
             entityList.add(person);
+            System.out.println(driver.getCurrentUrl());
             for(String link: Iterables.concat(parents, married, children.keySet())){
                 driver.get(link);
                 if(isDisambiguityPage(driver)){
@@ -50,7 +63,8 @@ public class Utils {
                 driver.navigate().back();
             }
         }catch (NoSuchElementException e){
-            person = new Person(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText(), driver.getCurrentUrl(), null, null, null, false);
+            String name = driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText();
+            person = new Person(name, driver.getCurrentUrl(), articleID, null, null, null, false);
             dinasty.add(person);
             entityList.add(person);
         }
@@ -81,8 +95,8 @@ public class Utils {
         }
         return null;
     }
-    private static Person getFrom(final Set<Person> list, final String href){
-        return list.stream().filter(o -> o.getHref().equals(href)).findFirst().orElse(null);
+    private static Person getFrom(final Set<Person> list, final long articleID){
+        return list.stream().filter(o -> o.getArticleID() == articleID).findFirst().orElse(null);
     }
 
     // FIXME: CAMBIARE NOME A QUESTA ROBA, TROPPO SPECIFICO AL MOMENTO
@@ -136,8 +150,8 @@ public class Utils {
         else if(relativeHeader == null) return results;
 
         List<String> hrefsInBrackets = new ArrayList<>();
-        Pattern regex = Pattern.compile("\\((.*?)\\)");
-        Matcher regexMatcher = regex.matcher(relativeHeader.getText());
+
+        Matcher regexMatcher = inBracketsPattern.matcher(relativeHeader.getText());
 
         while (regexMatcher.find()) {
             hrefsInBrackets.add(regexMatcher.group(1));

@@ -7,18 +7,21 @@ import java.util.*;
 
 public class Person {
     private final String name;
-    private final String href;    // used as ID to distinguish homonym persons
+    private final String href;
+
+    private final long articleID;   // used as ID to distinguish homonym persons
 
     private Set<String> parentsHref;
     private Set<String> marriedHref;
-    private HashMap<String, Boolean> children = new HashMap<>();
+    private HashMap<String, Boolean> children;
 
     private final boolean vip;
 
 
-    public Person(String name, String href, Set<String> parents, Set<String> married, HashMap<String, Boolean> children, boolean vip){
+    public Person(String name, String href, long articleID, Set<String> parents, Set<String> married, HashMap<String, Boolean> children, boolean vip){
         this.name = name;
         this.href = href;
+        this.articleID = articleID;
         this.parentsHref = parents;
         this.marriedHref = married;
         this.children = children;
@@ -44,6 +47,14 @@ public class Person {
 
     public String getHref() {
         return href;
+    }
+
+    public long getArticleID() {
+        return articleID;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public HashMap<String, Boolean> getChildren(){

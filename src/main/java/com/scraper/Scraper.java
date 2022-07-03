@@ -31,6 +31,7 @@ public class Scraper {
                 Utils.getInfo(driver, dinasties.get(tableIndex), entityList);
                 driver.navigate().back();
             }
+
             break;
             //tableIndex++;
         }
