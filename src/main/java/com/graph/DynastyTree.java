@@ -1,21 +1,27 @@
 package com.graph;
 
 import com.data.Person;
-import com.mxgraph.layout.*;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.layout.orthogonal.mxOrthogonalLayout;
+import com.mxgraph.layout.mxParallelEdgeLayout;
+import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
-import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxConstants;
+import com.mxgraph.util.mxEvent;
+import com.mxgraph.util.mxEventObject;
+import com.mxgraph.util.mxEventSource;
+import com.mxgraph.view.mxGraphSelectionModel;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
-import org.jgrapht.ListenableGraph;
 import org.jgrapht.ext.JGraphXAdapter;
-import org.jgrapht.graph.DefaultDirectedGraph;
 import org.jgrapht.graph.DefaultEdge;
-import org.jgrapht.graph.Multigraph;
+import org.jgrapht.graph.SimpleGraph;
 
-import javax.swing.*;
+import java.awt.*;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.*;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class DynastyTree {
@@ -47,7 +53,7 @@ public class DynastyTree {
         }
     }
 
-    private final Graph<Person, RelationshipEdge> graph = new Multigraph<>(RelationshipEdge.class);
+    private final Graph<Person, RelationshipEdge> graph = new SimpleGraph<>(RelationshipEdge.class);
     private static final String MARRIED = "married";
     private static final String KIN = "kin";
     private static final String ADOPTED = "adopted";
@@ -72,20 +78,40 @@ public class DynastyTree {
                 else
                     graph.addEdge(person, child, new RelationshipEdge(KIN));
             }
+            /*List<Person> parents = entityList.stream().filter(p -> person.getParentsHrefs().contains(p.getHref())).collect(Collectors.toList());
+            for (Person parent: parents)
+                graph.addEdge(parent, person, new RelationshipEdge(KIN));*/
         }
 
         //  TODO:   https://jgraph.github.io/mxgraph/docs/manual_javavis.html   ---   mxGraph documentation
         //  FIXME:  place wives at same level of the husbands
 
         this.graphAdapter = new JGraphXAdapter<>(graph);
-        new mxCircleLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
-        new mxParallelEdgeLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
         new mxHierarchicalLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
+        //new mxParallelEdgeLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
         HashMap<RelationshipEdge, mxICell> edgemxICellHashMap = graphAdapter.getEdgeToCellMap();
         ArrayList<Object> marriedList = new ArrayList<>();
         ArrayList<Object> adoptedList = new ArrayList<>();
         ArrayList<Object> kinList = new ArrayList<>();
-
+        graphAdapter.setConnectableEdges(false);
+        graphAdapter.setCellsResizable(false);
+        graphAdapter.setCellsMovable(false);
+        mxConstants.DEFAULT_MARKERSIZE = 0;
+        graphAdapter.getSelectionModel().addListener(mxEvent.CHANGE, new mxEventSource.mxIEventListener() {
+            @Override
+            public void invoke(Object o, mxEventObject mxEventObject) {
+                mxGraphSelectionModel sm = (mxGraphSelectionModel) o;
+                mxCell cell = (mxCell) sm.getCell();
+                if (cell != null && cell.isVertex()) {
+                    Person temp = (Person)cell.getValue();
+                    try {
+                        Desktop.getDesktop().browse(new URI(temp.getHref()));
+                    } catch (IOException | URISyntaxException e) {
+                        throw new RuntimeException(e);
+                    }
+                }
+            }
+        });
         for(RelationshipEdge edge : edgemxICellHashMap.keySet()){
             if(edge.getLabel().equals("married"))
                 marriedList.add(edgemxICellHashMap.get(edge));

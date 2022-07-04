@@ -8,9 +8,12 @@ import com.gui.TreeWindow.TreeWindow;
 import com.scraper.Scraper;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Hashtable;
 
 public class Window extends JFrame implements ActionListener{
 
@@ -32,13 +35,15 @@ public class Window extends JFrame implements ActionListener{
     private final JLabel labSPQR = new JLabel();
     private final String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
     private final JComboBox<String> dropdown_menu = new JComboBox<>(dynasties);
-    private final JButton button = new JButton("CREA ALBERO");
-    private final JLabel loadingBar = new JLabel();
+    private final JButton button = new JButton("LOAD DATA");
 
     private Scraper scraper;
     private JProgressBar progressBar;
     private Dimension screenSize;
 
+    private JSlider slider;
+
+    private int sliderValue = 1;
 
 
 
@@ -48,10 +53,10 @@ public class Window extends JFrame implements ActionListener{
         setupListener();
 
         screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        System.out.println(screenSize);
+        slider = new JSlider(JSlider.HORIZONTAL, 1, 10, 1);
+        slider.setValue(1);
 
         progressBar = new JProgressBar(0, 100);
-        progressBar.setValue(50);
     }
 
     private void setupListener(){
@@ -83,13 +88,14 @@ public class Window extends JFrame implements ActionListener{
 
         // GESTIONE BUTTON
         button.setFocusable(false);
+        button.setActionCommand("Load Data");
         button.setFont(new Font("Comic Sans", Font.BOLD, 15));
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(new Color(0x4D3939));
         button.setForeground(Color.white);
         button.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
         button.setBounds(219,280,160,30);
-        button.setEnabled(false);
+        button.setEnabled(true);
 
 
         // GESTIONE PROGRESS BAR
@@ -99,11 +105,34 @@ public class Window extends JFrame implements ActionListener{
         progressBar.setBackground(Color.white);
         progressBar.setForeground(new Color(0x4D3939));
         progressBar.setBounds(55,330,494,30);
-        progressBar.setString("Wikipedia è fatto con i piedini");
         progressBar.setBorderPainted(true);
         progressBar.setStringPainted(true);
 
 
+        //  GESTIONE SLIDER
+        slider.setEnabled(true);
+        slider.setForeground(new Color(0x4D3939));
+        slider.setBackground(Color.white);
+        slider.setBounds(79,200,436,60); // Dimensioni JPanel[x=0,y=175,width=594,height=476]
+        slider.setMajorTickSpacing(1);
+        slider.setFocusable(false);
+        slider.setPaintTicks(true);
+        slider.setPaintLabels(true);
+        Hashtable labelTable = (Hashtable) slider.getLabelTable();
+        labelTable.replace(10, new JLabel("∞"));
+        slider.setLabelTable(labelTable);
+        slider.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
+        //slider.setBorder(BorderFactory.createEtchedBorder());
+        slider.setVisible(true);
+        slider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider source = (JSlider)e.getSource();
+                if (!source.getValueIsAdjusting()) {
+                    sliderValue = source.getValue();
+                }
+            }
+        });
 
 
         // GESTIONE PANEL
@@ -122,6 +151,7 @@ public class Window extends JFrame implements ActionListener{
         pCenter2CENTER.add(dropdown_menu);
         pCenter2CENTER.add(button);
         pCenter2CENTER.add(progressBar);
+        pCenter2CENTER.add(slider);
         pCenter2NORD.add(labLogo);
         panelWest.add(labSx, BorderLayout.SOUTH);
         panelEast.add(labDx, BorderLayout.SOUTH);
@@ -143,9 +173,6 @@ public class Window extends JFrame implements ActionListener{
         setLocationRelativeTo(null);          //Si apre la finestra al centro dello schermo
         setVisible(true);
     }
-    public void openBttn(){
-        button.setEnabled(true);
-    }
 
     public static void main(String[] args) {
         try {
@@ -155,13 +182,11 @@ public class Window extends JFrame implements ActionListener{
         }
         Window window = new Window();
         window.setup();
-        Scraper scraper = new Scraper();        //  TODO: CHE PALLE CI METTE UN BORDELLO FORSE SERVE UNA PERCENTUALE ALTRIMENTI UNO SE AMMAZZA PRIMA CHE FINISCE
+        //Scraper scraper = new Scraper();        //  TODO: CHE PALLE CI METTE UN BORDELLO FORSE SERVE UNA PERCENTUALE ALTRIMENTI UNO SE AMMAZZA PRIMA CHE FINISCE
         System.out.println(" FINITO ");         //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
                                                 //  TODO: ANCHE NELL'ALTRA CLASSE (VEDI SOTTO)
 
-        window.scraper = scraper;
-        window.openBttn();
-
+        //window.scraper = scraper;
     }
 
 
@@ -169,7 +194,18 @@ public class Window extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String bottone = e.getActionCommand();
-        if(bottone.equals("CREA ALBERO"))
+        if(bottone.equals("Load Data")){
+            button.setText("CREA ALBERO");
+            button.setActionCommand("Generate Tree");
+            button.setEnabled(false);
+            slider.setVisible(false);
+            Thread thread = new Thread(() -> {
+                scraper = new Scraper(progressBar, sliderValue);
+                button.setEnabled(true);
+            });
+            thread.start();
+        }
+        if(bottone.equals("Generate Tree"))
         {
             new TreeWindow(dropdown_menu.getSelectedItem().toString(), dropdown_menu.getSelectedIndex(), scraper);
         }

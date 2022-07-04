@@ -2,21 +2,32 @@ package com.scraper;
 
 import com.data.Person;
 import com.google.common.collect.Iterables;
+import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import javax.swing.*;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+
+        /*  1)
+        * */
+
 
 public class Utils {
 
     private static final Pattern articleIDPattern = Pattern.compile("\"wgArticleId\":(.*?),");
     private static final Pattern inBracketsPattern = Pattern.compile("\\((.*?)\\)");
 
-    public static void getInfo(WebDriver driver, Set<Person> dinasty, Set<Person> entityList){
+    public static void getInfo(WebDriver driver, Set<Person> dinasty, Set<Person> entityList, JProgressBar progressBar, int depth, boolean ignoreDepth){
+
+        if(depth == -1 && !ignoreDepth) return;
+
+        System.out.println(driver.getCurrentUrl());
         String scriptText = driver.findElement(By.xpath("/html/head/script[1]")).getAttribute("innerHTML");
         Matcher regexMatcher = articleIDPattern.matcher(scriptText);
         regexMatcher.find();
@@ -28,7 +39,7 @@ public class Utils {
                 dinasty.add(person);
                 for(String link: Iterables.concat(person.getParentsHrefs(), person.getMarriedHrefs(), person.getChildren().keySet())){
                     driver.get(link);
-                    getInfo(driver, dinasty, entityList);
+                    getInfo(driver, dinasty, entityList, progressBar, depth-1, ignoreDepth);
                     driver.navigate().back();
                 }
             }
@@ -39,7 +50,7 @@ public class Utils {
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
             String name = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_testata\"]/th")).getText();
-
+            progressBar.setString(name);
 /*            String title = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_divisione\"]/th")).getText();
             String bornDate = null;
             try{
@@ -52,18 +63,19 @@ public class Utils {
             person = new Person(name, driver.getCurrentUrl(), articleID, parents, married, children, true);
             dinasty.add(person);
             entityList.add(person);
-            System.out.println(driver.getCurrentUrl());
+
             for(String link: Iterables.concat(parents, married, children.keySet())){
                 driver.get(link);
                 if(isDisambiguityPage(driver)){
                     driver.navigate().back();
                     break;
                 }
-                getInfo(driver, dinasty, entityList);
+                getInfo(driver, dinasty, entityList, progressBar, depth-1, ignoreDepth);
                 driver.navigate().back();
             }
         }catch (NoSuchElementException e){
             String name = driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/p[1]/b")).getText();
+            progressBar.setString(name);
             person = new Person(name, driver.getCurrentUrl(), articleID, null, null, null, false);
             dinasty.add(person);
             entityList.add(person);
@@ -124,12 +136,12 @@ public class Utils {
             }
         }
         else{
-            List<String> wordList = Arrays.asList(childrenHeader.getText().split(" "));
+            List<String> wordList = Arrays.asList(StringUtils.split(childrenHeader.getText(), "\n "));
             for(WebElement relative : childrenHeader.findElements(By.tagName("a"))){
                 if(pageExists(relative)){
                     String href = relative.getAttribute("href");
                     int index = wordList.indexOf(relative.getText());
-                    if(!href.matches(".*\\d.*") && index != wordList.size()-1 && wordList.get(index+1).equals("(adottivo)"))
+                    if(!href.matches(".*\\d.*") && (index < wordList.size()-1 && wordList.get(index+1).equals("(adottivo)")) || index < wordList.size()-2 && wordList.get(index+2).equals("adottato)"))
                         results.put(href, true);
                     else if(!href.matches(".*\\d.*"))
                         results.put(href, false);
