@@ -120,7 +120,7 @@ public class DynastyTree {
                 marriedList.add(edgemxICellHashMap.get(edge));
             if(edge.getLabel().equals("adopted"))
                 adoptedList.add(edgemxICellHashMap.get(edge));
-            else
+            if(edge.getLabel().equals("kin"))
                 kinList.add(edgemxICellHashMap.get(edge));
         }
 
