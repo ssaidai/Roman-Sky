@@ -36,6 +36,7 @@ public class TreeWindow extends JFrame implements ActionListener {
     private mxGraphComponent graphComponent;
 
     private int pressPointX, pressPointY;
+    private double initialZoom = 0;
 
     /**
      * Class constructor
@@ -45,6 +46,7 @@ public class TreeWindow extends JFrame implements ActionListener {
      */
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
+        this.dinasty = dinasty;
         setLayout(new BorderLayout());
         setSize(1300,700);
         setMaximumSize(new Dimension(1400, 800));
@@ -55,7 +57,6 @@ public class TreeWindow extends JFrame implements ActionListener {
         DynastyTree tree = scraper.getDinastyTree(dIndex);
         jGraphXAdapter = tree.getGraphAdapter();
         graphComponent = new mxGraphComponent(jGraphXAdapter);
-        this.dinasty = dinasty;
         pan.add(graphComponent);
         add(pan);
 
@@ -95,6 +96,32 @@ public class TreeWindow extends JFrame implements ActionListener {
             @Override
             public void mouseMoved(MouseEvent e) {
 
+            }
+        });
+
+        graphComponent.getGraphControl().addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e) {
+                if (e.isControlDown()){
+                    if (e.getPreciseWheelRotation() < 0){
+                        initialZoom ++;
+                        graphComponent.zoomIn();
+                    }
+                    else{
+                        if (initialZoom > 0) {
+                            initialZoom --;
+                            graphComponent.zoomOut();
+                        }
+                        else {
+                            initialZoom = 0;
+                            graphComponent.zoomActual();
+                            graphComponent.getParent().dispatchEvent(e);
+                        }
+                    }
+                }
+                else{
+                    graphComponent.getParent().dispatchEvent(e);
+                }
             }
         });
 

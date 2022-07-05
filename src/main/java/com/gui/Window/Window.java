@@ -88,7 +88,7 @@ public class Window extends JFrame implements ActionListener{
 
         // GESTIONE BUTTON
         button.setFocusable(false);
-        button.setActionCommand("Load Data");
+        button.setActionCommand("INSERISCI");
         button.setFont(new Font("Comic Sans", Font.BOLD, 15));
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(new Color(0x4D3939));
@@ -101,6 +101,7 @@ public class Window extends JFrame implements ActionListener{
         // GESTIONE PROGRESS BAR
         progressBar.setFocusable(false);
         progressBar.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
+        progressBar.setString("Attendendo l'inserimento della profondità");
         progressBar.setBorder(BorderFactory.createEtchedBorder());
         progressBar.setBackground(Color.white);
         progressBar.setForeground(new Color(0x4D3939));
@@ -194,7 +195,7 @@ public class Window extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String bottone = e.getActionCommand();
-        if(bottone.equals("Load Data")){
+        if(bottone.equals("INSERISCI")){
             button.setText("CREA ALBERO");
             button.setActionCommand("Generate Tree");
             button.setEnabled(false);
