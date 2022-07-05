@@ -39,6 +39,7 @@ public class Scraper {
         }
         progressBar.setValue(100);
         progressBar.setString("Tutte le dinastie sono state caricate");
+        System.out.println("FINITO");
     }
 
     public DynastyTree getDinastyTree(int index){

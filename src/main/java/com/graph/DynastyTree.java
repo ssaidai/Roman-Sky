@@ -96,6 +96,9 @@ public class DynastyTree {
         graphAdapter.setConnectableEdges(false);
         graphAdapter.setCellsResizable(false);
         graphAdapter.setCellsMovable(false);
+        graphAdapter.setCellsEditable(false);
+        graphAdapter.setAllowDanglingEdges(false);
+        //graphAdapter.setCellsSelectable(false);       FIXME:  put this to remove errors when drag on cells/edges, but cannot longer open the associated WIKI page on click
         mxConstants.DEFAULT_MARKERSIZE = 0;
         graphAdapter.getSelectionModel().addListener(mxEvent.CHANGE, new mxEventSource.mxIEventListener() {
             @Override

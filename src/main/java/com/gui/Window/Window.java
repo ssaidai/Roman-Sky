@@ -183,7 +183,7 @@ public class Window extends JFrame implements ActionListener{
         Window window = new Window();
         window.setup();
         //Scraper scraper = new Scraper();        //  TODO: CHE PALLE CI METTE UN BORDELLO FORSE SERVE UNA PERCENTUALE ALTRIMENTI UNO SE AMMAZZA PRIMA CHE FINISCE
-        System.out.println(" FINITO ");         //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
+                                                //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
                                                 //  TODO: ANCHE NELL'ALTRA CLASSE (VEDI SOTTO)
 
         //window.scraper = scraper;

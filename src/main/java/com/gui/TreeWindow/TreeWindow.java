@@ -33,6 +33,9 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JPanel pan = new JPanel();
 
     private JGraphXAdapter jGraphXAdapter;
+    private mxGraphComponent graphComponent;
+
+    private int pressPointX, pressPointY;
 
     /**
      * Class constructor
@@ -51,10 +54,10 @@ public class TreeWindow extends JFrame implements ActionListener {
         setVisible(true);
         DynastyTree tree = scraper.getDinastyTree(dIndex);
         jGraphXAdapter = tree.getGraphAdapter();
+        graphComponent = new mxGraphComponent(jGraphXAdapter);
         this.dinasty = dinasty;
-        pan.add(new mxGraphComponent(jGraphXAdapter));
-        JScrollPane pan2 = new JScrollPane(pan);
-        add(pan2);
+        pan.add(graphComponent);
+        add(pan);
 
 
 
@@ -73,6 +76,28 @@ public class TreeWindow extends JFrame implements ActionListener {
         changeNamesColorItem.addActionListener(this);
         infoItem.addActionListener(this);
         exitItem.addActionListener(this);
+
+        //MOUSE - CLICK, DRAG AND MOVE
+        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                pressPointX = e.getXOnScreen() - graphComponent.getX();
+                pressPointY = e.getYOnScreen() - graphComponent.getY();
+            }
+        });
+        graphComponent.getGraphControl().addMouseMotionListener(new MouseMotionListener() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                graphComponent.setLocation(e.getXOnScreen() - pressPointX,
+                        e.getYOnScreen() - pressPointY);
+            }
+
+            @Override
+            public void mouseMoved(MouseEvent e) {
+
+            }
+        });
+
     }
 
     /**
@@ -141,5 +166,6 @@ public class TreeWindow extends JFrame implements ActionListener {
             new InfoWindow();
         }
     }
+
 
 }
