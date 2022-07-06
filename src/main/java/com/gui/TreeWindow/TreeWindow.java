@@ -30,12 +30,13 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem exitItem = new JMenuItem("Exit");
     private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
 
-    private JPanel pan = new JPanel();
-
     private JGraphXAdapter jGraphXAdapter;
     private mxGraphComponent graphComponent;
 
-    private int pressPointX, pressPointY;
+    private JScrollPane pane;
+    private HandScrollListener handScrollListener;
+
+    private int deltaX, deltaY;
     private double initialZoom = 0;
 
     /**
@@ -48,8 +49,8 @@ public class TreeWindow extends JFrame implements ActionListener {
         super(dinasty);
         this.dinasty = dinasty;
         setLayout(new BorderLayout());
-        setSize(1300,700);
-        setMaximumSize(new Dimension(1400, 800));
+        setSize(1300,750);
+        setMaximumSize(new Dimension(1300, 750));
         setResizable(true);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
@@ -57,8 +58,13 @@ public class TreeWindow extends JFrame implements ActionListener {
         DynastyTree tree = scraper.getDinastyTree(dIndex);
         jGraphXAdapter = tree.getGraphAdapter();
         graphComponent = new mxGraphComponent(jGraphXAdapter);
-        pan.add(graphComponent);
-        add(pan);
+        graphComponent.setAutoscrolls(true);
+        handScrollListener = new HandScrollListener(graphComponent);
+        //graphComponent.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);      TODO: Set on whenever drag and scroll works
+        //graphComponent.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        pane = new JScrollPane(graphComponent);
+        add(pane);
+
 
 
 
@@ -78,27 +84,33 @@ public class TreeWindow extends JFrame implements ActionListener {
         infoItem.addActionListener(this);
         exitItem.addActionListener(this);
 
-        //MOUSE - CLICK, DRAG AND MOVE
-        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
+        //MOUSE - DRAG AND SCROLL
+        /**graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {           FIXME: this one is the "wrong drag"
             @Override
             public void mousePressed(MouseEvent e) {
-                pressPointX = e.getXOnScreen() - graphComponent.getX();
-                pressPointY = e.getYOnScreen() - graphComponent.getY();
+                 deltaX = e.getXOnScreen() - graphComponent.getX();
+                 deltaY = e.getYOnScreen() - graphComponent.getY();
             }
         });
         graphComponent.getGraphControl().addMouseMotionListener(new MouseMotionListener() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                graphComponent.setLocation(e.getXOnScreen() - pressPointX,
-                        e.getYOnScreen() - pressPointY);
+                graphComponent.setLocation(e.getXOnScreen() - deltaX,
+                        e.getYOnScreen() - deltaY);
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
 
             }
-        });
+        });*/
 
+        pane.getViewport().addMouseListener(handScrollListener);                //TODO: scrollListener implementation
+        pane.getViewport().addMouseMotionListener(handScrollListener);
+
+
+
+        //ZOOM IN/OUT
         graphComponent.getGraphControl().addMouseWheelListener(new MouseWheelListener() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
@@ -111,6 +123,9 @@ public class TreeWindow extends JFrame implements ActionListener {
                         if (initialZoom > 0) {
                             initialZoom --;
                             graphComponent.zoomOut();
+                            if (initialZoom <= 0){
+                                graphComponent.zoomActual();
+                            }
                         }
                         else {
                             initialZoom = 0;
@@ -195,4 +210,71 @@ public class TreeWindow extends JFrame implements ActionListener {
     }
 
 
+    MouseAdapter ma = new MouseAdapter() {
+        private int deltaX, deltaY;
+        private Point start;
+        private JViewport viewPort;
+        private Rectangle view;
+
+        @Override
+        public void mousePressed(MouseEvent e) {
+            start = new Point(e.getPoint());
+        }
+
+        @Override
+        public void mouseReleased(MouseEvent e) {
+        }
+
+        @Override
+        public void mouseDragged(MouseEvent e) {
+            if (start != null){
+                viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, graphComponent);
+                if (viewPort != null){
+                    deltaX = start.x - e.getX();
+                    deltaY = start.y - e.getY();
+
+                    view = viewPort.getViewRect();
+                    view.x += deltaX;
+                    view.y += deltaY;
+
+                    graphComponent.scrollRectToVisible(view);
+                }
+            }
+        }
+    };
+
+    public class HandScrollListener extends MouseAdapter                                    //TODO: scrollListener
+    {
+        private final Cursor defCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+        private final Cursor hndCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
+        private final Point pp = new Point();
+        private JScrollPane gComponent;
+
+        public HandScrollListener(JScrollPane gComponent)
+        {
+            this.gComponent = gComponent;
+        }
+
+        public void mouseDragged(final MouseEvent e)
+        {
+            JViewport vport = (JViewport)e.getSource();
+            Point cp = e.getPoint();
+            Point vp = vport.getViewPosition();
+            vp.translate(pp.x-cp.x, pp.y-cp.y);
+            gComponent.scrollRectToVisible(new Rectangle(vp, vport.getSize()));
+            pp.setLocation(cp);
+        }
+
+        public void mousePressed(MouseEvent e)
+        {
+            gComponent.setCursor(hndCursor);
+            pp.setLocation(e.getPoint());
+        }
+
+        public void mouseReleased(MouseEvent e)
+        {
+            gComponent.setCursor(defCursor);
+            gComponent.repaint();
+        }
+    }
 }

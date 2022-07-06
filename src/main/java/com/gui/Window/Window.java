@@ -35,7 +35,7 @@ public class Window extends JFrame implements ActionListener{
     private final JLabel labSPQR = new JLabel();
     private final String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
     private final JComboBox<String> dropdown_menu = new JComboBox<>(dynasties);
-    private final JButton button = new JButton("LOAD DATA");
+    private final JButton button = new JButton("LOAD DATE");
 
     private Scraper scraper;
     private JProgressBar progressBar;
@@ -88,7 +88,7 @@ public class Window extends JFrame implements ActionListener{
 
         // GESTIONE BUTTON
         button.setFocusable(false);
-        button.setActionCommand("INSERISCI");
+        button.setActionCommand("LOAD DATE");
         button.setFont(new Font("Comic Sans", Font.BOLD, 15));
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(new Color(0x4D3939));
@@ -101,7 +101,7 @@ public class Window extends JFrame implements ActionListener{
         // GESTIONE PROGRESS BAR
         progressBar.setFocusable(false);
         progressBar.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
-        progressBar.setString("Attendendo l'inserimento della profondità");
+        progressBar.setString("Enter research deapth");
         progressBar.setBorder(BorderFactory.createEtchedBorder());
         progressBar.setBackground(Color.white);
         progressBar.setForeground(new Color(0x4D3939));
@@ -195,8 +195,8 @@ public class Window extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String bottone = e.getActionCommand();
-        if(bottone.equals("INSERISCI")){
-            button.setText("CREA ALBERO");
+        if(bottone.equals("LOAD DATE")){
+            button.setText("GET GRAPH");
             button.setActionCommand("Generate Tree");
             button.setEnabled(false);
             slider.setVisible(false);
