@@ -7,6 +7,7 @@ import org.jgrapht.ext.JGraphXAdapter;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
@@ -28,16 +29,24 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem infoItem = new JMenuItem("Info");
     private JMenuItem drawItem = new JMenuItem("Draw");
     private JMenuItem exitItem = new JMenuItem("Exit");
-    private JMenuItem changeNamesColorItem = new JMenuItem("Change colors");
+    private BackgroundMenuItem colFItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO");
+    private BackgroundMenuItem colFAItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO ADOTTIVO");
+    private BackgroundMenuItem colMItem = new BackgroundMenuItem("COLORE RELAZIONE CON MOGLIE");
+    private JMenu changeNamesColorItem = new JMenu("Change colors");
 
     private JGraphXAdapter jGraphXAdapter;
     private mxGraphComponent graphComponent;
+    final JColorChooser picker = new JColorChooser();
 
     private JScrollPane pane;
     private HandScrollListener handScrollListener;
 
     private int deltaX, deltaY;
     private double initialZoom = 0;
+    private DynastyTree tree;
+    private Color colMoglie = new Color(0,0,255);
+    private Color colFiglio = new Color(0,255,0);
+    private Color colFA = new Color(255,0,0);
 
     /**
      * Class constructor
@@ -55,8 +64,11 @@ public class TreeWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
         setVisible(true);
-        DynastyTree tree = scraper.getDinastyTree(dIndex);
+        tree = scraper.getDinastyTree(dIndex);
         jGraphXAdapter = tree.getGraphAdapter();
+        tree.setCellsStyle("married", colMoglie);
+        tree.setCellsStyle("kin", colFiglio);
+        tree.setCellsStyle("adopted", colFA);
         graphComponent = new mxGraphComponent(jGraphXAdapter);
         graphComponent.setAutoscrolls(true);
         handScrollListener = new HandScrollListener(graphComponent);
@@ -64,11 +76,6 @@ public class TreeWindow extends JFrame implements ActionListener {
         //graphComponent.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         pane = new JScrollPane(graphComponent);
         add(pane);
-
-
-
-
-
         setup();
         setupListener();
         mnemonics();
@@ -83,6 +90,10 @@ public class TreeWindow extends JFrame implements ActionListener {
         changeNamesColorItem.addActionListener(this);
         infoItem.addActionListener(this);
         exitItem.addActionListener(this);
+        colFAItem.addActionListener(this);
+        colFItem.addActionListener(this);
+        colMItem.addActionListener(this);
+
 
         //MOUSE - DRAG AND SCROLL
         /**graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {           FIXME: this one is the "wrong drag"
@@ -155,16 +166,33 @@ public class TreeWindow extends JFrame implements ActionListener {
         menuBar.add(menuHelp);
         menuFile.add(saveItem);
         menuFile.add(exitItem);
-        menuEdit.add(drawItem);
         menuEdit.add(changeNamesColorItem);
         menuHelp.add(infoItem);
+        changeNamesColorItem.add(colFItem);
+        changeNamesColorItem.add(colFAItem);
+        changeNamesColorItem.add(colMItem);
+        colMItem.setColor(colMoglie);
+        colFItem.setColor(colFiglio);
+        colFAItem.setColor(colFA);
 
-        //TODO: INSERIRE ICONE (24x24) PER MENU (sito da dove ho scaricato l'icona https://icons8.it/icons)
+
+        //MODIFICA DI PICKER
+        AbstractColorChooserPanel[] ab = picker.getChooserPanels();
+        AbstractColorChooserPanel[] ab2 = ab.clone();
+        picker.removeChooserPanel(ab[0]);
+        picker.removeChooserPanel(ab[1]);
+        picker.removeChooserPanel(ab[2]);
+        picker.addChooserPanel(ab2[2]);
+        picker.addChooserPanel(ab2[1]);
+        picker.addChooserPanel(ab2[0]);
+
+
+        //SET DI ICONE NEL MENU
         saveItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaSalva.png"));
         infoItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaInfo.png"));
         exitItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaExit.png"));
-        drawItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaDraw.png"));
         changeNamesColorItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
+
 
 
 
@@ -183,11 +211,32 @@ public class TreeWindow extends JFrame implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == colFItem){
+            JColorChooser.createDialog(colFItem,"PROVA",true,picker, this, null ).setVisible(true);
+            tree.setCellsStyle("kin" , picker.getColor());
+            colFItem.setColor(picker.getColor());
+
+        }
+
+        if(e.getSource() == colFAItem){
+            JColorChooser.createDialog(colFItem,"PROVA",true,picker, this, null ).setVisible(true);
+            tree.setCellsStyle("adopted" , picker.getColor());
+            colFAItem.setColor(picker.getColor());
+        }
+
+        if(e.getSource() == colMItem){
+            JColorChooser.createDialog(colFItem,"PROVA",true,picker, this, null ).setVisible(true);
+            tree.setCellsStyle("married" , picker.getColor());
+            colMItem.setColor(picker.getColor());
+        }
+
+
         if(e.getSource() == exitItem){
             setVisible(false);
         }
         if(e.getSource() == saveItem){
             try {
+                /*
                 Point p1 = getLocationOnScreen();
                 Point p = new Point((int)p1.getX() + 10, (int)p1.getY() + 25);
 
@@ -197,6 +246,11 @@ public class TreeWindow extends JFrame implements ActionListener {
                 Robot robot = new Robot();
                 BufferedImage background = robot.createScreenCapture(rect);
                 new SaveWindow(background);
+
+                 */
+                BufferedImage image = new BufferedImage(pane.getWidth(), pane.getHeight(), BufferedImage.TYPE_INT_RGB);
+                pane.paint(image.getGraphics());
+                new SaveWindow(image);
 
             }
             catch (Exception ex) {

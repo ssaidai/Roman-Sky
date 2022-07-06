@@ -5,10 +5,7 @@ import com.gui.MyFont;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -23,30 +20,46 @@ import java.io.File;
 /**
  * SaveWindow Class.
  */
-public class SaveWindow extends JFrame implements ActionListener, MouseMotionListener {
+public class SaveWindow extends JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
 
+    private JMenuBar menuBar = new JMenuBar();
+    private JMenu menuFile = new JMenu("File");
+    private JMenu menuEdit= new JMenu("Edit");
+    private JMenuItem saveItem = new JMenuItem("Save");
+    private JMenuItem drawItem = new JMenuItem("Draw");
     private JFileChooser jF = new JFileChooser(new File("c://"));
     private BufferedImage image;
     private JPanel panel = new JPanel(null);
     private JButton save = new JButton("SAVE");
-    private JButton cancel = new JButton("CANCEL");
+    private JButton cancel = new JButton("EXIT");
     private JPanel pane;
     private JLabel toolsText = new JLabel("STRUMENTI DISEGNO ");
     private JLabel colorText = new JLabel("SCEGLI COLORE ");
-    private JLabel pixelText = new JLabel("INSERISCI PIXEL ");
+    private JLabel pixelText = new JLabel("SELEZIONA PIXEL ");
     private String[] c = {"NERO", "ROSSO", "GIALLO", "BLU"};
 
     private JComboBox<String> colMenu = new JComboBox<>(c);
 
-    private JTextArea pixMenu = new JTextArea();
+    private String[] dPix = {"2 px", "5 px", "10 px"};
+    private JComboBox<String> dimPixel = new JComboBox<>(dPix);
+    private JLabel strText = new JLabel("SELEZIONA STRUMENTO ");
+
     private String paintColor = "BLACK";
     private boolean contr = true;
     private JPanel p2 = new JPanel(null);
-    private int pixel = 1;
+    private int pixel = 2;
     private JButton pixBttn = new JButton("O");
     private JPanel pPrincipale = new JPanel(null);
     private JLabel errorStrFormat = new JLabel("Numero di pixel non valido...");
+    private JMenuItem exitItem = new JMenuItem("Exit");
+    private int currentX, currentY, oldX, oldY;
+    private String[] ut = {"MATITA","GOMMA"};
+
+    private JComboBox<String> utMenu = new JComboBox<>(ut);
+    private String utContr = "MATITA";
+
+
 
 
     /**
@@ -56,10 +69,13 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     public SaveWindow(BufferedImage bf){
 
         super("SAVE");
+
         panel.setBackground(new Color(0xFFFFFF));
         setupListener();
+        mnemonics();
         setResizable(false);
-        setSize(bf.getWidth() + 200,bf.getHeight() + 100);
+
+        setSize(Math.max(bf.getWidth(), 740), bf.getHeight()+100);
         setVisible(true);
         pane = new JPanel() {
             @Override
@@ -68,76 +84,90 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
                 g.drawImage(bf, 0, 0, null);
             }
         };
+        pane.setBounds(0, 45, bf.getWidth(), bf.getHeight());
+        pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
+                new ImageIcon("src/resources/icons/cursorIconss/MATITA.png").getImage(),
+                new Point(0,0),"custom cursor"));
+        panel.add(pane);
 
 
-        toolsText.setBounds(bf.getWidth() + 20, 10, 150, 20 );
-        toolsText.setForeground(new Color(0x000000));
-        toolsText.setFont(MyFont.creaFont("src/resources/fonts/lato.light.ttf" , 14f));
+
+            /*
+            toolsText.setBounds(bf.getWidth() + 20, 10, 150, 20);
+            toolsText.setForeground(new Color(0x000000));
+            toolsText.setFont(MyFont.creaFont("src/resources/fonts/lato.light.ttf", 14f));
+
+             */
 
 
-        colorText.setBounds(bf.getWidth() + 20, 40, 150, 20 );
+        colorText.setBounds(10, 2, 150, 20);
         colorText.setForeground(new Color(0x000000));
-        colorText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf" , 12f));
+        colorText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
 
-        colMenu.setBounds(bf.getWidth() + 20, 60, 150, 20 );
+        colMenu.setBounds(10, 20, 150, 20);
 
-        pixelText.setBounds(bf.getWidth() + 20, 100, 150, 20 );
+        pixelText.setBounds(180, 2, 150, 20);
         pixelText.setForeground(new Color(0x000000));
-        pixelText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf" , 12f));
+        pixelText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
 
-        pixMenu.setBounds(bf.getWidth() + 20, 120, 70, 20 );
-        pixMenu.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        pixBttn.setBounds(bf.getWidth() + 100, 120, 80, 20);
-        pixBttn.setText("OK");
-        pixBttn.setFocusable(false);
-        errorStrFormat.setBounds(bf.getWidth() + 20, 150, 190, 20);
-        errorStrFormat.setVisible(false);
-        errorStrFormat.setForeground(new Color(0xF30000));
-        errorStrFormat.setFont(MyFont.creaFont("src/resources/fonts/lato.light.ttf" , 11f));
+        dimPixel.setBounds(180, 20, 70, 20);
 
 
 
 
-        save.setBounds(10,getHeight() - 80,120, 30 );
+
+        strText.setBounds(290, 2, 150, 20);
+        strText.setForeground(new Color(0x000000));
+        strText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
+        utMenu.setBounds(290, 20, 150, 20);
+
+
+
+
+        save.setBounds(getWidth() - 280, 10, 120, 30);
         save.setFocusable(false);
-        cancel.setBounds(140,getHeight() - 80,120, 30 );
+        cancel.setBounds(getWidth() - 150, 10, 120, 30);
         cancel.setFocusable(false);
 
 
 
 
-        pane.setBounds(0,0,bf.getWidth() ,bf.getHeight());
-        pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        panel.add(pane);
         panel.add(errorStrFormat);
         panel.add(pixBttn);
         panel.add(colorText);
         panel.add(pixelText);
-        panel.add(pixMenu);
+        panel.add(dimPixel);
         panel.add(toolsText);
         panel.add(colMenu);
-        panel.add(colMenu);
+        panel.add(strText);
         panel.add(cancel);
+        panel.add(utMenu);
         panel.add(save);
-        //JScrollPane p = new JScrollPane(panel);
+        panel.setPreferredSize(new Dimension(bf.getWidth() + 200, bf.getHeight() + 100));
+
+
+
+        //System.out.println("WIDTH : " + width + " \n" + "HEIGHT : " + height);
         add(panel);
-
-
-
-
-
-
-
-
-
+    }
+    public void mnemonics(){
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));      //FIXME: Se viene chiusa la finestra di save, viene riaperta per una seconda volta
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));      // Non è necessarrio mettere sia setAccelerator che setMnemonic
+        drawItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
     }
 
     public void setupListener(){
+        addMouseListener(this);
         addMouseMotionListener(this);
         save.addActionListener(this);
         cancel.addActionListener(this);
         colMenu.addActionListener(this);
-        pixBttn.addActionListener(this);
+        saveItem.addActionListener(this);
+        drawItem.addActionListener(this);
+        utMenu.addActionListener(this);
+        dimPixel.addActionListener(this);
+
 
 
     }
@@ -150,15 +180,20 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
         //salva immagine
         try {
-
+            /*
             Point p = pane.getLocationOnScreen();
 
-            Dimension dim = pane.getSize();
+            Dimension dim = new Dimension(pane.getWidth() - 15, pane.getHeight());
 
             Rectangle rect = new Rectangle(p, dim);
 
             Robot robot = new Robot();
             this.image = robot.createScreenCapture(rect);
+
+             */
+            BufferedImage image = new BufferedImage(pane.getWidth(), pane.getHeight(), BufferedImage.TYPE_INT_RGB);
+            pane.paint(image.getGraphics());
+            new SaveWindow(image);
 
         }
         catch (Exception ex) {
@@ -188,20 +223,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     }
 
-    public boolean isNum(String txt){
-        try {
-            Integer number = Integer.valueOf(txt);
-            if(number < 0){
-                errorStrFormat.setVisible(true);
-                return false;
-            }
-            errorStrFormat.setVisible(false);
-        }catch (NumberFormatException ex){
-            errorStrFormat.setVisible(true);
-            return false;
-        }
-        return true;
-    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == save){
@@ -214,10 +236,21 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
         if(e.getSource() == colMenu){
             paintColor = colMenu.getSelectedItem().toString();
         }
-        if(e.getSource() == pixBttn){
-            if(isNum(pixMenu.getText()) == true){
-                pixel = Integer.parseInt(pixMenu.getText());
-            }
+        if(e.getSource() == dimPixel){
+            pixel = Integer.parseInt(dimPixel.getSelectedItem().toString().split(" ")[0]);
+        }
+
+        if(e.getSource() == saveItem){
+            setup();
+        }
+        if(e.getSource() == exitItem){
+            setVisible(false);
+        }
+        if(e.getSource() == utMenu){
+            utContr = utMenu.getSelectedItem().toString();
+            pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
+                    new ImageIcon("src/resources/icons/cursorIconss/"+utMenu.getSelectedItem().toString()+".png").getImage(),
+                    new Point(0,0),"custom cursor"));
         }
 
 
@@ -225,6 +258,50 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     @Override
     public void mouseDragged(MouseEvent e) {
+        if(utContr.equals("MATITA")){
+
+
+            Graphics2D g = (Graphics2D)pane.getGraphics();
+            if(paintColor == "NERO"){
+                g.setColor(Color.BLACK);
+
+            }
+            else if(paintColor == "ROSSO"){
+                g.setColor(Color.RED);
+            }
+            else if(paintColor == "GIALLO"){
+                g.setColor(Color.YELLOW);
+            }
+            else if(paintColor == "BLU"){
+                g.setColor(Color.BLUE);
+            }
+            currentX = e.getX() - 10;
+            currentY = e.getY() - 40;
+
+
+            errorStrFormat.setVisible(false);
+            g.setStroke(new BasicStroke(pixel));
+            g.drawLine(oldX , oldY , currentX , currentY);
+
+
+
+            oldX = currentX;
+            oldY = currentY;
+        }else if(utContr == "GOMMA"){
+            repaint(e.getX() - 5, e.getY() + 28, pixel, pixel);
+        }
+
+
+    }
+
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
         Graphics g = pane.getGraphics();
         if(paintColor == "NERO"){
             g.setColor(Color.BLACK);
@@ -239,15 +316,26 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
         else if(paintColor == "BLU"){
             g.setColor(Color.BLUE);
         }
+    }
 
-        g.fillRect(e.getX(), e.getY(), pixel, pixel);
+    @Override
+    public void mousePressed(MouseEvent e) {
+        oldX = e.getX() - 10;
+        oldY = e.getY() - 40;
+    }
 
-
+    @Override
+    public void mouseReleased(MouseEvent e) {
 
     }
 
     @Override
-    public void mouseMoved(MouseEvent e) {
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
 
     }
 }

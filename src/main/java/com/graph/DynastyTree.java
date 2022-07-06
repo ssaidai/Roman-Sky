@@ -120,6 +120,7 @@ public class DynastyTree {
                 marriedList.add(edgemxICellHashMap.get(edge));
             if(edge.getLabel().equals("adopted"))
                 adoptedList.add(edgemxICellHashMap.get(edge));
+            else
             if(edge.getLabel().equals("kin"))
                 kinList.add(edgemxICellHashMap.get(edge));
         }
@@ -127,13 +128,13 @@ public class DynastyTree {
         this.marriedCells = new Object[marriedList.size()];
         marriedList.toArray(this.marriedCells);
 
-        setCellsStyle("married", "78130C");
+        //setCellsStyle("married", "78130C");
         //graphAdapter.setCellStyle("strokeColor=#78130C", marriedCells);
 
         this.adoptedCells = new Object[adoptedList.size()];
         adoptedList.toArray(this.adoptedCells);
 
-        setCellsStyle("adopted", "422AAD");
+        //setCellsStyle("adopted", "422AAD");
         graphAdapter.setCellStyle("dashed=true", adoptedCells);
 
         this.kinCells = new Object[kinList.size()];
@@ -144,7 +145,8 @@ public class DynastyTree {
         return this.graphAdapter;
     }
 
-    public void setCellsStyle(String cellType, String colorInHex){
+    public void setCellsStyle(String cellType, Color c){
+        String colorInHex = String.format("%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
         String color = "strokeColor=#" + colorInHex;
         switch (cellType){
             case "married":
