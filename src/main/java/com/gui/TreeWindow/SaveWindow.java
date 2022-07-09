@@ -11,10 +11,8 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 
-//TODO: 1) SISTEMARE LA FINESTRA QUANDO SI SALVA A SCHERMO INTERO
-//TODO: 2) SISTEMARE LA FINESTRA SALVA CHE SI APRE DUE VOLTE
-//TODO: 3) IMPLEMENTARE TASTO ELIMINA MODIFICHE (CANCELLA DISEGNO)
-//TODO: 4) MIGLIORARE LA PARTE GRAFICA (O ANCHE NO)
+
+
 
 
 /**
@@ -58,6 +56,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     private JComboBox<String> utMenu = new JComboBox<>(ut);
     private String utContr = "MATITA";
+    private Graphics2D g;
 
 
 
@@ -150,6 +149,8 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
         //System.out.println("WIDTH : " + width + " \n" + "HEIGHT : " + height);
         add(panel);
+
+
     }
     public void mnemonics(){
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));      //FIXME: Se viene chiusa la finestra di save, viene riaperta per una seconda volta
@@ -180,7 +181,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
         //salva immagine
         try {
-            /*
+
             Point p = pane.getLocationOnScreen();
 
             Dimension dim = new Dimension(pane.getWidth() - 15, pane.getHeight());
@@ -190,28 +191,23 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
             Robot robot = new Robot();
             this.image = robot.createScreenCapture(rect);
 
-             */
-            BufferedImage image = new BufferedImage(pane.getWidth(), pane.getHeight(), BufferedImage.TYPE_INT_RGB);
-            pane.paint(image.getGraphics());
-            new SaveWindow(image);
-
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
 
         //-------------------
-        jF.setDialogTitle("Save as...");
-        jF.showSaveDialog(null);
-        jF.setFileFilter(new FileType(".jpeg", "jpeg file"));
 
-        int res = jF.showSaveDialog(null);
+        jF.setCurrentDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
+
+
+        int res = jF.showSaveDialog(this);
         if(res == JFileChooser.APPROVE_OPTION){
             File file = jF.getSelectedFile();
 
             try
             {
-                ImageIO.write(image,"jpeg", new File(new File(file.getPath()) + ".jpeg"));
+                ImageIO.write(image,"jpeg", new File(file.getPath() + ".jpeg"));
             }
             catch(Exception exception)
             {
@@ -259,9 +255,10 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     @Override
     public void mouseDragged(MouseEvent e) {
         if(utContr.equals("MATITA")){
+            g = (Graphics2D)pane.getGraphics();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 
-            Graphics2D g = (Graphics2D)pane.getGraphics();
             if(paintColor == "NERO"){
                 g.setColor(Color.BLACK);
 
@@ -288,7 +285,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
             oldX = currentX;
             oldY = currentY;
         }else if(utContr == "GOMMA"){
-            repaint(e.getX() - 5, e.getY() + 28, pixel, pixel);
+            repaint(e.getX() - 2, e.getY() + 20, pixel + 7 , pixel + 7);
         }
 
 
