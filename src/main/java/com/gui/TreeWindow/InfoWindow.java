@@ -7,6 +7,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * InfoWindow è la classe che rappresenta tutte le info che riguardano la progettazione del progetto.
+ */
+
 public class InfoWindow extends JFrame implements ActionListener {
     JPanel panPrincipale = new JPanel();
     JLabel logo = new JLabel();
@@ -16,9 +20,9 @@ public class InfoWindow extends JFrame implements ActionListener {
     JButton okBTTN = new JButton("OK");
 
 
-
-
-
+    /**
+     *  Costruttore della classe InfoWindow
+     */
     public InfoWindow(){
         super("Info");
         setContentPane(super.getContentPane());
@@ -30,6 +34,10 @@ public class InfoWindow extends JFrame implements ActionListener {
         setup();
         setupListener();
     }
+
+    /**
+     * Setup dei componenti che compongono la finestra.
+     */
 
     public void setup(){
 
@@ -70,11 +78,20 @@ public class InfoWindow extends JFrame implements ActionListener {
         add(panPrincipale);
     }
 
+    /**
+     * In questo metodo vengono aggiunti i vari Listener ai vari componenti.
+     */
     private void setupListener(){
         okBTTN.addActionListener(this);
     }
 
-
+    /**
+     * Override del metodo actionPerformed.
+     * <p>
+     *     Il click del button okBTTN setta la visibilità del frame a falso.
+     * </p>
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == okBTTN){

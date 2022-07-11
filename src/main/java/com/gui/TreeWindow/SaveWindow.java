@@ -234,6 +234,10 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     /**
      *  Override del metodo actionPerformed.
+     *
+     *  <p>
+     *      Se viene premuto il button save
+     *  </p>
      * @param e the event to be processed
      */
     @Override

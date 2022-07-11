@@ -5,7 +5,6 @@ import com.mxgraph.swing.mxGraphComponent;
 import com.scraper.Scraper;
 import org.jgrapht.ext.JGraphXAdapter;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
@@ -15,11 +14,14 @@ import java.awt.image.BufferedImage;
 
 
 /**
- *  tree GUI
+ *  Questa classe ha come obiettivo principale la rappresentazione dell'albero genealogico della dinastia scelta.
+ *
+ *  <p>
+ *      Sono presenti anche implementazioni secondarie quali la possibilità di poter salvare la schermata e fare disegni su di essa e cambiare colori alle varie relazioni.
+ *      E' inoltre possibile aprire una finestra INFO nella quale ci saranno le informazioni del progetto.
+ *  </p>
  */
 public class TreeWindow extends JFrame implements ActionListener {
-
-    private String dinasty;
 
     private JMenuBar menuBar = new JMenuBar();
     private JMenu menuFile = new JMenu("File");
@@ -32,7 +34,7 @@ public class TreeWindow extends JFrame implements ActionListener {
     private BackgroundMenuItem colFItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO");
     private BackgroundMenuItem colFAItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO ADOTTIVO");
     private BackgroundMenuItem colMItem = new BackgroundMenuItem("COLORE RELAZIONE CON MOGLIE");
-    private JMenu changeNamesColorItem = new JMenu("Change colors");
+    private JMenu changeRelColor = new JMenu("Change colors");
 
     private JGraphXAdapter jGraphXAdapter;
     private mxGraphComponent graphComponent;
@@ -49,14 +51,14 @@ public class TreeWindow extends JFrame implements ActionListener {
     private Color colFA = new Color(255,0,0);
 
     /**
-     * Class constructor
+     * Costruttore della classe TreeWindow.
      * @param dinasty
      * @param dIndex
      * @param scraper
      */
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
-        this.dinasty = dinasty;
+        //this.dinasty = dinasty;
         setLayout(new BorderLayout());
         setSize(1300,750);
         setMaximumSize(new Dimension(1300, 750));
@@ -82,12 +84,12 @@ public class TreeWindow extends JFrame implements ActionListener {
     }
 
     /**
-     * setup the addActionListener method.
+     * In questo metodo vengono aggiunti i vari Listener ai vari componenti.
      */
     private void setupListener(){
         saveItem.addActionListener(this);
         drawItem.addActionListener(this);
-        changeNamesColorItem.addActionListener(this);
+        changeRelColor.addActionListener(this);
         infoItem.addActionListener(this);
         exitItem.addActionListener(this);
         colFAItem.addActionListener(this);
@@ -154,23 +156,37 @@ public class TreeWindow extends JFrame implements ActionListener {
     }
 
     /**
-     * GUI setup.
+     * Setup della GUI.
+     *
+     * <p>
+     *     GESTIONE MENU: questa sezione riguarda il setup riguardante l'implementazione della barra del menu (menu bar).
+     *     In particolare menuBar è l'ogetto di tipo JMenuBar. menuFile, menuEdit, changeRelColor e menuHelp sono gli oggetti di tipo JMenu. saveItem, exitItem e infoItem
+     *     sono gli oggetti di tipo JMenuItem. colMItem, colFItem e colFAItem sono oggetti di tipo BackgroundMenuItem.
+     * </p>
+     *
+     * <p>
+     *     MODIFICA PICKER: questa sezione riguarda la modifica del pannello che permette all'utente di selezionare un colore.
+     * </p>
+     *
+     * <p>
+     *     SET DI ICONE NEL MENU: sezione dedicata all'aggiunta di icone nella barra del menu.
+     * </p>
      *
      */
     public void setup(){
 
-        // Gestione menù
+        // GESTIONE MENU
         setJMenuBar(menuBar);
         menuBar.add(menuFile);
         menuBar.add(menuEdit);
         menuBar.add(menuHelp);
         menuFile.add(saveItem);
         menuFile.add(exitItem);
-        menuEdit.add(changeNamesColorItem);
+        menuEdit.add(changeRelColor);
         menuHelp.add(infoItem);
-        changeNamesColorItem.add(colFItem);
-        changeNamesColorItem.add(colFAItem);
-        changeNamesColorItem.add(colMItem);
+        changeRelColor.add(colFItem);
+        changeRelColor.add(colFAItem);
+        changeRelColor.add(colMItem);
         colMItem.setColor(colMoglie);
         colFItem.setColor(colFiglio);
         colFAItem.setColor(colFA);
@@ -191,7 +207,7 @@ public class TreeWindow extends JFrame implements ActionListener {
         saveItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaSalva.png"));
         infoItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaInfo.png"));
         exitItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaExit.png"));
-        changeNamesColorItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
+        changeRelColor.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
 
 
 
@@ -199,16 +215,25 @@ public class TreeWindow extends JFrame implements ActionListener {
     }
     //TODO: KEYBOARD SHORTCUTS PER MENU ATTRAVERSO IL METODO setMnemonic
     /**
-     * mnemonic method
+     * Set delle/di mnemonics. Offre la possibilità di navigare nella menu bar tramite una combinazione di tasti.
+     *
+     * <p>
+     *     saveItem: Ctrl + S
+     *     infoItem: Ctrl + I
+     *     exitItem: Ctrl + E
+     *     changeRelColor: Ctrl + C
+     * </p>
      */
     public void mnemonics(){
         saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));      //FIXME: Se viene chiusa la finestra di save, viene riaperta per una seconda volta
         infoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK));
         exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));      // Non è necessarrio mettere sia setAccelerator che setMnemonic
-        drawItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
-        changeNamesColorItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
+        changeRelColor.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
     }
-
+    /**
+     * Override del metodo actionPerformed.
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == colFItem){
@@ -236,18 +261,6 @@ public class TreeWindow extends JFrame implements ActionListener {
         }
         if(e.getSource() == saveItem){
             try {
-                /*
-                Point p1 = getLocationOnScreen();
-                Point p = new Point((int)p1.getX() + 10, (int)p1.getY() + 25);
-
-                Dimension dim = new Dimension(getWidth() - 20, getHeight() - 40);
-                Rectangle rect = new Rectangle(p, dim);
-
-                Robot robot = new Robot();
-                BufferedImage background = robot.createScreenCapture(rect);
-                new SaveWindow(background);
-
-                 */
                 BufferedImage image = new BufferedImage(pane.getWidth(), pane.getHeight(), BufferedImage.TYPE_INT_RGB);
                 pane.paint(image.getGraphics());
                 new SaveWindow(image);
