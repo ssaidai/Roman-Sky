@@ -1,0 +1,687 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="15.0.0">
+  <zoom_level>5</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>380</x>
+      <y>255</y>
+      <w>145</w>
+      <h>235</h>
+    </coordinates>
+    <panel_attributes>*Window*
+--
++ mainLogo: JLabel
++ panelNord: JPanel
++ panelCenter: JPanel
++ panelSud: JPanel
++ panelWest: JPanel
++ panelEast: JPanel
++ panelCenter2: JPanel
++ pCenterNORD: JPanel
++ pCenter2CENTER: JPanel
++ dropdown_Text: JLabel
++ labSx: JLabel
++ labDx: JLabel
++ background1: JLabel
++ background2: JLabel
++ labLogo: JLabel 
++ labSPQR: JLabel
++ dynasties: String[]
++ dropdown_menu: JComboBox&lt;String&gt;
++ button: JButton
++ scraper: Scraper
++ progressBar: JProgressBar
++ screenSize: Dimension
++ slider: JSlider
++ sliderValue: int
+--
+- setup()
+- setupListener()
+- actionPerformed(e: ActionEvent
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>585</x>
+      <y>435</y>
+      <w>150</w>
+      <h>125</h>
+    </coordinates>
+    <panel_attributes>*Person*
+--
++ name: Stirng
++ href: String
++ article ID: long
++ parentsHref: Set&lt;String&gt;
++ marriedHref: Set&lt;String&gt;
++ children: HashMap&lt;String, boolean&gt;
++ vip: boolean
+--
+- getMarriedHrefs(): Set&lt;String&gt;
+- getrParentsHrefs(): Set&lt;String&gt;
+- getHref(): String
+- getArticleID(): long
+- getName(): String
+- getChildren():HashMap&lt;String, boolean&gt;
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>550</x>
+      <y>200</y>
+      <w>230</w>
+      <h>130</h>
+    </coordinates>
+    <panel_attributes>*Utils*
+--
++ articleIDPattern: Pattern
++ inBracketsPattern: Pattern
+--
+- getInfo(driver: WebDriver, dinasty: Set&lt;Person&gt;, 
+entityList: Set&lt;Person&gt;, progressBar: JProgressBar,
+depth: int, ignoreDepth: boolean)
+- isDisambiguityPage(driver: WebDriver): boolean
+- pageExists(element: WebElement): boolean
+- getHeaderContent(header: String, table: WebElement): WebElement
+- getFrom(list: Set&lt;Person&gt;, articleID: long): Person
+- isInBrackets(list: List&lt;String&gt;, str: String): boolean
+- getChildren(table: WebElement): HashMap&lt;String, boolean&gt;
+- getRelatives(table: WebElement, type: String): Set&lt;String&gt;
+bg=cyan
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>590</x>
+      <y>355</y>
+      <w>145</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*Scraper*
+--
++ tables: List&lt;WebElements&gt;
++ dinasties: ArrayList&lt;Person&gt;
++ entityList: Set&lt;Person&gt;
++ driver: WebDriver
+--
+- getDinastyTree(index: int): DinastyTree
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>835</x>
+      <y>565</y>
+      <w>120</w>
+      <h>95</h>
+    </coordinates>
+    <panel_attributes>*InfoWindow*
+--
++ panPrinciple: JPanel
++ logo: JLabel
++ text: JLabel
++ textPrinc: JTextArea
++ okBTTN: JButton
+--
+- setup()
+- setupListener()
+- actionPerformed(e: ActionEvent)
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>345</x>
+      <y>575</y>
+      <w>105</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>*FileType*
+--
++ ext: String
++ descr: String
+--
+- accept(f: File): boolean
+- getDescription(): String
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>790</x>
+      <y>190</y>
+      <w>160</w>
+      <h>325</h>
+    </coordinates>
+    <panel_attributes>*SaveWindow*
+--
++ menuBar: JMenuBar
++ menuFile: JMenu
++ menuSave: JMenu
++ saveItem: JMenuItem
++ dramItem: JMenuItem
++ jF: JFileChooser
++ image: BufferedImage
++ panel: JPanel
++ save: JButton
++ cancel: JButton
++ pane: JPanel
++ toolsText: JLabel
++ colorText: JLabel
++ pixelText: JLabel
++ c: String[]
++ colMenu: JComboBox&lt;String&gt;
++ strText: JLabel
++ paintColor: String
++ contr: boolean
++ p2: JPanel
++ pixel: int
++ pixBttn: JButton
++ pPrinciple: JPanel
++ errorStrFormat: JLabel
++ exitItem: JMenuItem
++ currentX, currentY, oldX, oldY: int
++ ut: String[]
++ utMenu: JComboBox&lt;String&gt;
++ utContr: String
++ g: Graphics2D
++ bf: BufferedImage
+--
+- setup()
+- setupListener()
+- saveImg()
+- ActionPerformed(e: ActionEvent)
+- MouseDragged(e: MouseEvent)
+- mouseClicked(e: MouseEvent)
+- mousePressed(e: MouseEvent)
+bg=cyan
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>980</x>
+      <y>225</y>
+      <w>105</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>*BackgroundMenuItem*
+--
++ bgColor: Color
+--
+- setColor()
+- paintComponent(g: Graphics)
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>495</y>
+      <w>210</w>
+      <h>60</h>
+    </coordinates>
+    <panel_attributes>*RelationshipEdge*
+--
++ label: String
+--
+- getLabel(): String
+- toString(): String
+- getSource(): Person
+- getTarget(): Person
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>220</x>
+      <y>160</y>
+      <w>80</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>*MyFont*
+--
+- createFont(): Font
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>50</x>
+      <y>355</y>
+      <w>140</w>
+      <h>80</h>
+    </coordinates>
+    <panel_attributes>*HandScrollListener*
+--
++ defCursor: Cursor
++ hndCursor: Cursor
++ pp: Point
++ gComponent: JScrollPane
+--
+- mouseDragged(e: MouseEvent)
+- mousePressed(e: MouseEvent)
+- mouseReleased(e:MouseEvent)
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>400</x>
+      <y>115</y>
+      <w>105</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+*ActionListener*
+bg=green
+--
+- ActionPerformed(E: Event)
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>855</x>
+      <y>95</y>
+      <w>130</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+*MouseListener*
+--
+. mouseClicked(E: Event)
+- mousePressed(E: Event)
+- mouseReleased(E: Event)
+- mouseEntered(E: Event)
+- moouseExited(E: Event)
+bg=green</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>725</x>
+      <y>110</y>
+      <w>110</w>
+      <h>45</h>
+    </coordinates>
+    <panel_attributes>&lt;&lt;Interface&gt;&gt;
+*MouseMotionListener*
+--
+- MouseDragged(E: Event)
+- MouseMoved(E: Event)
+bg=green
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>660</x>
+      <y>665</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>*JFrame*
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>375</x>
+      <y>665</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>*FileFilter*
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1030</x>
+      <y>665</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>*DefaultEdge*
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>255</x>
+      <y>665</y>
+      <w>60</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>*MouseAdapter*
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>550</y>
+      <w>45</w>
+      <h>125</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;230.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>680</x>
+      <y>610</y>
+      <w>165</w>
+      <h>65</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>310.0;10.0;10.0;110.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>480</y>
+      <w>415</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;810.0;370.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>450</x>
+      <y>485</y>
+      <w>245</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;470.0;360.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>675</x>
+      <y>510</y>
+      <w>205</w>
+      <h>165</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>390.0;10.0;10.0;310.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1050</x>
+      <y>435</y>
+      <w>15</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>960</x>
+      <y>340</y>
+      <w>210</w>
+      <h>100</h>
+    </coordinates>
+    <panel_attributes>*DinastyTree*
+--
++ graph: Graph&lt;Person, RelationshipEdge&gt;
++ MARRIED: String
++ KIN: String
++ ADOPTED: String
++ graphAdapter: JGraphXAdapter&lt;Person, RelationshipEdge&gt;
++ marriedCells: Object[]
++ adoptedCells: Object[]
++ kinCells: Object[]
+--
+- getGraphAdapter(): JGraphXAdapter&lt;Person, RelationshipEdge&gt;
+- setCellsStyle(cellType: String, c: Color)
+bg=cyan</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>445</x>
+      <y>145</y>
+      <w>15</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>275</x>
+      <y>145</y>
+      <w>185</w>
+      <h>120</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>350.0;10.0;10.0;220.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>445</x>
+      <y>145</y>
+      <w>430</w>
+      <h>55</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;840.0;90.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>775</x>
+      <y>150</y>
+      <w>100</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;180.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>860</x>
+      <y>160</y>
+      <w>70</w>
+      <h>40</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>120.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>115</x>
+      <y>430</y>
+      <w>150</w>
+      <h>250</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;280.0;480.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>280</x>
+      <y>480</y>
+      <w>15</w>
+      <h>195</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;370.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>210</x>
+      <y>255</y>
+      <w>140</w>
+      <h>230</h>
+    </coordinates>
+    <panel_attributes>*TreeWIndow*
+--
++ dinasty: String
++ menuBar: JMenuBar
++ menuFIle: JMenu
++ menuEdit: JMenu
++ menuHelp: JMenu
++ saveItem: JMenuItem
++ infoItem: JMenuItem
++ drawItem: JMenuItem
++ exitItem: JMenuItem
++ colFItem: BackgroundMenuItem
++ colFAItem: BackgroundMenuItem
++ colMItem: BackgroundMenuItem
++ changeNamesColorItem: JMenu
++ jGraphXAdapter: JGraphXAdapter
++ graphComponent: mxGraphComponent
++ picker: JColorChooser
++ pane: JScrollPane
++ handScrollListener: HandScrollListener
++ deltaX, deltaY: int
++ initialZoom: double
++ tree: DinastyTree
++ colMoglie, ColFiglio, colFa: Color
+--
+- setupListener()
+- setup()
+- menmonics()
+- actionPerformed(e: ActionEvent)
+bg=cyan
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1030</x>
+      <y>265</y>
+      <w>45</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>395</x>
+      <y>625</y>
+      <w>45</w>
+      <h>50</h>
+    </coordinates>
+    <panel_attributes>lt=.&gt;
+&lt;&lt;extends&gt;&gt;</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;80.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1010</x>
+      <y>305</y>
+      <w>50</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>*JMenuItem*
+bg=blue</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>380</y>
+      <w>75</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;130.0;250.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>380</y>
+      <w>80</w>
+      <h>15</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;10.0;140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>520</x>
+      <y>260</y>
+      <w>40</w>
+      <h>135</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;250.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>655</x>
+      <y>410</y>
+      <w>15</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>730</x>
+      <y>325</y>
+      <w>40</w>
+      <h>190</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;.</panel_attributes>
+    <additional_attributes>10.0;360.0;60.0;10.0</additional_attributes>
+  </element>
+</diagram>
