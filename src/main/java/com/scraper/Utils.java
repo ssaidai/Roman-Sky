@@ -1,6 +1,6 @@
-package com.scraper;
+package main.java.com.scraper;
 
-import com.data.Person;
+import main.java.com.data.Person;
 import com.google.common.collect.Iterables;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;

@@ -6,11 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="RomanSky" />
         <module name="WebScraper" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="WebScraper" target="17" />
+      <module name="RomanSky" target="17" />
+      <module name="WebScraper" target="11" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,7 +1,7 @@
-package com.scraper;
+package main.java.com.scraper;
 
-import com.data.Person;
-import com.graph.DynastyTree;
+import main.java.com.data.Person;
+import main.java.com.graph.DynastyTree;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;

@@ -1,4 +1,4 @@
-package com.data;
+package main.java.com.data;
 
 import com.shapesecurity.salvation2.Values.Hash;
 

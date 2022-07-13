@@ -1,8 +1,8 @@
-package com.gui.Window.TreeWindow;
+package main.java.com.gui.Window.TreeWindow;
 
-import com.graph.DynastyTree;
+import main.java.com.graph.DynastyTree;
 import com.mxgraph.swing.mxGraphComponent;
-import com.scraper.Scraper;
+import main.java.com.scraper.Scraper;
 import org.jgrapht.ext.JGraphXAdapter;
 
 import javax.swing.*;

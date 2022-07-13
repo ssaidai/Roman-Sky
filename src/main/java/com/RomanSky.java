@@ -1,7 +1,7 @@
-package com;
+package main.java.com;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
-import com.gui.Window.MainWindow;
+import main.java.com.gui.Window.MainWindow;
 
 import javax.swing.*;
 

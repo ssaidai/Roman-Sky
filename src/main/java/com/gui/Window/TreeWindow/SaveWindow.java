@@ -1,6 +1,6 @@
-package com.gui.Window.TreeWindow;
+package main.java.com.gui.Window.TreeWindow;
 
-import com.gui.MyFont;
+import main.java.com.gui.MyFont;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -113,22 +113,22 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
         };
         pane.setBounds(0, 45, bf.getWidth(), bf.getHeight());
         pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("src/resources/icons/cursorIconss/MATITA.png").getImage(), new Point(0,0),"custom cursor"));
+        pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("res/icons/cursorIconss/MATITA.png").getImage(), new Point(0,0),"custom cursor"));
         panel.add(pane);
 
 
         // GESTIONE COMPONENTI RIGUARDANTI GLI STRUMENTI DI DISEGNO
         colorText.setBounds(10, 2, 150, 20);
         colorText.setForeground(new Color(0x000000));
-        colorText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
+        colorText.setFont(MyFont.creaFont("res/fonts/Uni Sans Thin.ttf", 12f));
         colMenu.setBounds(10, 20, 150, 20);
         pixelText.setBounds(180, 2, 150, 20);
         pixelText.setForeground(new Color(0x000000));
-        pixelText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
+        pixelText.setFont(MyFont.creaFont("res/fonts/Uni Sans Thin.ttf", 12f));
         dimPixel.setBounds(180, 20, 70, 20);
         strText.setBounds(290, 2, 150, 20);
         strText.setForeground(new Color(0x000000));
-        strText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
+        strText.setFont(MyFont.creaFont("res/fonts/Uni Sans Thin.ttf", 12f));
         utMenu.setBounds(290, 20, 150, 20);
         save.setBounds(getWidth() - 280, 10, 120, 30);
         save.setFocusable(false);
@@ -258,7 +258,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
         if(e.getSource() == utMenu){
             utContr = utMenu.getSelectedItem().toString();
             pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
-                    new ImageIcon("src/resources/icons/cursorIconss/"+utMenu.getSelectedItem().toString()+".png").getImage(),
+                    new ImageIcon("res/icons/cursorIconss/"+utMenu.getSelectedItem().toString()+".png").getImage(),
                     new Point(0,0),"custom cursor"));
         }
 

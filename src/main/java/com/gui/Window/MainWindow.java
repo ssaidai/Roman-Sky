@@ -1,8 +1,10 @@
-package com.gui.Window;
+package main.java.com.gui.Window;
 
-import com.gui.MyFont;
-import com.gui.Window.TreeWindow.TreeWindow;
-import com.scraper.Scraper;
+
+import main.java.com.gui.Window.TreeWindow.TreeWindow;
+import main.java.com.scraper.Scraper;
+import main.java.com.gui.MyFont;
+import main.java.com.scraper.Scraper;
 
 import javax.swing.*;
 import java.awt.*;

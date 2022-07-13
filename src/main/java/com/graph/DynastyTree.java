@@ -1,12 +1,13 @@
-package com.graph;
+package main.java.com.graph;
 
-import com.data.Person;
+import main.java.com.data.Person;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
 import com.mxgraph.view.mxGraphSelectionModel;
+import main.java.com.data.Person;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
 import org.jgrapht.ext.JGraphXAdapter;

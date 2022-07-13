@@ -1,6 +1,6 @@
-package com.gui.Window.TreeWindow;
+package main.java.com.gui.Window.TreeWindow;
 
-import com.gui.MyFont;
+import main.java.com.gui.MyFont;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -41,12 +41,12 @@ public class InfoWindow extends JFrame implements ActionListener {
     public void setup(){
 
         text.setBounds(125, 17, 270, 50);
-        text.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 20f));
+        text.setFont(MyFont.creaFont("res/fonts/lato.medium.ttf", 20f));
 
         textPrinc.setBounds(125, 65, 270, 180);
         textPrinc.setEditable(false);
         //textPrinc.setBackground(Color.WHITE);
-        textPrinc.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 11f));
+        textPrinc.setFont(MyFont.creaFont("res/fonts/lato.medium.ttf", 11f));
         String testo = "\n \nProgettato da: \n" +
                 "\n" +
                 "Max Cuzuc, Diego Guzman, Kevin Huang e \nVictor Lopata\n" +
@@ -57,7 +57,7 @@ public class InfoWindow extends JFrame implements ActionListener {
                 ;
         textPrinc.setText(testo);
 
-        logo.setIcon(new ImageIcon("src/resources/icons/iconaFrame2.png"));
+        logo.setIcon(new ImageIcon("res/icons/iconaFrame2.png"));
         logo.setBounds(15,15, 85,85);
         okBTTN.setFocusable(false);
         okBTTN.setBounds(320, 250, 68, 28);

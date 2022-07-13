@@ -1,4 +1,4 @@
-package com.gui.Window.TreeWindow;
+package main.java.com.gui.Window.TreeWindow;
 
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
