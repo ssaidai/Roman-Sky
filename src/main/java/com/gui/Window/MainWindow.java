@@ -5,8 +5,6 @@ import com.gui.Window.TreeWindow.TreeWindow;
 import com.scraper.Scraper;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,8 +22,6 @@ import java.util.Hashtable;
  * @see JButton
  */
 public class MainWindow extends JFrame implements ActionListener{
-
-    private final JLabel mainLogo =new JLabel();
     private final JPanel panelNord = new JPanel();
     private final JPanel panelCenter =new JPanel();       //Forse Card Layout
     private final JPanel panelSud =new JPanel();
@@ -58,7 +54,7 @@ public class MainWindow extends JFrame implements ActionListener{
      * Costruttore della classe Window.
      */
     public MainWindow(){
-        super("Imperatori Romani");
+        super("RomanSky");
         setLayout(new BorderLayout());
         setupListener();
 
@@ -147,7 +143,7 @@ public class MainWindow extends JFrame implements ActionListener{
         // GESTIONE PROGRESS BAR
         progressBar.setFocusable(false);
         progressBar.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
-        progressBar.setString("Inserisci profondità ricerca");
+        progressBar.setString("INSERISCI PROFONDITÀ RICERCA");
         progressBar.setBorder(BorderFactory.createEtchedBorder());
         progressBar.setBackground(Color.white);
         progressBar.setForeground(new Color(0x4D3939));
@@ -171,13 +167,10 @@ public class MainWindow extends JFrame implements ActionListener{
         slider.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
         //slider.setBorder(BorderFactory.createEtchedBorder());
         slider.setVisible(true);
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider)e.getSource();
-                if (!source.getValueIsAdjusting()) {
-                    sliderValue = source.getValue();
-                }
+        slider.addChangeListener(e -> {
+            JSlider source = (JSlider)e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                sliderValue = source.getValue();
             }
         });
 

@@ -34,7 +34,23 @@ public class TreeWindow extends JFrame implements ActionListener {
     private BackgroundMenuItem colFItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO");
     private BackgroundMenuItem colFAItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO ADOTTIVO");
     private BackgroundMenuItem colMItem = new BackgroundMenuItem("COLORE RELAZIONE CON MOGLIE");
-    private JMenu changeRelColor = new JMenu("Change colors");
+    private JMenu changeRelColor = new JMenu("Change colors"){
+        private KeyStroke accelerator;
+
+        @Override
+        public KeyStroke getAccelerator() {
+            return accelerator;
+        }
+
+        @Override
+        public void setAccelerator(KeyStroke keyStroke) {
+            KeyStroke oldAccelerator = accelerator;
+            this.accelerator = keyStroke;
+            repaint();
+            revalidate();
+            firePropertyChange("accelerator", oldAccelerator, accelerator);
+        }
+    };
 
     private JGraphXAdapter jGraphXAdapter;
     private mxGraphComponent graphComponent;

@@ -17,8 +17,8 @@ public class Scraper {
 
     private HashMap<Integer, Integer> maxEntities = new HashMap<>(){{
         put(1, 226);
-        put(2, 305);
-        put(3, 363);
+        put(2, 288);
+        put(3, 305);
         put(4, 323);
         put(5, 321);
         put(6, 334);
@@ -48,6 +48,7 @@ public class Scraper {
             if(table.equals(driver.findElement(By.xpath("//*[@id=\"mw-content-text\"]/div[1]/table[16]")))) continue;
             tableIndex++;
         }
+        System.out.println(Utils.contatore);
         progressBar.setString("Tutte le dinastie sono state caricate");
     }
 
