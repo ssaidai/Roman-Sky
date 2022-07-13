@@ -32,7 +32,6 @@ public class TreeWindow extends JFrame implements ActionListener {
     private JMenuItem drawItem = new JMenuItem("Draw");
     private JMenuItem exitItem = new JMenuItem("Exit");
     private BackgroundMenuItem colFItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO");
-    private BackgroundMenuItem colFAItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO ADOTTIVO");
     private BackgroundMenuItem colMItem = new BackgroundMenuItem("COLORE RELAZIONE CON MOGLIE");
     private JMenu changeRelColor = new JMenu("Change colors");
 
@@ -47,7 +46,6 @@ public class TreeWindow extends JFrame implements ActionListener {
     private DynastyTree tree;
     private Color colMoglie = new Color(182, 24, 24);
     private Color colFiglio = new Color(107, 81, 42);
-    private Color colFA = new Color(107, 81, 42);
 
     /**
      * Costruttore della classe TreeWindow.
@@ -69,10 +67,11 @@ public class TreeWindow extends JFrame implements ActionListener {
         jGraphXAdapter = tree.getGraphAdapter();
         tree.setCellsStyle("married", colMoglie);
         tree.setCellsStyle("kin", colFiglio);
-        tree.setCellsStyle("adopted", colFA);
+        tree.setCellsStyle("adopted", colFiglio);
         graphComponent = new mxGraphComponent(jGraphXAdapter);
         graphComponent.setAutoscrolls(true);
         pane = new JScrollPane(graphComponent);
+        pane.setBorder(null);
         add(pane);
         setup();
         setupListener();
@@ -88,7 +87,6 @@ public class TreeWindow extends JFrame implements ActionListener {
         changeRelColor.addActionListener(this);
         infoItem.addActionListener(this);
         exitItem.addActionListener(this);
-        colFAItem.addActionListener(this);
         colFItem.addActionListener(this);
         colMItem.addActionListener(this);
 
@@ -173,11 +171,10 @@ public class TreeWindow extends JFrame implements ActionListener {
         menuEdit.add(changeRelColor);
         menuHelp.add(infoItem);
         changeRelColor.add(colFItem);
-        changeRelColor.add(colFAItem);
         changeRelColor.add(colMItem);
         colMItem.setColor(colMoglie);
         colFItem.setColor(colFiglio);
-        colFAItem.setColor(colFA);
+
 
 
         //MODIFICA DI PICKER
@@ -226,15 +223,11 @@ public class TreeWindow extends JFrame implements ActionListener {
         if(e.getSource() == colFItem){
             JColorChooser.createDialog(colFItem,"Change kin relation color",true,picker, this, null ).setVisible(true);
             tree.setCellsStyle("kin" , picker.getColor());
+            tree.setCellsStyle("adopted" , picker.getColor());
             colFItem.setColor(picker.getColor());
 
         }
 
-        if(e.getSource() == colFAItem){
-            JColorChooser.createDialog(colFItem,"Change adopted relation color",true,picker, this, null ).setVisible(true);
-            tree.setCellsStyle("adopted" , picker.getColor());
-            colFAItem.setColor(picker.getColor());
-        }
 
         if(e.getSource() == colMItem){
             JColorChooser.createDialog(colFItem,"Change married relation color",true,picker, this, null ).setVisible(true);

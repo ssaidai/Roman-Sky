@@ -47,17 +47,14 @@ public class InfoWindow extends JFrame implements ActionListener {
         textPrinc.setEditable(false);
         //textPrinc.setBackground(Color.WHITE);
         textPrinc.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 11f));
-        String testo = "Build #IU-221.5921.22, built on June 21, 2022\n" +
+        String testo = "\n \nProgettato da: \n" +
                 "\n" +
-                "Licensed to Victor Lopata\n" +
+                "Max Cuzuc, Diego Guzman, Kevin Huang e \nVictor Lopata\n" +
                 "\n" +
-                "For educational use only.\n" +
-                "Runtime version: 11.0.15+10-b2043.56 amd64\n" +
-                "\n" +
-                "Windows 11 10.0\n" +
-                "GC: G1 Young Generation, G1 Old Generation\n" +
-                "Memory: 752M\n" +
-                "Cores: 8";
+                "Solo a scopo formativo o didattico.\n\n" +
+                "Versione programma: 1.0\n" +
+                "\n"
+                ;
         textPrinc.setText(testo);
 
         logo.setIcon(new ImageIcon("src/resources/icons/iconaFrame2.png"));

@@ -31,9 +31,9 @@ public class MainWindow extends JFrame implements ActionListener{
     private final JPanel panelSud =new JPanel();
     private final JPanel panelWest = new JPanel();
     private final JPanel panelEast = new JPanel();
-    private final JPanel panelCenter2 = new JPanel();
-    private final JPanel pCenter2NORD = new JPanel();
-    private final JPanel pCenter2CENTER = new JPanel();
+    private final JPanel pCen2 = new JPanel();
+    private final JPanel pC2NORD = new JPanel();
+    private final JPanel pCen2CEN = new JPanel();
     private final JLabel dropdown_Text = new JLabel("SCEGLI LA DINASTIA");
     private final JLabel labSx = new JLabel();
     private final JLabel labDx = new JLabel();
@@ -184,22 +184,22 @@ public class MainWindow extends JFrame implements ActionListener{
 
         // GESTIONE PANEL
         panelCenter.setLayout(new BorderLayout());
-        panelCenter2.setLayout(new BorderLayout());
-        pCenter2CENTER.setLayout(null);
-        panelCenter2.add(pCenter2CENTER, BorderLayout.CENTER);
-        panelCenter2.add(pCenter2NORD, BorderLayout.NORTH);
-        panelCenter.add(panelCenter2, BorderLayout.CENTER);
+        pCen2.setLayout(new BorderLayout());
+        pCen2CEN.setLayout(null);
+        pCen2.add(pCen2CEN, BorderLayout.CENTER);
+        pCen2.add(pC2NORD, BorderLayout.NORTH);
+        panelCenter.add(pCen2, BorderLayout.CENTER);
         panelNord.setLayout(new GridBagLayout());
         panelWest.setLayout(new BorderLayout());
         panelEast.setLayout(new BorderLayout());
         panelNord.add(background1);
         panelNord.setBackground(new Color(0x282727));
-        pCenter2CENTER.add(dropdown_Text);
-        pCenter2CENTER.add(dropdown_menu);
-        pCenter2CENTER.add(button);
-        pCenter2CENTER.add(progressBar);
-        pCenter2CENTER.add(slider);
-        pCenter2NORD.add(labLogo);
+        pCen2CEN.add(dropdown_Text);
+        pCen2CEN.add(dropdown_menu);
+        pCen2CEN.add(button);
+        pCen2CEN.add(progressBar);
+        pCen2CEN.add(slider);
+        pC2NORD.add(labLogo);
         panelWest.add(labSx, BorderLayout.SOUTH);
         panelEast.add(labDx, BorderLayout.SOUTH);
         panelSud.setLayout(new GridBagLayout());
