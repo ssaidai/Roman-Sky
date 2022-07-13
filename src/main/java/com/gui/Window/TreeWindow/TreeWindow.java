@@ -106,7 +106,14 @@ public class TreeWindow extends JFrame implements ActionListener {
         colMItem.addActionListener(this);
 
 
-        //MOUSE - DRAG AND SCROLL
+        /**
+         * The graphComponent is draggable thanks to the MouseAdapter whenever mouse is pressed
+         * and to the MouseMotionListener if mouse is dragged.
+                *
+         * The two method calculate the difference of position between the mouse and graph position and then
+         * set a new location for the graph if mouse is dragged.
+         */
+
         graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
@@ -127,7 +134,15 @@ public class TreeWindow extends JFrame implements ActionListener {
             }
         });
 
-        //ZOOM IN/OUT
+         /**
+         * Using MouseWheelListener we're able to zoom in and out.
+                * Whenever control is pressed on the keyboard, if the mouse wheel is scrolled forward we'll get a zoom in
+                * or else it's scrolled down we'll get a zoom out.
+                *
+         * initialZoom is a counter which is increased by one when zoomIn() is called and decreased by one if zoomOut() is called
+         * Only if initialZoom is major than 0 a zoomOut() can occur, that's why while zooming out the graph will never be smaller than the initial dimension
+          */
+
         graphComponent.getGraphControl().addMouseWheelListener(e -> {
             if (e.isControlDown()){
                 if (e.getPreciseWheelRotation() < 0){
