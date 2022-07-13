@@ -22,6 +22,9 @@ import java.util.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Class used to generate the graph
+ */
 public class DynastyTree {
     private class RelationshipEdge extends DefaultEdge{
         private final String label;
@@ -60,6 +63,11 @@ public class DynastyTree {
 
     private final Object[] marriedCells, adoptedCells, kinCells, vipCells, allCells;
 
+    /**
+     * DynastyTree constructor, initializes all the cell arrays used to change the style of our tree
+     *
+     * @param entityList
+     */
     public DynastyTree(Set<Person> entityList){
         Graphs.addAllVertices(this.graph, entityList);
 
@@ -146,10 +154,21 @@ public class DynastyTree {
         this.graphAdapter.setCellStyle("strokeColor=#6b512a;fillColor=#a88652;fontColor=#802e2e", this.vipCells);
     }
 
+    /**
+     * GraphAdapter's getter
+     *
+     * @return
+     */
     public JGraphXAdapter<Person, RelationshipEdge> getGraphAdapter(){
         return this.graphAdapter;
     }
 
+    /**
+     * Sets the specified cells' color to a custom one
+     *
+     * @param cellType
+     * @param c
+     */
     public void setCellsStyle(String cellType, Color c){
         String colorInHex = String.format("%02X%02X%02X", c.getRed(), c.getGreen(), c.getBlue());
         String color = "strokeColor=#" + colorInHex;

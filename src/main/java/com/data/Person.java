@@ -5,6 +5,9 @@ import com.shapesecurity.salvation2.Values.Hash;
 import java.time.LocalDate;
 import java.util.*;
 
+/**
+ *  Class that identify every single entity
+ */
 public class Person {
     private final String name;
     private final String href;
@@ -17,7 +20,17 @@ public class Person {
 
     private final boolean vip;
 
-
+    /**
+     * Person constructor
+     *
+     * @param name
+     * @param href
+     * @param articleID
+     * @param parents
+     * @param married
+     * @param children
+     * @param vip
+     */
     public Person(String name, String href, long articleID, HashMap<String, Boolean> parents, Set<String> married, HashMap<String, Boolean> children, boolean vip){
         this.name = name;
         this.href = href;
@@ -37,34 +50,66 @@ public class Person {
         }
     }
 
+    /**
+     * get married entities' hrefs
+     *
+     * @return
+     */
     public Set<String> getMarriedHrefs() {
         return marriedHref;
     }
 
+    /**
+     * get parents' hrefs
+     *
+     * @return
+     */
     public HashMap<String, Boolean> getParents() {
         return parents;
     }
 
+    /**
+     * get Person his own href
+     *
+     * @return
+     */
     public String getHref() {
         return href;
     }
 
+    /**
+     * get Person his own articleID
+     *
+     * @return
+     */
     public long getArticleID() {
         return articleID;
     }
 
-    public String getName() {
-        return name;
-    }
-
+    /**
+     * get Person Vip status
+     *
+     * @return
+     */
     public boolean isVip() {
         return vip;
     }
 
+    /**
+     * get Children' hrefs
+     *
+     * @return
+     */
     public HashMap<String, Boolean> getChildren(){
         return this.children;
     }
 
+
+    /**
+     * get Person his own name
+     *
+     * @return
+     */
     @Override
     public String toString(){
         return this.name;

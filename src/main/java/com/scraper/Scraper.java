@@ -10,6 +10,9 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import javax.swing.*;
 import java.util.*;
 
+/**
+ * Scraper's implementation
+ */
 public class Scraper {
     private final List<WebElement> tables;
     private ArrayList<Set<Person>> dinasties = new ArrayList<>();
@@ -28,6 +31,12 @@ public class Scraper {
         put(10, 500);
     }};
 
+    /**
+     * Scraper constructor
+     *
+     * @param progressBar
+     * @param depth
+     */
     public Scraper(JProgressBar progressBar, int depth){
         progressBar.setMaximum(maxEntities.get(depth));
 
@@ -51,6 +60,12 @@ public class Scraper {
         progressBar.setString("Tutte le dinastie sono state caricate");
     }
 
+    /**
+     * Dynasty tree getter
+     *
+     * @param index
+     * @return
+     */
     public DynastyTree getDynastyTree(int index){
         return new DynastyTree(dinasties.get(index));
     }

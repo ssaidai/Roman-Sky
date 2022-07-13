@@ -13,6 +13,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * All necessary methods for the scraping
+ */
 public class Utils {
 
     private static final Pattern articleIDPattern = Pattern.compile("\"wgArticleId\":(.*?),");
@@ -20,6 +23,17 @@ public class Utils {
 
     private static HashSet<String> scraperedHrefs = new HashSet<>();
 
+    /**
+     * Main recursive method which navigate for every entity all his kins, married's hrefs until when depth = -1.
+     *
+     * Update progressBar' string every time an entity get scraped.
+     *
+     * @param driver
+     * @param dinasty
+     * @param progressBar
+     * @param depth
+     * @param ignoreDepth
+     */
     public static void fetchData(WebDriver driver, Set<Person> dinasty, JProgressBar progressBar, int depth, boolean ignoreDepth){
         if(depth == -1 && !ignoreDepth) return;
 
@@ -64,6 +78,12 @@ public class Utils {
         progressBar.setValue(progressBar.getValue()+1);
     }
 
+    /**
+     * Verify if a page is disambiguated then return true else false.
+     *
+     * @param driver
+     * @return
+     */
     private static boolean isDisambiguityPage(WebDriver driver){
         try{
             driver.findElement(By.xpath("//table[@class=\"avviso-disambigua\"]"));
@@ -74,10 +94,23 @@ public class Utils {
         }
     }
 
+    /**
+     * Verify if a page exist then return true else false
+     *
+     * @param element
+     * @return
+     */
     private static boolean pageExists(WebElement element){
         return !element.getAttribute("title").contains("la pagina non esiste");
     }
 
+    /**
+     * Get the header content from the input table
+     *
+     * @param header
+     * @param table
+     * @return
+     */
     private static WebElement getHeaderContent(String header, WebElement table){
         List<WebElement> rows = table.findElements(By.xpath("tbody/tr"));
         for(WebElement row : rows){
@@ -89,14 +122,37 @@ public class Utils {
         }
         return null;
     }
+
+    /**
+     * Return the Person from the list if the articleID is found else null
+     *
+     * @param list
+     * @param articleID
+     * @return
+     */
     private static Person getFrom(final Set<Person> list, final long articleID){
         return list.stream().filter(o -> o.getArticleID() == articleID).findFirst().orElse(null);
     }
 
+
+    /**
+     * Verify if a string is in the given list
+     *
+     * @param list
+     * @param str
+     * @return
+     */
     private static boolean isInList(final List<String> list, final String str){
         return list.stream().anyMatch(e -> e.contains(str));
     }
 
+    /**
+     * Get a HashMap of Kins' hrefs and adopted status (boolean) using getHeaderContent
+     *
+     * @param table
+     * @param kinType
+     * @return
+     */
     private static HashMap<String, Boolean> getKins(WebElement table, String kinType){
         HashMap<String, Boolean> results = new HashMap<>();
         WebElement childrenHeader = getHeaderContent(kinType, table);
@@ -136,6 +192,13 @@ public class Utils {
         return results;
     }
 
+    /**
+     * Get a Set of married entities' hrefs using getHeaderContent
+     *
+     * @param table
+     * @param type
+     * @return
+     */
     private static Set<String> getRelatives(WebElement table, String type){
         WebElement relativeHeader = getHeaderContent(type, table);
 
