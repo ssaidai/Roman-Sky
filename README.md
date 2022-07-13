@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href=""><img src="res/logos/logo2.png" alt="Markdownify" width="400"></a>
+  <a href="https://github.com/SSaiDai/Roman-Sky"><img src="res/logos/logo2.png" alt="RomanSky" width="400"></a>
   <br>
   Roman Sky
   <br>
