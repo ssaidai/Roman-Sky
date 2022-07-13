@@ -7,10 +7,19 @@ import java.io.IOException;
 
 // FONT SCARICABILI DAL SITO https://www.1001fonts.com/minimalistic-fonts.html?page=1 O DA UNO QUALSIASI
 // BASTA CHE SIA .TTF
+
+/**
+ * Questa classe ,attraverso il suo unico metodo statico, rende possibile la realizzazione di font personalizzati.
+ *
+ */
 public class MyFont {
 
     /**
      * Crea font personalizzati.
+     * <p>
+     *     Prende in input il percorso di un file .TTF e un numero a virgola mobile size.
+     * </p>
+     *
      * @param path
      * @param size
      * @return

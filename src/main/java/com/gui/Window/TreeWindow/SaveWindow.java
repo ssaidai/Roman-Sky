@@ -10,14 +10,29 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 
 
-//TODO: 1) SISTEMARE LA FINESTRA QUANDO SI SALVA A SCHERMO INTERO
-//TODO: 2) SISTEMARE LA FINESTRA SALVA CHE SI APRE DUE VOLTE
-//TODO: 3) IMPLEMENTARE TASTO ELIMINA MODIFICHE (CANCELLA DISEGNO)
-//TODO: 4) MIGLIORARE LA PARTE GRAFICA (O ANCHE NO)
+
+
 
 
 /**
- * SaveWindow Class.
+ * Questa classe consiste nell'implementazione della finestra che si apre dopo aver premuto il comando <b>Save</b> nella finestra <b>Treewindow</b>.
+ * Contiene principalmente due funzionalità: draw e il file chooser.
+ *
+ * <p>
+ *     La funzionalità draw permette all'utente di poter disegnare sopra la finestra che si vuole salvare. E' possibile scegliere vari colori e varie grandezze
+ *     della matita. E' presente anche la gomma.
+ *     Il draw è stato implementato attraverso le interfacce <b>MouseMotionListener</b> e <b>MouseListener</b> e anche attraverso alla classe <b>Graphics2D</b>.
+ * </p>
+ *
+ * <p>
+ *     Il file chooser è stato implementato attraverso la classe <b>JFileChooser</b>. Salva l'immagine desiderata in formato jpeg.
+ * </p>
+ *
+ * @see MouseMotionListener
+ * @see MouseListener
+ * @see JFileChooser
+ * @see Graphics2D
+ *
  */
 public class SaveWindow extends JFrame implements ActionListener, MouseMotionListener, MouseListener {
 
@@ -57,25 +72,38 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     private JComboBox<String> utMenu = new JComboBox<>(ut);
     private String utContr = "MATITA";
+    private Graphics2D g;
+    private BufferedImage bf;
 
 
 
 
     /**
-     * Class constructor.
-     * @param bf
+     * Costruttore della classe.
+     * @param bf paramentro di tipo BufferedImage.
+     * @see BufferedImage
      */
     public SaveWindow(BufferedImage bf){
 
         super("SAVE");
-
-        panel.setBackground(new Color(0xFFFFFF));
+        this.bf = bf;
         setupListener();
-        mnemonics();
         setResizable(false);
-
         setSize(Math.max(bf.getWidth(), 740), bf.getHeight()+100);
         setVisible(true);
+        setup();
+
+
+
+
+    }
+
+    /**
+     * Imposta e configura la finestra.
+     */
+    public void setup(){
+
+        // pane contiene l'immagine che si vuole salvare
         pane = new JPanel() {
             @Override
             protected void paintComponent(Graphics g) {
@@ -85,53 +113,31 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
         };
         pane.setBounds(0, 45, bf.getWidth(), bf.getHeight());
         pane.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-        pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
-                new ImageIcon("src/resources/icons/cursorIconss/MATITA.png").getImage(),
-                new Point(0,0),"custom cursor"));
+        pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(new ImageIcon("src/resources/icons/cursorIconss/MATITA.png").getImage(), new Point(0,0),"custom cursor"));
         panel.add(pane);
 
 
-
-            /*
-            toolsText.setBounds(bf.getWidth() + 20, 10, 150, 20);
-            toolsText.setForeground(new Color(0x000000));
-            toolsText.setFont(MyFont.creaFont("src/resources/fonts/lato.light.ttf", 14f));
-
-             */
-
-
+        // GESTIONE COMPONENTI RIGUARDANTI GLI STRUMENTI DI DISEGNO
         colorText.setBounds(10, 2, 150, 20);
         colorText.setForeground(new Color(0x000000));
         colorText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
-
         colMenu.setBounds(10, 20, 150, 20);
-
         pixelText.setBounds(180, 2, 150, 20);
         pixelText.setForeground(new Color(0x000000));
         pixelText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
-
         dimPixel.setBounds(180, 20, 70, 20);
-
-
-
-
-
         strText.setBounds(290, 2, 150, 20);
         strText.setForeground(new Color(0x000000));
         strText.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 12f));
         utMenu.setBounds(290, 20, 150, 20);
-
-
-
-
         save.setBounds(getWidth() - 280, 10, 120, 30);
         save.setFocusable(false);
         cancel.setBounds(getWidth() - 150, 10, 120, 30);
         cancel.setFocusable(false);
 
 
-
-
+        //GESTIONE PANEL
+        panel.setBackground(new Color(0xFFFFFF));
         panel.add(errorStrFormat);
         panel.add(pixBttn);
         panel.add(colorText);
@@ -146,40 +152,48 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
         panel.setPreferredSize(new Dimension(bf.getWidth() + 200, bf.getHeight() + 100));
 
 
-
-        //System.out.println("WIDTH : " + width + " \n" + "HEIGHT : " + height);
         add(panel);
-    }
-    public void mnemonics(){
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));      //FIXME: Se viene chiusa la finestra di save, viene riaperta per una seconda volta
-        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));      // Non è necessarrio mettere sia setAccelerator che setMnemonic
-        drawItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
+
     }
 
+
+    /**
+     * In questo metodo vengono aggiunti i vari Listener ai vari componenti.
+     */
     public void setupListener(){
         addMouseListener(this);
         addMouseMotionListener(this);
         save.addActionListener(this);
         cancel.addActionListener(this);
         colMenu.addActionListener(this);
-        saveItem.addActionListener(this);
-        drawItem.addActionListener(this);
         utMenu.addActionListener(this);
         dimPixel.addActionListener(this);
-
-
-
     }
 
 
     /**
-     * setup method
+     *  Realizzazione del salvataggio attraverso <b>JFileChooser</b>.
+     *  Inizialmente vengono prese le coordinate x e y del panello nel quale è presente l'area di disegno e la dimensione di quest'ultimo e viene creato un oggetto Rectangle
+     *  con le informazioni prese. Per catturare l'immagine usufruiamo del metodo createScreenCapture() della classe <b>Robot</b>.
+     *
+     *  Per salvare l'immagine utilizziamo la classe JFileChooser che fornisce un semplice meccanismo all'utente per salvare l'immagine. Attraverso il
+     *  metodo <b>showSaveDialog(Component parent)</b> si apre una finestra che ci consente di navigare nel nostro dispositivo e salvare l'immagine nella cartella
+     *  che desideriamo.
+     *  Viene utilizzato il metodo setCurrentDirectory(File dir) per impostare la cartella di partenza.
+     *  Attraverso il metodo statico write della classe <b>ImageIO</b> salviamo/scriviamo effettivamente la nostra immagine nella cartella desiderata.
+     *
+     * @see Point
+     * @see Dimension
+     * @see Rectangle
+     * @see Robot
+     * @see JFileChooser
+     * @see ImageIO
      */
-    public void setup(){
+    public void saveImg(){
 
         //salva immagine
         try {
-            /*
+
             Point p = pane.getLocationOnScreen();
 
             Dimension dim = new Dimension(pane.getWidth() - 15, pane.getHeight());
@@ -189,28 +203,23 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
             Robot robot = new Robot();
             this.image = robot.createScreenCapture(rect);
 
-             */
-            BufferedImage image = new BufferedImage(pane.getWidth(), pane.getHeight(), BufferedImage.TYPE_INT_RGB);
-            pane.paint(image.getGraphics());
-            new SaveWindow(image);
-
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
 
         //-------------------
-        jF.setDialogTitle("Save as...");
-        jF.showSaveDialog(null);
-        jF.setFileFilter(new FileType(".jpeg", "jpeg file"));
 
-        int res = jF.showSaveDialog(null);
+        jF.setCurrentDirectory(new File(System.getProperty("user.home") + System.getProperty("file.separator")+ "Downloads"));
+
+
+        int res = jF.showSaveDialog(this);
         if(res == JFileChooser.APPROVE_OPTION){
             File file = jF.getSelectedFile();
 
             try
             {
-                ImageIO.write(image,"jpeg", new File(new File(file.getPath()) + ".jpeg"));
+                ImageIO.write(image,"jpeg", new File(file.getPath() + ".jpeg"));
             }
             catch(Exception exception)
             {
@@ -222,11 +231,18 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     }
 
-
+    /**
+     *  Override del metodo actionPerformed.
+     *
+     *  <p>
+     *      Se viene premuto il button save
+     *  </p>
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == save){
-            setup();
+            saveImg();
 
         }
         if(e.getSource() == cancel){
@@ -239,12 +255,6 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
             pixel = Integer.parseInt(dimPixel.getSelectedItem().toString().split(" ")[0]);
         }
 
-        if(e.getSource() == saveItem){
-            setup();
-        }
-        if(e.getSource() == exitItem){
-            setVisible(false);
-        }
         if(e.getSource() == utMenu){
             utContr = utMenu.getSelectedItem().toString();
             pane.setCursor(Toolkit.getDefaultToolkit().createCustomCursor(
@@ -255,12 +265,30 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     }
 
+    /**
+     * Override del metodo mouseDragged.
+     * Implementaa tutto il necessario alla realizzazione del draw.
+     * Utilizziamo la classe Graphics2D per disegnare nell'area da disegno.
+     * Attraverso i metodi setColor() riusciamo a cambiare colore della matita.
+     *
+     * Il disegno avviene tramite il disegno di piccole linee che sono collegate l'una all'altra. E' necessario salvare le coordinate (x,y) del mouse precedenti e correnti
+     * rispettivamente nelle variabili oldX, oldY, currentX, currentY. Conoscendo queste informazioni disegnamo la linea partendo dalla posizione precedente del mouse fino alla posizione
+     * corrente; utilizziamo il metodo drawLine(oldX , oldY , currentX , currentY).
+     * Per settare la dimensione della nostra matita utilizziamo il metodo setStroke().
+     *
+     * La realizzazione della gomma avviene attraverso il metodo repaint().
+     * @see Graphics2D
+     *
+     * @param e the event to be processed
+     */
+
     @Override
     public void mouseDragged(MouseEvent e) {
         if(utContr.equals("MATITA")){
+            g = (Graphics2D)pane.getGraphics();
+            g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-
-            Graphics2D g = (Graphics2D)pane.getGraphics();
+            //imposto il colore della matita
             if(paintColor == "NERO"){
                 g.setColor(Color.BLACK);
 
@@ -274,31 +302,38 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
             else if(paintColor == "BLU"){
                 g.setColor(Color.BLUE);
             }
+            //salvo la posizione corrente del mouse
             currentX = e.getX() - 10;
             currentY = e.getY() - 40;
 
-
             errorStrFormat.setVisible(false);
+            //imposto la grandezza della matita
             g.setStroke(new BasicStroke(pixel));
+            //disegno
             g.drawLine(oldX , oldY , currentX , currentY);
-
-
-
+            //salvo la posizione corrente nella posizione precedente
             oldX = currentX;
             oldY = currentY;
         }else if(utContr == "GOMMA"){
-            repaint(e.getX() - 5, e.getY() + 28, pixel, pixel);
+            repaint(e.getX() - 2, e.getY() + 20, pixel + 7 , pixel + 7);
         }
 
 
     }
 
-
+    /**
+     * Override metodo mouseMoved.
+     * @param e the event to be processed
+     */
     @Override
     public void mouseMoved(MouseEvent e) {
 
     }
 
+    /**
+     * override mouseClicked.
+     * @param e the event to be processed
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
         Graphics g = pane.getGraphics();
@@ -317,22 +352,38 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
         }
     }
 
+    /**
+     * override mousePressed.
+     * Salva in oldX, oldY la posizione corrente del mouse.
+     * @param e the event to be processed
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         oldX = e.getX() - 10;
         oldY = e.getY() - 40;
     }
 
+
+    /**
+     * override mouseReleased.
+     * @param e the event to be processed
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
 
     }
-
+    /**
+     * override mouseEntered.
+     * @param e the event to be processed
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
 
     }
-
+    /**
+     * override mouseExited.
+     * @param e the event to be processed
+     */
     @Override
     public void mouseExited(MouseEvent e) {
 
