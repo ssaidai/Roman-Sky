@@ -2,7 +2,6 @@ package com.graph;
 
 import com.data.Person;
 import com.mxgraph.layout.hierarchical.mxHierarchicalLayout;
-import com.mxgraph.layout.mxParallelEdgeLayout;
 import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxConstants;
@@ -60,10 +59,9 @@ public class DynastyTree {
 
     private final JGraphXAdapter<Person, RelationshipEdge> graphAdapter;
 
-    private Object[] marriedCells, adoptedCells, kinCells;
+    private final Object[] marriedCells, adoptedCells, kinCells, vipCells, allCells;
 
     public DynastyTree(Set<Person> entityList){
-        //  TODO:   order entities by bornDate before adding it to the graph (set adds them in random order)
         Graphs.addAllVertices(this.graph, entityList);
 
         for(Person person : graph.vertexSet()){
@@ -78,27 +76,29 @@ public class DynastyTree {
                 else
                     graph.addEdge(person, child, new RelationshipEdge(KIN));
             }
-            /*List<Person> parents = entityList.stream().filter(p -> person.getParentsHrefs().contains(p.getHref())).collect(Collectors.toList());
+            List<Person> parents = entityList.stream().filter(p -> person.getParents().containsKey(p.getHref())).collect(Collectors.toList());
             for (Person parent: parents)
-                graph.addEdge(parent, person, new RelationshipEdge(KIN));*/
+                if(person.getParents().get(parent.getHref()))
+                    graph.addEdge(parent, person, new RelationshipEdge(ADOPTED));
+                else
+                    graph.addEdge(parent, person, new RelationshipEdge(KIN));
         }
-
-        //  TODO:   https://jgraph.github.io/mxgraph/docs/manual_javavis.html   ---   mxGraph documentation
-        //  FIXME:  place wives at same level of the husbands
 
         this.graphAdapter = new JGraphXAdapter<>(graph);
         new mxHierarchicalLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
-        //new mxParallelEdgeLayout(graphAdapter).execute(graphAdapter.getDefaultParent());
         HashMap<RelationshipEdge, mxICell> edgemxICellHashMap = graphAdapter.getEdgeToCellMap();
+        HashMap<Person, mxICell> vertexToCellMap = graphAdapter.getVertexToCellMap();
+
         ArrayList<Object> marriedList = new ArrayList<>();
         ArrayList<Object> adoptedList = new ArrayList<>();
         ArrayList<Object> kinList = new ArrayList<>();
+        ArrayList<Object> vipList = new ArrayList<>();
+        ArrayList<Object> allList = new ArrayList<>();
         graphAdapter.setConnectableEdges(false);
         graphAdapter.setCellsResizable(false);
         graphAdapter.setCellsMovable(false);
         graphAdapter.setCellsEditable(false);
         graphAdapter.setAllowDanglingEdges(false);
-        //graphAdapter.setCellsSelectable(false);       FIXME:  put this to remove errors when drag on cells/edges, but cannot longer open the associated WIKI page on click
         mxConstants.DEFAULT_MARKERSIZE = 0;
         graphAdapter.getSelectionModel().addListener(mxEvent.CHANGE, new mxEventSource.mxIEventListener() {
             @Override
@@ -115,6 +115,11 @@ public class DynastyTree {
                 }
             }
         });
+        for(Person person : vertexToCellMap.keySet()){
+            if(person.isVip())
+                vipList.add(vertexToCellMap.get(person));
+            allList.add(vertexToCellMap.get(person));
+        }
         for(RelationshipEdge edge : edgemxICellHashMap.keySet()){
             if(edge.getLabel().equals("married"))
                 marriedList.add(edgemxICellHashMap.get(edge));
@@ -128,17 +133,20 @@ public class DynastyTree {
         this.marriedCells = new Object[marriedList.size()];
         marriedList.toArray(this.marriedCells);
 
-        //setCellsStyle("married", "78130C");
-        //graphAdapter.setCellStyle("strokeColor=#78130C", marriedCells);
-
         this.adoptedCells = new Object[adoptedList.size()];
         adoptedList.toArray(this.adoptedCells);
 
-        //setCellsStyle("adopted", "422AAD");
-        graphAdapter.setCellStyle("dashed=true", adoptedCells);
-
         this.kinCells = new Object[kinList.size()];
         kinList.toArray(this.kinCells);
+
+        this.vipCells = new Object[vipList.size()];
+        vipList.toArray(this.vipCells);
+
+        this.allCells = new Object[allList.size()];
+        allList.toArray(this.allCells);
+
+        this.graphAdapter.setCellStyle("strokeColor=#6b512a;fillColor=#a88652;fontColor=#ffffff", this.allCells);
+        this.graphAdapter.setCellStyle("strokeColor=#6b512a;fillColor=#a88652;fontColor=#802e2e", this.vipCells);
     }
 
     public JGraphXAdapter<Person, RelationshipEdge> getGraphAdapter(){
@@ -156,11 +164,8 @@ public class DynastyTree {
                 this.graphAdapter.setCellStyle(color, kinCells);
                 break;
             case "adopted":
-                this.graphAdapter.setCellStyle(color, adoptedCells);
+                this.graphAdapter.setCellStyle(color+";dashed=true", adoptedCells);
                 break;
         }
     }
-
 }
-
-

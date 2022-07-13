@@ -11,23 +11,23 @@ public class Person {
 
     private final long articleID;   // used as ID to distinguish homonym persons
 
-    private Set<String> parentsHref;
+    private HashMap<String, Boolean> parents;
     private Set<String> marriedHref;
     private HashMap<String, Boolean> children;
 
     private final boolean vip;
 
 
-    public Person(String name, String href, long articleID, Set<String> parents, Set<String> married, HashMap<String, Boolean> children, boolean vip){
+    public Person(String name, String href, long articleID, HashMap<String, Boolean> parents, Set<String> married, HashMap<String, Boolean> children, boolean vip){
         this.name = name;
         this.href = href;
         this.articleID = articleID;
-        this.parentsHref = parents;
+        this.parents = parents;
         this.marriedHref = married;
         this.children = children;
         this.vip = vip;
-        if(this.parentsHref == null){
-            this.parentsHref = new HashSet<>();
+        if(this.parents == null){
+            this.parents = new HashMap<>();
         }
         if(this.marriedHref == null){
             this.marriedHref = new HashSet<>();
@@ -41,8 +41,8 @@ public class Person {
         return marriedHref;
     }
 
-    public Set<String> getParentsHrefs() {
-        return parentsHref;
+    public HashMap<String, Boolean> getParents() {
+        return parents;
     }
 
     public String getHref() {
@@ -55,6 +55,10 @@ public class Person {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isVip() {
+        return vip;
     }
 
     public HashMap<String, Boolean> getChildren(){

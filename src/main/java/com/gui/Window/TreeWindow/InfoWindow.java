@@ -1,9 +1,8 @@
-package com.gui.TreeWindow;
+package com.gui.Window.TreeWindow;
 
 import com.gui.MyFont;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 

@@ -1,4 +1,4 @@
-package com.gui.TreeWindow;
+package com.gui.Window.TreeWindow;
 
 import com.gui.MyFont;
 
@@ -6,7 +6,6 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 

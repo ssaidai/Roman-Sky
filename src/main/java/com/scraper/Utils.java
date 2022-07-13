@@ -13,64 +13,44 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-        /*  1)
-        * */
-
-
 public class Utils {
 
     private static final Pattern articleIDPattern = Pattern.compile("\"wgArticleId\":(.*?),");
     private static final Pattern inBracketsPattern = Pattern.compile("\\((.*?)\\)");
 
-    public static void getInfo(WebDriver driver, Set<Person> dinasty, Set<Person> entityList, JProgressBar progressBar, int depth, boolean ignoreDepth){
+    private static HashSet<String> scraperedHrefs = new HashSet<>();
 
+    public static void fetchData(WebDriver driver, Set<Person> dinasty, JProgressBar progressBar, int depth, boolean ignoreDepth){
         if(depth == -1 && !ignoreDepth) return;
 
-        System.out.println(driver.getCurrentUrl());
         String scriptText = driver.findElement(By.xpath("/html/head/script[1]")).getAttribute("innerHTML");
         Matcher regexMatcher = articleIDPattern.matcher(scriptText);
         regexMatcher.find();
         long articleID = Long.parseLong(regexMatcher.group(1));
-        Person person = getFrom(entityList, articleID);
+        Person person = getFrom(dinasty, articleID);
 
         if(person != null){
-            if(!dinasty.contains(person)){
-                dinasty.add(person);
-                for(String link: Iterables.concat(person.getParentsHrefs(), person.getMarriedHrefs(), person.getChildren().keySet())){
-                    driver.get(link);
-                    getInfo(driver, dinasty, entityList, progressBar, depth-1, ignoreDepth);
-                    driver.navigate().back();
-                }
-            }
-            else
-                return;
+            return;
         }
 
         try{
             WebElement synopticTable = driver.findElement(By.xpath("//table[@class=\"sinottico\"]"));
             String name = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_testata\"]/th")).getText();
             progressBar.setString(name);
-/*            String title = synopticTable.findElement(By.xpath("tbody/tr[@class=\"sinottico_divisione\"]/th")).getText();
-            String bornDate = null;
-            try{
-                 bornDate = getHeaderContent("Nascita", synopticTable).getText();
-            }
-            catch (NullPointerException ignored){}*/
-            Set<String> parents = getRelatives(synopticTable, "Padre");
+            HashMap<String, Boolean> parents = getKins(synopticTable, "Padre");
             Set<String> married = getRelatives(synopticTable, "Coniug");
-            HashMap<String, Boolean> children = getChildren(synopticTable);
+            HashMap<String, Boolean> children = getKins(synopticTable, "Figli");
             person = new Person(name, driver.getCurrentUrl(), articleID, parents, married, children, true);
             dinasty.add(person);
-            entityList.add(person);
-
-            for(String link: Iterables.concat(parents, married, children.keySet())){
+            scraperedHrefs.add(driver.getCurrentUrl());
+            for(String link: Iterables.concat(parents.keySet(), married, children.keySet())){
+                if(scraperedHrefs.contains(link)) continue;
                 driver.get(link);
                 if(isDisambiguityPage(driver)){
                     driver.navigate().back();
-                    break;
+                    continue;
                 }
-                getInfo(driver, dinasty, entityList, progressBar, depth-1, ignoreDepth);
+                fetchData(driver, dinasty, progressBar, depth-1, ignoreDepth);
                 driver.navigate().back();
             }
         }catch (NoSuchElementException e){
@@ -78,8 +58,10 @@ public class Utils {
             progressBar.setString(name);
             person = new Person(name, driver.getCurrentUrl(), articleID, null, null, null, false);
             dinasty.add(person);
-            entityList.add(person);
+            scraperedHrefs.add(driver.getCurrentUrl());
         }
+        System.out.println(driver.getCurrentUrl());
+        progressBar.setValue(progressBar.getValue()+1);
     }
 
     private static boolean isDisambiguityPage(WebDriver driver){
@@ -111,14 +93,13 @@ public class Utils {
         return list.stream().filter(o -> o.getArticleID() == articleID).findFirst().orElse(null);
     }
 
-    // FIXME: CAMBIARE NOME A QUESTA ROBA, TROPPO SPECIFICO AL MOMENTO
-    private static boolean isInBrackets(final List<String> list, final String str){
+    private static boolean isInList(final List<String> list, final String str){
         return list.stream().anyMatch(e -> e.contains(str));
     }
 
-    private static HashMap<String, Boolean> getChildren(WebElement table){
+    private static HashMap<String, Boolean> getKins(WebElement table, String kinType){
         HashMap<String, Boolean> results = new HashMap<>();
-        WebElement childrenHeader = getHeaderContent("Figli", table);
+        WebElement childrenHeader = getHeaderContent(kinType, table);
         if(childrenHeader == null) return results;
 
         String[] strings = childrenHeader.getText().split(":");
@@ -148,6 +129,10 @@ public class Utils {
                 }
             }
         }
+        if(kinType.equals("Padre")){
+            HashMap<String, Boolean> temp = getKins(table, "Madre");
+            results.putAll(temp);
+        }
         return results;
     }
 
@@ -162,8 +147,9 @@ public class Utils {
         else if(relativeHeader == null) return results;
 
         List<String> hrefsInBrackets = new ArrayList<>();
+        String relativesText = relativeHeader.getText();
 
-        Matcher regexMatcher = inBracketsPattern.matcher(relativeHeader.getText());
+        Matcher regexMatcher = inBracketsPattern.matcher(relativesText);
 
         while (regexMatcher.find()) {
             hrefsInBrackets.add(regexMatcher.group(1));
@@ -172,14 +158,10 @@ public class Utils {
         for(WebElement relative : relativeHeader.findElements(By.tagName("a"))){
             if(pageExists(relative)){
                 String href = relative.getAttribute("href");
-                if(!href.matches(".*\\d.*") && !isInBrackets(hrefsInBrackets, relative.getText())){
+                if(!href.matches(".*\\d.*") && !isInList(hrefsInBrackets, relative.getText())){
                     results.add(href);
                 }
             }
-        }
-        if(type.equals("Padre")){
-            Set<String> temp = getRelatives(table, "Madre");
-            results.addAll(temp);
         }
         return results;
     }

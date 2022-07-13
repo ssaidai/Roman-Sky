@@ -1,26 +1,22 @@
-package com.gui.TreeWindow;
+package com.gui.Window.TreeWindow;
 
 import com.graph.DynastyTree;
 import com.mxgraph.swing.mxGraphComponent;
 import com.scraper.Scraper;
 import org.jgrapht.ext.JGraphXAdapter;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.colorchooser.AbstractColorChooserPanel;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-
+import java.io.IOException;
 
 
 /**
- *  tree GUI
+ * Tree Window
  */
 public class TreeWindow extends JFrame implements ActionListener {
-
-    private String dinasty;
-
     private JMenuBar menuBar = new JMenuBar();
     private JMenu menuFile = new JMenu("File");
     private JMenu menuEdit= new JMenu("Edit");
@@ -32,31 +28,45 @@ public class TreeWindow extends JFrame implements ActionListener {
     private BackgroundMenuItem colFItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO");
     private BackgroundMenuItem colFAItem = new BackgroundMenuItem("COLORE RELAZIONE CON FIGLIO ADOTTIVO");
     private BackgroundMenuItem colMItem = new BackgroundMenuItem("COLORE RELAZIONE CON MOGLIE");
-    private JMenu changeNamesColorItem = new JMenu("Change colors");
+    private JMenu changeNamesColorItem = new JMenu("Change colors"){
+        private KeyStroke accelerator;
+
+        @Override
+        public KeyStroke getAccelerator() {
+            return accelerator;
+        }
+        @Override
+        public void setAccelerator(KeyStroke keyStroke) {
+            KeyStroke oldAccelerator = accelerator;
+            this.accelerator = keyStroke;
+            repaint();
+            revalidate();
+            firePropertyChange("accelerator", oldAccelerator, accelerator);
+        }
+    };
 
     private JGraphXAdapter jGraphXAdapter;
     private mxGraphComponent graphComponent;
     final JColorChooser picker = new JColorChooser();
 
     private JScrollPane pane;
-    private HandScrollListener handScrollListener;
 
     private int deltaX, deltaY;
     private double initialZoom = 0;
     private DynastyTree tree;
-    private Color colMoglie = new Color(0,0,255);
-    private Color colFiglio = new Color(0,255,0);
-    private Color colFA = new Color(255,0,0);
+    private Color colMoglie = new Color(168, 20, 20);
+    private Color colFiglio = new Color(107, 81, 42);
+    private Color colFA = new Color(107, 81, 42);
 
     /**
-     * Class constructor
+     * TreeWindow
      * @param dinasty
      * @param dIndex
      * @param scraper
+     * @throws IOException
      */
-    public TreeWindow(String dinasty, int dIndex, Scraper scraper){
+    public TreeWindow(String dinasty, int dIndex, Scraper scraper) {
         super(dinasty);
-        this.dinasty = dinasty;
         setLayout(new BorderLayout());
         setSize(1300,750);
         setMaximumSize(new Dimension(1300, 750));
@@ -64,16 +74,13 @@ public class TreeWindow extends JFrame implements ActionListener {
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);          // Si apre la finestra al centro dello schermo
         setVisible(true);
-        tree = scraper.getDinastyTree(dIndex);
+        tree = scraper.getDynastyTree(dIndex);
         jGraphXAdapter = tree.getGraphAdapter();
         tree.setCellsStyle("married", colMoglie);
         tree.setCellsStyle("kin", colFiglio);
         tree.setCellsStyle("adopted", colFA);
         graphComponent = new mxGraphComponent(jGraphXAdapter);
         graphComponent.setAutoscrolls(true);
-        handScrollListener = new HandScrollListener(graphComponent);
-        //graphComponent.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);      TODO: Set on whenever drag and scroll works
-        //graphComponent.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         pane = new JScrollPane(graphComponent);
         add(pane);
         setup();
@@ -96,7 +103,7 @@ public class TreeWindow extends JFrame implements ActionListener {
 
 
         //MOUSE - DRAG AND SCROLL
-        /**graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {           FIXME: this one is the "wrong drag"
+        graphComponent.getGraphControl().addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                  deltaX = e.getXOnScreen() - graphComponent.getX();
@@ -114,12 +121,7 @@ public class TreeWindow extends JFrame implements ActionListener {
             public void mouseMoved(MouseEvent e) {
 
             }
-        });*/
-
-        pane.getViewport().addMouseListener(handScrollListener);                //TODO: scrollListener implementation
-        pane.getViewport().addMouseMotionListener(handScrollListener);
-
-
+        });
 
         //ZOOM IN/OUT
         graphComponent.getGraphControl().addMouseWheelListener(new MouseWheelListener() {
@@ -197,14 +199,13 @@ public class TreeWindow extends JFrame implements ActionListener {
 
 
     }
-    //TODO: KEYBOARD SHORTCUTS PER MENU ATTRAVERSO IL METODO setMnemonic
     /**
      * mnemonic method
      */
     public void mnemonics(){
-        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));      //FIXME: Se viene chiusa la finestra di save, viene riaperta per una seconda volta
+        saveItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK));
         infoItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I, InputEvent.CTRL_DOWN_MASK));
-        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));      // Non è necessarrio mettere sia setAccelerator che setMnemonic
+        exitItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, InputEvent.CTRL_DOWN_MASK));
         drawItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_D, InputEvent.CTRL_DOWN_MASK));
         changeNamesColorItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
     }
@@ -212,20 +213,20 @@ public class TreeWindow extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() == colFItem){
-            JColorChooser.createDialog(colFItem,"PROVA",true,picker, this, null ).setVisible(true);
+            JColorChooser.createDialog(colFItem,"Change kin relation color",true,picker, this, null ).setVisible(true);
             tree.setCellsStyle("kin" , picker.getColor());
             colFItem.setColor(picker.getColor());
 
         }
 
         if(e.getSource() == colFAItem){
-            JColorChooser.createDialog(colFItem,"PROVA",true,picker, this, null ).setVisible(true);
+            JColorChooser.createDialog(colFItem,"Change adopted relation color",true,picker, this, null ).setVisible(true);
             tree.setCellsStyle("adopted" , picker.getColor());
             colFAItem.setColor(picker.getColor());
         }
 
         if(e.getSource() == colMItem){
-            JColorChooser.createDialog(colFItem,"PROVA",true,picker, this, null ).setVisible(true);
+            JColorChooser.createDialog(colFItem,"Change married relation color",true,picker, this, null ).setVisible(true);
             tree.setCellsStyle("married" , picker.getColor());
             colMItem.setColor(picker.getColor());
         }
@@ -260,75 +261,6 @@ public class TreeWindow extends JFrame implements ActionListener {
         }
         if(e.getSource() == infoItem){
             new InfoWindow();
-        }
-    }
-
-
-    MouseAdapter ma = new MouseAdapter() {
-        private int deltaX, deltaY;
-        private Point start;
-        private JViewport viewPort;
-        private Rectangle view;
-
-        @Override
-        public void mousePressed(MouseEvent e) {
-            start = new Point(e.getPoint());
-        }
-
-        @Override
-        public void mouseReleased(MouseEvent e) {
-        }
-
-        @Override
-        public void mouseDragged(MouseEvent e) {
-            if (start != null){
-                viewPort = (JViewport) SwingUtilities.getAncestorOfClass(JViewport.class, graphComponent);
-                if (viewPort != null){
-                    deltaX = start.x - e.getX();
-                    deltaY = start.y - e.getY();
-
-                    view = viewPort.getViewRect();
-                    view.x += deltaX;
-                    view.y += deltaY;
-
-                    graphComponent.scrollRectToVisible(view);
-                }
-            }
-        }
-    };
-
-    public class HandScrollListener extends MouseAdapter                                    //TODO: scrollListener
-    {
-        private final Cursor defCursor = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
-        private final Cursor hndCursor = Cursor.getPredefinedCursor(Cursor.HAND_CURSOR);
-        private final Point pp = new Point();
-        private JScrollPane gComponent;
-
-        public HandScrollListener(JScrollPane gComponent)
-        {
-            this.gComponent = gComponent;
-        }
-
-        public void mouseDragged(final MouseEvent e)
-        {
-            JViewport vport = (JViewport)e.getSource();
-            Point cp = e.getPoint();
-            Point vp = vport.getViewPosition();
-            vp.translate(pp.x-cp.x, pp.y-cp.y);
-            gComponent.scrollRectToVisible(new Rectangle(vp, vport.getSize()));
-            pp.setLocation(cp);
-        }
-
-        public void mousePressed(MouseEvent e)
-        {
-            gComponent.setCursor(hndCursor);
-            pp.setLocation(e.getPoint());
-        }
-
-        public void mouseReleased(MouseEvent e)
-        {
-            gComponent.setCursor(defCursor);
-            gComponent.repaint();
         }
     }
 }

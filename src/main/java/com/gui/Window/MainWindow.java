@@ -4,18 +4,16 @@ package com.gui.Window;
 
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.gui.MyFont;
-import com.gui.TreeWindow.TreeWindow;
+import com.gui.Window.TreeWindow.TreeWindow;
 import com.scraper.Scraper;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
-public class Window extends JFrame implements ActionListener{
+public class MainWindow extends JFrame implements ActionListener{
 
     private final JLabel mainLogo =new JLabel();
     private final JPanel panelNord = new JPanel();
@@ -35,7 +33,7 @@ public class Window extends JFrame implements ActionListener{
     private final JLabel labSPQR = new JLabel();
     private final String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
     private final JComboBox<String> dropdown_menu = new JComboBox<>(dynasties);
-    private final JButton button = new JButton("LOAD DATE");
+    private final JButton button = new JButton("SCARICA DATI");
 
     private Scraper scraper;
     private JProgressBar progressBar;
@@ -47,7 +45,7 @@ public class Window extends JFrame implements ActionListener{
 
 
 
-    public Window(){
+    public MainWindow(){
         super("Imperatori Romani");
         setLayout(new BorderLayout());
         setupListener();
@@ -57,6 +55,8 @@ public class Window extends JFrame implements ActionListener{
         slider.setValue(1);
 
         progressBar = new JProgressBar(0, 100);
+
+        setup();
     }
 
     private void setupListener(){
@@ -84,11 +84,12 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
         dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 16f));
         dropdown_menu.setBounds(44,150,516,30);
+        dropdown_menu.setEnabled(false);
 
 
         // GESTIONE BUTTON
         button.setFocusable(false);
-        button.setActionCommand("LOAD DATE");
+        button.setActionCommand("SCARICA DATI");
         button.setFont(new Font("Comic Sans", Font.BOLD, 15));
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(new Color(0x4D3939));
@@ -101,7 +102,7 @@ public class Window extends JFrame implements ActionListener{
         // GESTIONE PROGRESS BAR
         progressBar.setFocusable(false);
         progressBar.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
-        progressBar.setString("Enter research deapth");
+        progressBar.setString("Inserisci profondità ricerca");
         progressBar.setBorder(BorderFactory.createEtchedBorder());
         progressBar.setBackground(Color.white);
         progressBar.setForeground(new Color(0x4D3939));
@@ -123,18 +124,14 @@ public class Window extends JFrame implements ActionListener{
         labelTable.replace(10, new JLabel("∞"));
         slider.setLabelTable(labelTable);
         slider.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
-        //slider.setBorder(BorderFactory.createEtchedBorder());
         slider.setVisible(true);
-        slider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider source = (JSlider)e.getSource();
-                if (!source.getValueIsAdjusting()) {
-                    sliderValue = source.getValue();
-                }
+
+        slider.addChangeListener(e -> {
+            JSlider source = (JSlider)e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                sliderValue = source.getValue();
             }
         });
-
 
         // GESTIONE PANEL
         panelCenter.setLayout(new BorderLayout());
@@ -175,34 +172,19 @@ public class Window extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Window window = new Window();
-        window.setup();
-        //Scraper scraper = new Scraper();        //  TODO: CHE PALLE CI METTE UN BORDELLO FORSE SERVE UNA PERCENTUALE ALTRIMENTI UNO SE AMMAZZA PRIMA CHE FINISCE
-                                                //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
-                                                //  TODO: ANCHE NELL'ALTRA CLASSE (VEDI SOTTO)
-
-        //window.scraper = scraper;
-    }
-
-
     // GESTIONE DEGLI EVENTI
     @Override
     public void actionPerformed(ActionEvent e) {
         String bottone = e.getActionCommand();
-        if(bottone.equals("LOAD DATE")){
-            button.setText("GET GRAPH");
+        if(bottone.equals("SCARICA DATI")){
+            button.setText("CREA ALBERO");
             button.setActionCommand("Generate Tree");
             button.setEnabled(false);
             slider.setVisible(false);
             Thread thread = new Thread(() -> {
                 scraper = new Scraper(progressBar, sliderValue);
                 button.setEnabled(true);
+                dropdown_menu.setEnabled(true);
             });
             thread.start();
         }

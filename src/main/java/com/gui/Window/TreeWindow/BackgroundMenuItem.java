@@ -1,4 +1,4 @@
-package com.gui.TreeWindow;
+package com.gui.Window.TreeWindow;
 
 import javax.swing.*;
 import java.awt.*;
