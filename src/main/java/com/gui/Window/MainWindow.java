@@ -11,10 +11,10 @@ import java.awt.event.ActionListener;
 import java.util.Hashtable;
 
 /**
- * Classe che rappresenta la finestra principale dopo aver avviato il programma.
+ * Class which represent the principle window after starting the program.
  *
- * <p>I componenti principali implementati in questa finestra sono: JComboBox (utilizzata per scegliere quale dinastia raffigurare),
- * JButton (per caricare i dati), JSlider (utulizzata per scegliere quante dinastie caricare) e la JProgressBar (utilizzatta come barra di caricamento)</p>
+ * <p>The principle components implemented in this window are: JComboBox (used to choose the dinasty to show),
+ * JButton (to upload data), JSlider (used to choose what dinasty to load) and the JProgressBar (used as loading bar)</p>
  *
  * @see JComboBox
  * @see JSlider
@@ -51,7 +51,7 @@ public class MainWindow extends JFrame implements ActionListener{
 
 
     /**
-     * Costruttore della classe Window.
+     * Window class constructor.
      */
     public MainWindow(){
         super("RomanSky");
@@ -66,7 +66,7 @@ public class MainWindow extends JFrame implements ActionListener{
         setup();
     }
     /**
-     * In questo metodo vengono aggiunti i Listener ai vari componenti.
+     * In this method we add Listeners to components.
      */
     private void setupListener(){
         button.addActionListener(this);
@@ -74,36 +74,36 @@ public class MainWindow extends JFrame implements ActionListener{
     }
 
     /**
-     * setup dei vari componenti utilizzati.
+     * Components setup.
      *
      * <p>
-     *     Gestione label: gestione dei vari oggetti di tipo JLabel. In particolare background1 e background2 vengono utilizzati per l'inserimento delle immagini sfondo2Nord.jpg e
-     *     sfondo2Sud.jpg come sfondo, labLogo utilizzata per l'inserimento del logo principale al centro dello schermo, dropdown_Text raffigura il testo principale "Scegli la dinastia"
+     *     LABEL MANAGEMENT: Management of the various label objects. In particular background1 and background2 are used to insert the images sfondo2Nord.jpg and
+     *     sfondo2Sud.jpg as wallpaper, labLogo used to insert the main logo to the center of the screen, dropdown_Text represent the main text "Scegli la dinastia"
      *     e infine labSx e labDx che raffigurano le statue di Cesare e Augusto.
      * </p>
      *
      * <p>
-     *     Gestione Combobox: sezione dedicata alla gestione di dropdown_menu.
+     *     COMBOBOX MANAGEMENT: Section dedicated to manage the dropdown_box.
      * </p>
      *
      * <p>
-     *     Gestione Button: sezione dedicata alla gestione del buttone principale button.
+     *     BUTTON MANAGEMENT: Section dedicated to manage the main button.
      * </p>
      *
      * <p>
-     *     Gestione ProgressBar: gestione della barra di caricamento
+     *     PROGRESS BAR MANAGEMENT: Management of the progress bar.
      * </p>
      *
      * <p>
-     *     Gestione slider: gestione dello slider.
+     *     SLIDER MANAGEMENT: Management of the slider.
      * </p>
      *
      * <p>
-     *     Gestione panel: gestione dei vari panel -> panelCenter, panelCenter2, pCenter2CENTER, panelNord, panelWest, panelEast, panelSud, pCenter2NORD.
+     *     PANEL MANAGEMENT: Management of the different panels -> panelCenter, panelCenter2, pCenter2CENTER, panelNord, panelWest, panelEast, panelSud, pCenter2NORD.
      * </p>
      *
      * <p>
-     *     Gestione frame: gestione del frame e dei suoi componenti.
+     *     FRAME MANAGEMENT: Management of the frame and its components.
      * </p>
      */
     public void setup() {
@@ -215,7 +215,7 @@ public class MainWindow extends JFrame implements ActionListener{
     }
 
     /**
-     *  Override del metodo actionPerformed.
+     *  Override of the method actionPerformed.
      * @param e the event to be processed
      */
     @Override

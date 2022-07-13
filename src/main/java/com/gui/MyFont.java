@@ -9,15 +9,15 @@ import java.io.IOException;
 // BASTA CHE SIA .TTF
 
 /**
- * Questa classe ,attraverso il suo unico metodo statico, rende possibile la realizzazione di font personalizzati.
+ * This class, thorugh his unique static method, enables the realization of custom fonts.
  *
  */
 public class MyFont {
 
     /**
-     * Crea font personalizzati.
+     * Create custom fonts.
      * <p>
-     *     Prende in input il percorso di un file .TTF e un numero a virgola mobile size.
+     *     It takes in input a file .TTF and a floating point number.
      * </p>
      *
      * @param path

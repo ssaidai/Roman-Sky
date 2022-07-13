@@ -4,14 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Questa classe estende la classe JMenuItem. Il suo scopo è offrire la possibilità di poter disegnare forme geometriche ( in questo caso solo quaadrato ) su un oggetto di tipo JMenuItem.
+ * This class extends JMenuItem. Its purpose is to offer the possibility of being able to draw geometric shapes ( in this case only a square ) on a JMenuItem object type.
  */
 public class BackgroundMenuItem extends JMenuItem {
 
     private Color bgColor=Color.WHITE;
 
     /**
-     * Costruttore della classe BackgroundMenuItem.
+     * Constructor of the class BackgroundMenuItem.
      * @param txt
      */
     public BackgroundMenuItem(String txt){
@@ -19,7 +19,7 @@ public class BackgroundMenuItem extends JMenuItem {
     }
 
     /**
-     * set del colore
+     * set of the color
      * @param color
      */
     public void setColor(Color color) {
@@ -27,8 +27,8 @@ public class BackgroundMenuItem extends JMenuItem {
     }
 
     /**
-     * Override del metodo paintComponent.
-     * Grazie a questo metodo siamo in grado di disegnare sopra il nostro oggetto di tipo JMenuItem
+     * Override of the method paintComponent
+     * Thanks to this method we are able to draw over our JMenuItem object.
      * @param g the <code>Graphics</code> object to protect
      */
     @Override

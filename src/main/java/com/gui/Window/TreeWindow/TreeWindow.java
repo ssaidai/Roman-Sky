@@ -14,11 +14,11 @@ import java.awt.image.BufferedImage;
 
 
 /**
- *  Questa classe ha come obiettivo principale la rappresentazione dell'albero genealogico della dinastia scelta.
+ *  This class has as its main objective the representation of the genealogical tree of the chosen dynasty.
  *
  *  <p>
- *      Sono presenti anche implementazioni secondarie quali la possibilità di poter salvare la schermata e fare disegni su di essa e cambiare colori alle varie relazioni.
- *      E' inoltre possibile aprire una finestra INFO nella quale ci saranno le informazioni del progetto.
+ *      There are secondaty implementations also such as the possiblity to save the screen and to do drawings over it and to change colors to the various relationships.
+ *      It is also possible to open an INFO window where there will be all the information about the projects.
  *  </p>
  */
 public class TreeWindow extends JFrame implements ActionListener {
@@ -64,7 +64,7 @@ public class TreeWindow extends JFrame implements ActionListener {
     private Color colFiglio = new Color(107, 81, 42);
 
     /**
-     * Costruttore della classe TreeWindow.
+     * Constructor of the TreeWindow class.
      * @param dinasty
      * @param dIndex
      * @param scraper
@@ -94,7 +94,7 @@ public class TreeWindow extends JFrame implements ActionListener {
     }
 
     /**
-     * In questo metodo vengono aggiunti i vari Listener ai vari componenti.
+     * In this method we add Listeners to various components.
      */
     private void setupListener(){
         saveItem.addActionListener(this);
@@ -157,20 +157,20 @@ public class TreeWindow extends JFrame implements ActionListener {
     }
 
     /**
-     * Setup della GUI.
+     * GUI Setup.
      *
      * <p>
-     *     GESTIONE MENU: questa sezione riguarda il setup riguardante l'implementazione della barra del menu (menu bar).
-     *     In particolare menuBar è l'ogetto di tipo JMenuBar. menuFile, menuEdit, changeRelColor e menuHelp sono gli oggetti di tipo JMenu. saveItem, exitItem e infoItem
-     *     sono gli oggetti di tipo JMenuItem. colMItem, colFItem e colFAItem sono oggetti di tipo BackgroundMenuItem.
+     *     MENU MANAGER: This section is about the setup of the implementation of the menu bar.
+     *     In particular menuBar is a JMenuBar object type. menuFile, menuEdit, changeRelColor and menuHelp are JMenu object type. saveItem, exitItem and infoItem
+     *     are JMenuItem object types. colMItem, colFItem e colFAItem are BackgroundMenuItem object types.
      * </p>
      *
      * <p>
-     *     MODIFICA PICKER: questa sezione riguarda la modifica del pannello che permette all'utente di selezionare un colore.
+     *     PICKER MODIFIER: This section concerns the changes of the panel which allow the user to change the colors.
      * </p>
      *
      * <p>
-     *     SET DI ICONE NEL MENU: sezione dedicata all'aggiunta di icone nella barra del menu.
+     *     MENU ICON SET: Section dedicated to add icons in the menu.
      * </p>
      *
      */
@@ -214,7 +214,7 @@ public class TreeWindow extends JFrame implements ActionListener {
 
     }
     /**
-     * Set delle/di mnemonics. Offre la possibilità di navigare nella menu bar tramite una combinazione di tasti.
+     * Mnemonics set. It offers the possibility to surf to the menu bar thanks to shortcuts.
      *
      * <p>
      *     saveItem: Ctrl + S
@@ -230,7 +230,7 @@ public class TreeWindow extends JFrame implements ActionListener {
         changeRelColor.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK));
     }
     /**
-     * Override del metodo actionPerformed.
+     * Override of the method actionPerformed.
      * @param e the event to be processed
      */
     @Override

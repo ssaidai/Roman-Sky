@@ -15,17 +15,17 @@ import java.io.File;
 
 
 /**
- * Questa classe consiste nell'implementazione della finestra che si apre dopo aver premuto il comando <b>Save</b> nella finestra <b>Treewindow</b>.
- * Contiene principalmente due funzionalità: draw e il file chooser.
+ * This class consists in the implementation of the window which opens after pressing the command <b>Save</b> in the window <b>Treewindow</b>.
+ * It contains especially two functionality: draw and the file chooser.
  *
  * <p>
- *     La funzionalità draw permette all'utente di poter disegnare sopra la finestra che si vuole salvare. E' possibile scegliere vari colori e varie grandezze
- *     della matita. E' presente anche la gomma.
- *     Il draw è stato implementato attraverso le interfacce <b>MouseMotionListener</b> e <b>MouseListener</b> e anche attraverso alla classe <b>Graphics2D</b>.
+ *     The functionality draw allows the user to be able to draw over the window you want to save. It is possible to choose between a lot of colors and sizes.
+ *     of the pencil. There is also an eraser.
+ *     The draw was implemented with the interfaces <b>MouseMotionListener</b> and <b>MouseListener</b> and also thanks to <b>Graphics2D</b>.
  * </p>
  *
  * <p>
- *     Il file chooser è stato implementato attraverso la classe <b>JFileChooser</b>. Salva l'immagine desiderata in formato jpeg.
+ *     The file chooser was implemented thanks to <b>JFileChooser</b>. It saves the image in jpeg format.
  * </p>
  *
  * @see MouseMotionListener
@@ -79,8 +79,8 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
 
     /**
-     * Costruttore della classe.
-     * @param bf paramentro di tipo BufferedImage.
+     * Constructor of the class
+     * @param bf parameter of BufferedImage type.
      * @see BufferedImage
      */
     public SaveWindow(BufferedImage bf){
@@ -99,7 +99,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     }
 
     /**
-     * Imposta e configura la finestra.
+     * Setup and configure the window.
      */
     public void setup(){
 
@@ -158,7 +158,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
 
     /**
-     * In questo metodo vengono aggiunti i vari Listener ai vari componenti.
+     * In this method we add various Listener and components.
      */
     public void setupListener(){
         addMouseListener(this);
@@ -172,15 +172,15 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
 
     /**
-     *  Realizzazione del salvataggio attraverso <b>JFileChooser</b>.
-     *  Inizialmente vengono prese le coordinate x e y del panello nel quale è presente l'area di disegno e la dimensione di quest'ultimo e viene creato un oggetto Rectangle
-     *  con le informazioni prese. Per catturare l'immagine usufruiamo del metodo createScreenCapture() della classe <b>Robot</b>.
+     *  Realization of the save operation thanks to <b>JFileChooser</b>.
+     *  At first, we get the coordinates  and y of the panel where the draw area is and the dimension of this one and it is created an object Rectangle
+     *  with the informations taken. To capture the image we use the method createScreenCapture() of the class <b>Robot</b>.
      *
-     *  Per salvare l'immagine utilizziamo la classe JFileChooser che fornisce un semplice meccanismo all'utente per salvare l'immagine. Attraverso il
-     *  metodo <b>showSaveDialog(Component parent)</b> si apre una finestra che ci consente di navigare nel nostro dispositivo e salvare l'immagine nella cartella
-     *  che desideriamo.
-     *  Viene utilizzato il metodo setCurrentDirectory(File dir) per impostare la cartella di partenza.
-     *  Attraverso il metodo statico write della classe <b>ImageIO</b> salviamo/scriviamo effettivamente la nostra immagine nella cartella desiderata.
+     *  To save the image, we use the class JFileChooser which provides a simple mechanism to the user for saving the image. Through the
+     *  method <b>showSaveDialog(Component parent)</b> a window will open that allows you to surf in our device and to save the image in the folder
+     *  we want.
+     *  The method setCurrentDirectory(File dir) is used for setting the starting folder.
+     *  Through the static method write of the class <b>ImageIO</b> we save/write our image in the chosen folder.
      *
      * @see Point
      * @see Dimension
@@ -232,10 +232,10 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     }
 
     /**
-     *  Override del metodo actionPerformed.
+     *  Override of the method actionPerformed.
      *
      *  <p>
-     *      Se viene premuto il button save
+     *      If the button save is pressed
      *  </p>
      * @param e the event to be processed
      */
@@ -266,17 +266,17 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     }
 
     /**
-     * Override del metodo mouseDragged.
-     * Implementaa tutto il necessario alla realizzazione del draw.
-     * Utilizziamo la classe Graphics2D per disegnare nell'area da disegno.
-     * Attraverso i metodi setColor() riusciamo a cambiare colore della matita.
+     * Override of the method mouseDragged.
+     * Implements everything necessary for the realization of the draw.
+     * We use the class Graphics2D to draw in the drawing area.
+     * Through the method setColor() we are able to change the color of the pencil.
      *
-     * Il disegno avviene tramite il disegno di piccole linee che sono collegate l'una all'altra. E' necessario salvare le coordinate (x,y) del mouse precedenti e correnti
-     * rispettivamente nelle variabili oldX, oldY, currentX, currentY. Conoscendo queste informazioni disegnamo la linea partendo dalla posizione precedente del mouse fino alla posizione
-     * corrente; utilizziamo il metodo drawLine(oldX , oldY , currentX , currentY).
-     * Per settare la dimensione della nostra matita utilizziamo il metodo setStroke().
+     * The drawing is done by drawing small lines that are connected to each other. It is necessary to save the current and previous coordinates (x,y) of the mouse
+     * respectively in the variables oldX, oldY, currentX, currentY. With these informations we draw the line starting from the previous position of the mouse until the current
+     * position; we use the method drawLine(oldX , oldY , currentX , currentY).
+     * We use the method setStroke() for setting the dimension of our pencil.
      *
-     * La realizzazione della gomma avviene attraverso il metodo repaint().
+     * The realization of the eraser occurs through the method repaint().
      * @see Graphics2D
      *
      * @param e the event to be processed
@@ -322,7 +322,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     }
 
     /**
-     * Override metodo mouseMoved.
+     * Override of the method mouseMoved.
      * @param e the event to be processed
      */
     @Override
@@ -331,7 +331,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     }
 
     /**
-     * override mouseClicked.
+     * Override mouseClicked.
      * @param e the event to be processed
      */
     @Override
@@ -353,8 +353,8 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
     }
 
     /**
-     * override mousePressed.
-     * Salva in oldX, oldY la posizione corrente del mouse.
+     * Override mousePressed.
+     * It saves the current position of the mouse in oldX and oldY.
      * @param e the event to be processed
      */
     @Override
@@ -365,7 +365,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
 
     /**
-     * override mouseReleased.
+     * Override mouseReleased.
      * @param e the event to be processed
      */
     @Override
@@ -373,7 +373,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     }
     /**
-     * override mouseEntered.
+     * Override mouseEntered.
      * @param e the event to be processed
      */
     @Override
@@ -381,7 +381,7 @@ public class SaveWindow extends JFrame implements ActionListener, MouseMotionLis
 
     }
     /**
-     * override mouseExited.
+     * Override mouseExited.
      * @param e the event to be processed
      */
     @Override
