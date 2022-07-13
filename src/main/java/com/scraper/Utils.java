@@ -20,8 +20,6 @@ public class Utils {
 
     private static HashSet<String> scraperedHrefs = new HashSet<>();
 
-    public static int contatore = 0;
-
     public static void fetchData(WebDriver driver, Set<Person> dinasty, JProgressBar progressBar, int depth, boolean ignoreDepth){
         if(depth == -1 && !ignoreDepth) return;
 
@@ -64,7 +62,6 @@ public class Utils {
         }
         System.out.println(driver.getCurrentUrl());
         progressBar.setValue(progressBar.getValue()+1);
-        contatore++;
     }
 
     private static boolean isDisambiguityPage(WebDriver driver){

@@ -71,7 +71,6 @@ public class TreeWindow extends JFrame implements ActionListener {
      */
     public TreeWindow(String dinasty, int dIndex, Scraper scraper){
         super(dinasty);
-        //this.dinasty = dinasty;
         setLayout(new BorderLayout());
         setSize(1300,750);
         setMaximumSize(new Dimension(1300, 750));
@@ -205,10 +204,10 @@ public class TreeWindow extends JFrame implements ActionListener {
 
 
         //SET DI ICONE NEL MENU
-        saveItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaSalva.png"));
-        infoItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaInfo.png"));
-        exitItem.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaExit.png"));
-        changeRelColor.setIcon(new ImageIcon("src/resources/icons/menuIcons/iconaColors.png"));
+        saveItem.setIcon(new ImageIcon("res/icons/menuIcons/iconaSalva.png"));
+        infoItem.setIcon(new ImageIcon("res/icons/menuIcons/iconaInfo.png"));
+        exitItem.setIcon(new ImageIcon("res/icons/menuIcons/iconaExit.png"));
+        changeRelColor.setIcon(new ImageIcon("res/icons/menuIcons/iconaColors.png"));
 
 
 

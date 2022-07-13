@@ -109,22 +109,22 @@ public class MainWindow extends JFrame implements ActionListener{
     public void setup() {
         // GESTIONE LABEL
         background1.setPreferredSize(new Dimension(1400, 30));
-        background1.setIcon(new ImageIcon("src/resources/images/sfondo2Nord.jpg"));
+        background1.setIcon(new ImageIcon("res/images/sfondo2Nord.jpg"));
         background2.setPreferredSize(new Dimension(1400, 30));
-        background2.setIcon(new ImageIcon("src/resources/images/sfondo2Sud.jpg"));
-        labLogo.setIcon(new ImageIcon("src/resources/logos/logo_small.png"));
+        background2.setIcon(new ImageIcon("res/images/sfondo2Sud.jpg"));
+        labLogo.setIcon(new ImageIcon("res/logos/logo_small.png"));
         dropdown_Text.setBounds(188,100,400,50);
         dropdown_Text.setForeground(new Color(0x000000));
-        dropdown_Text.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 25f));
-        labSx.setIcon(new ImageIcon("src/resources/images/GC2.png"));
-        labDx.setIcon(new ImageIcon("src/resources/images/Augusto3dx.png"));
-        labSPQR.setIcon(new ImageIcon("src/resources/logos/logo_spqr.png"));
+        dropdown_Text.setFont(MyFont.creaFont("res/fonts/Uni Sans Thin.ttf", 25f));
+        labSx.setIcon(new ImageIcon("res/images/GC2.png"));
+        labDx.setIcon(new ImageIcon("res/images/Augusto3dx.png"));
+        labSPQR.setIcon(new ImageIcon("res/logos/logo_spqr.png"));
 
         // GESTIONE COMBOBOX
         dropdown_menu.setBackground(new Color(0xFAF7F7));
         dropdown_menu.setFocusable(false);
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
-        dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 16f));
+        dropdown_menu.setFont(MyFont.creaFont("res/fonts/Uni Sans Thin.ttf", 16f));
         dropdown_menu.setBounds(44,150,516,30);
         dropdown_menu.setEnabled(false);
 
@@ -135,14 +135,14 @@ public class MainWindow extends JFrame implements ActionListener{
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(new Color(0x4D3939));
         button.setForeground(Color.white);
-        button.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
+        button.setFont(MyFont.creaFont("res/fonts/lato.medium.ttf", 15f));
         button.setBounds(219,280,160,30);
         button.setEnabled(true);
 
 
         // GESTIONE PROGRESS BAR
         progressBar.setFocusable(false);
-        progressBar.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
+        progressBar.setFont(MyFont.creaFont("res/fonts/lato.medium.ttf", 15f));
         progressBar.setString("INSERISCI PROFONDITÀ RICERCA");
         progressBar.setBorder(BorderFactory.createEtchedBorder());
         progressBar.setBackground(Color.white);
@@ -164,7 +164,7 @@ public class MainWindow extends JFrame implements ActionListener{
         Hashtable labelTable = (Hashtable) slider.getLabelTable();
         labelTable.replace(10, new JLabel("∞"));
         slider.setLabelTable(labelTable);
-        slider.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
+        slider.setFont(MyFont.creaFont("res/fonts/lato.medium.ttf", 15f));
         //slider.setBorder(BorderFactory.createEtchedBorder());
         slider.setVisible(true);
         slider.addChangeListener(e -> {
