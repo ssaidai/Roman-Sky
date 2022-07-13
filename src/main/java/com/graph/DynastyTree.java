@@ -6,8 +6,6 @@ import com.mxgraph.model.mxCell;
 import com.mxgraph.model.mxICell;
 import com.mxgraph.util.mxConstants;
 import com.mxgraph.util.mxEvent;
-import com.mxgraph.util.mxEventObject;
-import com.mxgraph.util.mxEventSource;
 import com.mxgraph.view.mxGraphSelectionModel;
 import org.jgrapht.Graph;
 import org.jgrapht.Graphs;
@@ -94,24 +92,23 @@ public class DynastyTree {
         ArrayList<Object> kinList = new ArrayList<>();
         ArrayList<Object> vipList = new ArrayList<>();
         ArrayList<Object> allList = new ArrayList<>();
+
         graphAdapter.setConnectableEdges(false);
         graphAdapter.setCellsResizable(false);
         graphAdapter.setCellsMovable(false);
         graphAdapter.setCellsEditable(false);
         graphAdapter.setAllowDanglingEdges(false);
         mxConstants.DEFAULT_MARKERSIZE = 0;
-        graphAdapter.getSelectionModel().addListener(mxEvent.CHANGE, new mxEventSource.mxIEventListener() {
-            @Override
-            public void invoke(Object o, mxEventObject mxEventObject) {
-                mxGraphSelectionModel sm = (mxGraphSelectionModel) o;
-                mxCell cell = (mxCell) sm.getCell();
-                if (cell != null && cell.isVertex()) {
-                    Person temp = (Person)cell.getValue();
-                    try {
-                        Desktop.getDesktop().browse(new URI(temp.getHref()));
-                    } catch (IOException | URISyntaxException e) {
-                        throw new RuntimeException(e);
-                    }
+
+        graphAdapter.getSelectionModel().addListener(mxEvent.CHANGE, (o, mxEventObject) -> {
+            mxGraphSelectionModel sm = (mxGraphSelectionModel) o;
+            mxCell cell = (mxCell) sm.getCell();
+            if (cell != null && cell.isVertex()) {
+                Person temp = (Person)cell.getValue();
+                try {
+                    Desktop.getDesktop().browse(new URI(temp.getHref()));
+                } catch (IOException | URISyntaxException e) {
+                    throw new RuntimeException(e);
                 }
             }
         });
@@ -125,7 +122,6 @@ public class DynastyTree {
                 marriedList.add(edgemxICellHashMap.get(edge));
             if(edge.getLabel().equals("adopted"))
                 adoptedList.add(edgemxICellHashMap.get(edge));
-            else
             if(edge.getLabel().equals("kin"))
                 kinList.add(edgemxICellHashMap.get(edge));
         }
