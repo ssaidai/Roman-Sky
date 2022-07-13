@@ -1,10 +1,7 @@
 package com.gui.Window;
 
-
-
-import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.gui.MyFont;
-import com.gui.TreeWindow.TreeWindow;
+import com.gui.Window.TreeWindow.TreeWindow;
 import com.scraper.Scraper;
 
 import javax.swing.*;
@@ -26,7 +23,7 @@ import java.util.Hashtable;
  * @see JProgressBar
  * @see JButton
  */
-public class Window extends JFrame implements ActionListener{
+public class MainWindow extends JFrame implements ActionListener{
 
     private final JLabel mainLogo =new JLabel();
     private final JPanel panelNord = new JPanel();
@@ -37,7 +34,7 @@ public class Window extends JFrame implements ActionListener{
     private final JPanel panelCenter2 = new JPanel();
     private final JPanel pCenter2NORD = new JPanel();
     private final JPanel pCenter2CENTER = new JPanel();
-    private final JLabel dropdown_Text = new JLabel("SCEGLI LA DINASTIA ");
+    private final JLabel dropdown_Text = new JLabel("SCEGLI LA DINASTIA");
     private final JLabel labSx = new JLabel();
     private final JLabel labDx = new JLabel();
     private final JLabel background1 = new JLabel();
@@ -46,7 +43,7 @@ public class Window extends JFrame implements ActionListener{
     private final JLabel labSPQR = new JLabel();
     private final String[] dynasties = {"DINASTIA GIULIO CLAUDIA", "GUERRA CIVILE ROMANA", "DINASTIA DEI FLAVI", "IMPERATORI ADOTTIVI", "GUERRA CIVILE ROMANA 2", "DINASTIA DEI SEVERI", "ANARCHIA MILITARE", "DINASTIA VALERIANA", "IMPERATORI ILLIRICI", "RIFORMA TETRARCHICA", "GUERRA CIVILE ROMANA 3", "DINASTIA COSTANTINIANA", "CASATA VALENTINIANO TEODOSIO", "CASATA TEODOSIO", "ULTIMI IMPERATORI"};
     private final JComboBox<String> dropdown_menu = new JComboBox<>(dynasties);
-    private final JButton button = new JButton("LOAD DATE");
+    private final JButton button = new JButton("CARICA DATI");
 
     private Scraper scraper;
     private JProgressBar progressBar;
@@ -60,7 +57,7 @@ public class Window extends JFrame implements ActionListener{
     /**
      * Costruttore della classe Window.
      */
-    public Window(){
+    public MainWindow(){
         super("Imperatori Romani");
         setLayout(new BorderLayout());
         setupListener();
@@ -70,6 +67,7 @@ public class Window extends JFrame implements ActionListener{
         slider.setValue(1);
 
         progressBar = new JProgressBar(0, 100);
+        setup();
     }
     /**
      * In questo metodo vengono aggiunti i Listener ai vari componenti.
@@ -132,11 +130,11 @@ public class Window extends JFrame implements ActionListener{
         dropdown_menu.setBorder(BorderFactory.createRaisedBevelBorder());
         dropdown_menu.setFont(MyFont.creaFont("src/resources/fonts/Uni Sans Thin.ttf", 16f));
         dropdown_menu.setBounds(44,150,516,30);
-
+        dropdown_menu.setEnabled(false);
 
         // GESTIONE BUTTON
         button.setFocusable(false);
-        button.setActionCommand("LOAD DATE");
+        button.setActionCommand("CARICA DATI");
         button.setFont(new Font("Comic Sans", Font.BOLD, 15));
         button.setBorder(BorderFactory.createEtchedBorder());
         button.setBackground(new Color(0x4D3939));
@@ -149,7 +147,7 @@ public class Window extends JFrame implements ActionListener{
         // GESTIONE PROGRESS BAR
         progressBar.setFocusable(false);
         progressBar.setFont(MyFont.creaFont("src/resources/fonts/lato.medium.ttf", 15f));
-        progressBar.setString("Enter research deapth");
+        progressBar.setString("Inserisci profondità ricerca");
         progressBar.setBorder(BorderFactory.createEtchedBorder());
         progressBar.setBackground(Color.white);
         progressBar.setForeground(new Color(0x4D3939));
@@ -223,22 +221,6 @@ public class Window extends JFrame implements ActionListener{
         setVisible(true);
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel(new FlatIntelliJLaf());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Window window = new Window();
-        window.setup();
-        //Scraper scraper = new Scraper();        //  TODO: CHE PALLE CI METTE UN BORDELLO FORSE SERVE UNA PERCENTUALE ALTRIMENTI UNO SE AMMAZZA PRIMA CHE FINISCE
-                                                //  TODO: E' MEGLIO ISTANZIARE LO SCRAPER NEL COSTRUTTORE E NON NEL MAIN PERCHE CI SERVE
-                                                //  TODO: ANCHE NELL'ALTRA CLASSE (VEDI SOTTO)
-
-        //window.scraper = scraper;
-    }
-
-
     /**
      *  Override del metodo actionPerformed.
      * @param e the event to be processed
@@ -246,14 +228,15 @@ public class Window extends JFrame implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String bottone = e.getActionCommand();
-        if(bottone.equals("LOAD DATE")){
-            button.setText("GET GRAPH");
+        if(bottone.equals("CARICA DATI")){
+            button.setText("CREA ALBERO");
             button.setActionCommand("Generate Tree");
             button.setEnabled(false);
             slider.setVisible(false);
             Thread thread = new Thread(() -> {
                 scraper = new Scraper(progressBar, sliderValue);
                 button.setEnabled(true);
+                dropdown_menu.setEnabled(true);
             });
             thread.start();
         }
